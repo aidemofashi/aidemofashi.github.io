@@ -19,15 +19,15 @@
   <meta name="author" content="aidemofashi">
   <meta name="keywords" content="">
   
-    <meta name="description" content="less7需要先设置mysql的文件读写权限：    Windows的配置文件在mysql下的my.iniLinux的配置文件在&#x2F;etc&#x2F;conf    怎么找也找不到，最后问了卡密，在&#x2F;etc&#x2F;mysql中找到了；但是还是没法写马；   看网上的解法写点笔记：先判断注入类型，没有sql错误回显的情况就不断猜测闭合语句，能正确闭合不报错就表示闭合成功   因">
+    <meta name="description" content="less7需要先设置mysql的文件读写权限：    Windows的配置文件在mysql下的my.iniLinux的配置文件在&#x2F;etc&#x2F;conf    怎么找也找不到，最后问了卡密，在&#x2F;etc&#x2F;mysql中找到了；但是还是没法写马；docker环境现在还没搞懂，以后有机会再win下再部署sql-labs试试； 看网上的解法写点笔记：先判断注入类型，没有sq">
 <meta property="og:type" content="article">
 <meta property="og:title" content="note-04">
 <meta property="og:url" content="http://example.com/2025/03/02/note-04/index.html">
 <meta property="og:site_name" content="aidemofashi&#39;s blog">
-<meta property="og:description" content="less7需要先设置mysql的文件读写权限：    Windows的配置文件在mysql下的my.iniLinux的配置文件在&#x2F;etc&#x2F;conf    怎么找也找不到，最后问了卡密，在&#x2F;etc&#x2F;mysql中找到了；但是还是没法写马；   看网上的解法写点笔记：先判断注入类型，没有sql错误回显的情况就不断猜测闭合语句，能正确闭合不报错就表示闭合成功   因">
+<meta property="og:description" content="less7需要先设置mysql的文件读写权限：    Windows的配置文件在mysql下的my.iniLinux的配置文件在&#x2F;etc&#x2F;conf    怎么找也找不到，最后问了卡密，在&#x2F;etc&#x2F;mysql中找到了；但是还是没法写马；docker环境现在还没搞懂，以后有机会再win下再部署sql-labs试试； 看网上的解法写点笔记：先判断注入类型，没有sq">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-02T08:20:58.000Z">
-<meta property="article:modified_time" content="2025-03-02T09:42:54.731Z">
+<meta property="article:modified_time" content="2025-03-02T12:22:37.444Z">
 <meta property="article:author" content="aidemofashi">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          636 字
+          659 字
         
       </span>
     
@@ -279,7 +279,7 @@
 <blockquote>
 <p>Windows的配置文件在mysql下的my.ini<br>Linux的配置文件在&#x2F;etc&#x2F;conf  </p>
 </blockquote>
-<p>怎么找也找不到，最后问了卡密，在&#x2F;etc&#x2F;mysql中找到了；<br>但是还是没法写马；  </p>
+<p>怎么找也找不到，最后问了卡密，在&#x2F;etc&#x2F;mysql中找到了；<br>但是还是没法写马；<br>docker环境现在还没搞懂，以后有机会再win下再部署sql-labs试试；</p>
 <h2 id="看网上的解法写点笔记："><a href="#看网上的解法写点笔记：" class="headerlink" title="看网上的解法写点笔记："></a>看网上的解法写点笔记：</h2><p>先判断注入类型，没有sql错误回显的情况就不断猜测闭合语句，能正确闭合不报错就表示闭合成功  </p>
 <p>因为用 ‘ 打破’’闭合但是没用猜对全部闭合的话会一直提示sql语法错误，能完成闭合并且并且不报错就为完全猜对。</p>
 <figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">?<span class="hljs-built_in">id</span>=<span class="hljs-number">1</span>&#x27;)) <span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
