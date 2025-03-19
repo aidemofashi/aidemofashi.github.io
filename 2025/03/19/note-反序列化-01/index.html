@@ -27,7 +27,7 @@
 <meta property="og:description" content="pop链，我也不知道是什么  POP链就是利用魔法方法在里面进行多次跳转然后获取敏感数据的一种payload，实战应用范围暂时没遇到，不过在CTF比赛中经常出现这样的题目，同时也经常与反序列化一起考察，可以理解为是反序列化的一种拓展，泛用性更强，涉及到的魔法方法也更多。    [SWPUCTF 2021 新生赛]pop我想tag可以有：pop链，反序列化原题： 123456789101112131">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-19T10:49:19.000Z">
-<meta property="article:modified_time" content="2025-03-19T12:28:30.885Z">
+<meta property="article:modified_time" content="2025-03-19T12:35:10.340Z">
 <meta property="article:author" content="aidemofashi">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -289,7 +289,9 @@
 <blockquote>
 <p>$this-&gt;w00m-&gt;{$this-&gt;w22m}(); 最终的效果是动态调用 $this-&gt;w00m 对象中的一个方法，方法的名称由 $this-&gt;w22m 决定。而 这条语句的意思就是调用了在w33m里的w00m属性（这里是w00m类）中的w22m方法。</p>
 </blockquote>
-<p><strong>为什么先赋值 w22m</strong><br>利用 w22m 的 __destruct 方法：<br>w22m 类的 __destruct 方法会输出 $this-&gt;w00m。<br>当 PHP 脚本结束时，或者当对象被销毁时，__destruct 方法会被自动调用。<br>这意味着，当我们反序列化一个 w22m 对象时，__destruct 方法会立即执行，从而触发后续的操作。<br><strong>触发 w33m 的 __toString 方法：</strong><br>w22m 的 __destruct 方法输出 $this-&gt;w00m，而 $this-&gt;w00m 是一个 w33m 对象。<br>当 PHP 需要将一个对象转换为字符串时（例如在 echo 中），会自动调用该对象的 __toString 方法。<br>因此，w33m 的 __toString 方法会被调用。<br><strong>调用 w44m 的 Getflag 方法：</strong><br>w33m 的 __toString 方法中，$this-&gt;w00m-&gt;{$this-&gt;w22m}() 会被执行。<br>这里的 $this-&gt;w00m 是一个 w44m 对象，而 $this-&gt;w22m 是字符串 ‘Getflag’。<br>因此，w44m 的 Getflag 方法会被调用。  </p>
+<h2 id="为什么先赋值-w22m"><a href="#为什么先赋值-w22m" class="headerlink" title="为什么先赋值 w22m  "></a><strong>为什么先赋值 w22m</strong>  </h2><p><strong>利用 w22m 的 __destruct 方法：</strong><br>w22m 类的 __destruct 方法会输出 $this-&gt;w00m。<br>当 PHP 脚本结束时，或者当对象被销毁时，__destruct 方法会被自动调用。<br>这意味着，当我们反序列化一个 w22m 对象时，__destruct 方法会立即执行，从而触发后续的操作。  </p>
+<p><strong>触发 w33m 的 __toString 方法：</strong><br>w22m 的 __destruct 方法输出 $this-&gt;w00m，而 $this-&gt;w00m 是一个 w33m 对象。<br>当 PHP 需要将一个对象转换为字符串时（例如在 echo 中），会自动调用该对象的 __toString 方法。<br>因此，w33m 的 __toString 方法会被调用。    </p>
+<p><strong>调用 w44m 的 Getflag 方法：</strong><br>w33m 的 __toString 方法中，$this-&gt;w00m-&gt;{$this-&gt;w22m}() 会被执行。<br>这里的 $this-&gt;w00m 是一个 w44m 对象，而 $this-&gt;w22m 是字符串 ‘Getflag’。<br>因此，w44m 的 Getflag 方法会被调用。  </p>
 <h2 id="我的理解是：整个构造的最终目的是为了执行-w44m-类中的-Getflag-方法"><a href="#我的理解是：整个构造的最终目的是为了执行-w44m-类中的-Getflag-方法" class="headerlink" title="我的理解是：整个构造的最终目的是为了执行 w44m 类中的 Getflag 方法  "></a>我的理解是：整个构造的最终目的是为了执行 w44m 类中的 Getflag 方法  </h2><blockquote>
 <p>对于__toString()，要求是在它类里的变量被实例化时才会被触发。所以$p-&gt;w00m &#x3D; new w33m();则不会触发__toString()。而后面$a-&gt;w00m-&gt;w00m&#x3D;new w44m();语句为w33m类中的变量实例化后，才能使_toString()方法可被调用，进一步让$a-&gt;w00m-&gt;w22m&#x3D;’Getflag’;语句生效。</p>
 </blockquote>
