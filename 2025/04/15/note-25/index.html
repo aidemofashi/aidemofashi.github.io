@@ -27,7 +27,7 @@
 <meta property="og:description" content="[suctf 2019]EasySQL老早就做过这题了，当初wp看的半知半解，现在是我想能算上是大彻大悟了吧   1select $_GET[&#x27;query&#x27;] || flag from flag || 符是或的意思，应该就和注入中的 || , or 是一个用法    这里的||在mysql中表示或，如果前一个操作数为真，则不看后面的语句  网上最多的payload都是 1*,1">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-04-15T05:11:04.000Z">
-<meta property="article:modified_time" content="2025-04-15T05:11:24.910Z">
+<meta property="article:modified_time" content="2025-04-15T14:41:37.241Z">
 <meta property="article:author" content="aidemofashi">
 <meta property="article:tag" content="note">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          662 字
+          733 字
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          6 分钟
+          7 分钟
         
       </span>
     
@@ -294,6 +294,9 @@
 <p>应该就是语法问题，字段限制的话应该不是  </p>
 <p>看的wp：<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/StevenOnesir/article/details/110203051">https://blog.csdn.net/StevenOnesir/article/details/110203051</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/xhy18634297976/article/details/122515412">https://blog.csdn.net/xhy18634297976/article/details/122515412</a></p>
 <p>以前看不明白现在看明白了，但以现在水平打比赛时遇到类似题目应该猜不出来后端语句</p>
+<p>那是怎样猜出后端语句的呢：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">select <span class="hljs-keyword">command</span>1 || <span class="hljs-keyword">command</span>2 <br><br>情况一：若<span class="hljs-keyword">command</span>1为非0数字，则结果为1。<br><br>情况二：若<span class="hljs-keyword">command</span>1为0或字母，<span class="hljs-keyword">command</span>2为非0数字，则结果为1。<br><br>情况三：<span class="hljs-keyword">command</span>1和<span class="hljs-keyword">command</span>2都不为非0数字，则结果为0。<br></code></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/2302_79800344/article/details/136268777">https://blog.csdn.net/2302_79800344/article/details/136268777</a></p>
 <h1 id="ACTF2020-新生赛-Exec"><a href="#ACTF2020-新生赛-Exec" class="headerlink" title="[ACTF2020 新生赛]Exec"></a>[ACTF2020 新生赛]Exec</h1><p>根据题目猜测是命令执行类型，看到页面是一个ping的功能，尝试ping了一下我的网站：<br><a target="_blank" rel="noopener" href="http://www.gwwafz.online/">www.gwwafz.online</a><br>回显：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs html">PING www.gwwafz.online (39.105.15.250): 56 data bytes<br><br>--- www.gwwafz.online ping statistics ---<br>3 packets transmitted, 0 packets received, 100% packet loss<br></code></pre></td></tr></table></figure>
 <p>故想起使用管道符来连接命令:<br>39.105.15.250|ls &#x2F;  </p>
