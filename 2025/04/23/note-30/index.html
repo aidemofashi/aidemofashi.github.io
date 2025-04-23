@@ -27,7 +27,7 @@
 <meta property="og:description" content="[ACTF2020 新生赛]BackupFile扫目录一直扫不出来，扫了十来次，最后发现是是请求太快， 1dirsearch -u http:&#x2F;&#x2F;087da459-7de3-4061-82c8-b3cf69426d11.node5.buuoj.cn:81&#x2F; -w backup_include.txt --delay&#x3D;1 -t 2 终于发现备份文件&#x2F;index.php.bak   1234">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-04-23T11:58:29.000Z">
-<meta property="article:modified_time" content="2025-04-23T12:00:32.045Z">
+<meta property="article:modified_time" content="2025-04-23T12:40:01.807Z">
 <meta property="article:author" content="aidemofashi">
 <meta property="article:tag" content="note">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.4k 字
+          1.6k 字
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          12 分钟
+          14 分钟
         
       </span>
     
@@ -301,7 +301,8 @@
 <p>最后记得F12查看，因为程序里不会echo flag 而是 return flag！！！！！<br>wp里是用file_get_contents()的伪协议来直接输出base64编码后的flag</p>
 <h2 id="notice"><a href="#notice" class="headerlink" title="notice"></a>notice</h2><p>is_valid()函数对传入的字符串进行判断，确保每一个字符ASCII码值都在32-125，即该函数的作用是确保参数字符串的每一个字符都是可打印的，才返回true。  </p>
 <p>public无标记，变量名不变。 s:2:“op”;i:2;<br>protected在变量名前添加标记\00*\00。 s:5:“\00*\00op”;i:2;<br>private在变量名前添加标记\00类名\00。s:17:“\00类名\00op”;i:2;<br>序列化后protected类型的属性存在不可打印字符。（private类型的属性序列化后也产生不可打印字符）;<br>PHP版本7.1+，对属性的类型不敏感;</p>
-
+<h1 id="极客大挑战-2019-BuyFlag"><a href="#极客大挑战-2019-BuyFlag" class="headerlink" title="[极客大挑战 2019]BuyFlag"></a>[极客大挑战 2019]BuyFlag</h1><p>感觉我心还是太急了，没发现cooki，没试一下用bp抓包，就上网找wp了，明明是很标准的流程，，，，，<br>一开始发现要post上传password，但是没发先有cookie一直回显要求的账户，把cookie改为1即可，<br>然后到密码，试了“404”，不行。看wp，用php弱比较，上传404a，显示能过不是纯数值这关，然后到弱比较，如果比较的变量开头是数字，会把数字截取到遇到字符为止，所以404a会变成404。<br>然后到了money，试了了一下，不能传太长的数值，所以用科学计数法传了9亿，拿到flag </p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs routeros">POST /<br><span class="hljs-attribute">cookie</span>=1<br><br><span class="hljs-attribute">password</span>=404aa&amp;money=9e8<br></code></pre></td></tr></table></figure>
                 
               </div>
             
