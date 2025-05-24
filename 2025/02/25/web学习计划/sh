@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# 指定输出文件名
+output_file="notepad.md"
+
+# 删除旧输出文件（如果存在）
+rm -f "$output_file"
+
+# 循环处理当前目录下的*note*.md文件
+for file in *note*.md; do
+    # 跳过输出文件自身
+    if [[ "$file" == "$output_file" ]]; then
+        continue
+    fi
+    
+    # 将文件内容追加到输出文件中
+    if [[ -f "$file" ]]; then
+        echo "正在合并文件: $file"
+        cat "$file" >> "$output_file"
+        # 在每个文件后添加换行分隔符
+        echo -e "\n" >> "$output_file"
+    fi
+done
+
+echo "合并完成！输出文件: $output_file"
