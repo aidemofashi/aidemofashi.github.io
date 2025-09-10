@@ -1,0 +1,637 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.jpg">
+  <link rel="icon" href="/img/logo.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="aidemofashi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="SEECON 13复现学习一下SEECON 13 的题目 self-ssrf拿到题目里的源码： 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647import express from &quot;express&quot;;const PORT &#x3D; 3000;const LOC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SECCON13">
+<meta property="og:url" content="https://aidemofashi.github.io/2025/09/10/SECCON13/index.html">
+<meta property="og:site_name" content="aidemofashi&#39;s blog">
+<meta property="og:description" content="SEECON 13复现学习一下SEECON 13 的题目 self-ssrf拿到题目里的源码： 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647import express from &quot;express&quot;;const PORT &#x3D; 3000;const LOC">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-09-10T14:45:12.000Z">
+<meta property="article:modified_time" content="2025-09-10T14:45:40.819Z">
+<meta property="article:author" content="aidemofashi">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>SECCON13 - aidemofashi&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"aidemofashi.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>aidemofashi&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="http://39.105.15.250/aidemofashi_home/index.html" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/main.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="SECCON13"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-09-10 22:45" pubdate>
+          2025年9月10日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">SECCON13</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="SEECON-13"><a href="#SEECON-13" class="headerlink" title="SEECON 13"></a>SEECON 13</h1><p>复现学习一下SEECON 13 的题目</p>
+<h2 id="self-ssrf"><a href="#self-ssrf" class="headerlink" title="self-ssrf"></a>self-ssrf</h2><p>拿到题目里的源码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> express <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;express&quot;</span>;<br><br><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PORT</span> = <span class="hljs-number">3000</span>;<br><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">LOCALHOST</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(<span class="hljs-string">`http://localhost:<span class="hljs-subst">$&#123;PORT&#125;</span>`</span>);<br><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">FLAG</span> = <span class="hljs-title class_">Bun</span>.<span class="hljs-property">env</span>.<span class="hljs-property">FLAG</span>!!;<br><br><span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>();<br><br>app.<span class="hljs-title function_">use</span>(<span class="hljs-string">&quot;/&quot;</span>, <span class="hljs-function">(<span class="hljs-params">req, res, next</span>) =&gt;</span> &#123;<br>  <span class="hljs-keyword">if</span> (req.<span class="hljs-property">query</span>.<span class="hljs-property">flag</span> === <span class="hljs-literal">undefined</span>) &#123;<br>    <span class="hljs-keyword">const</span> path = <span class="hljs-string">&quot;/flag?flag=guess_the_flag&quot;</span>;<br>    res.<span class="hljs-title function_">send</span>(<span class="hljs-string">`Go to &lt;a href=&quot;<span class="hljs-subst">$&#123;path&#125;</span>&quot;&gt;<span class="hljs-subst">$&#123;path&#125;</span>&lt;/a&gt;`</span>);<br>  &#125; <span class="hljs-keyword">else</span> <span class="hljs-title function_">next</span>();<br>&#125;);<br><br>app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&quot;/flag&quot;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> &#123;<br>  res.<span class="hljs-title function_">send</span>(<br>    req.<span class="hljs-property">query</span>.<span class="hljs-property">flag</span> === <span class="hljs-variable constant_">FLAG</span> <span class="hljs-comment">// Guess the flag</span><br>    <span class="hljs-comment">//如果请求中带的flag参数等于flag</span><br>      ? <span class="hljs-string">`Congratz! The flag is &#x27;<span class="hljs-subst">$&#123;FLAG&#125;</span>&#x27;.`</span> <span class="hljs-comment">//输出flag</span><br>      : <span class="hljs-string">`&lt;marquee&gt;🚩🚩🚩&lt;/marquee&gt;`</span><br>  );<br>&#125;);<br><br>app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&quot;/ssrf&quot;</span>, <span class="hljs-title function_">async</span> (req, res) =&gt; &#123;<br>  <span class="hljs-keyword">try</span> &#123;<br>    <span class="hljs-keyword">const</span> url = <span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(req.<span class="hljs-property">url</span>, <span class="hljs-variable constant_">LOCALHOST</span>);<br><br>    <span class="hljs-keyword">if</span> (url.<span class="hljs-property">hostname</span> !== <span class="hljs-variable constant_">LOCALHOST</span>.<span class="hljs-property">hostname</span>) &#123;<br>      res.<span class="hljs-title function_">send</span>(<span class="hljs-string">&quot;Try harder 1&quot;</span>);<br>      <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (url.<span class="hljs-property">protocol</span> !== <span class="hljs-variable constant_">LOCALHOST</span>.<span class="hljs-property">protocol</span>) &#123;<br>      res.<span class="hljs-title function_">send</span>(<span class="hljs-string">&quot;Try harder 2&quot;</span>);<br>      <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    url.<span class="hljs-property">pathname</span> = <span class="hljs-string">&quot;/flag&quot;</span>;<br>    url.<span class="hljs-property">searchParams</span>.<span class="hljs-title function_">append</span>(<span class="hljs-string">&quot;flag&quot;</span>, <span class="hljs-variable constant_">FLAG</span>);<br>    res.<span class="hljs-title function_">send</span>(<span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(url).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">r</span>) =&gt;</span> r.<span class="hljs-title function_">text</span>()));<br>  &#125; <span class="hljs-keyword">catch</span> &#123;<br>    res.<span class="hljs-title function_">status</span>(<span class="hljs-number">500</span>).<span class="hljs-title function_">send</span>(<span class="hljs-string">&quot;:(&quot;</span>);<br>  &#125;<br>&#125;);<br><br>app.<span class="hljs-title function_">listen</span>(<span class="hljs-variable constant_">PORT</span>);<br><br></code></pre></td></tr></table></figure>
+
+<p>看不懂完全没思路，去看了某大佬的wp，直接分析到express框架的源码了，等等的逻辑，直接被吓死。。。。<br>自己打也许不能分析出来，但还是学习一下思路：</p>
+<p>通过&#x2F;ssrf访问flag时会在末尾加上参数flag，并给予参数正确flag值，<br>我的问题是，那直接不带任何参数去访问&#x2F;ssrf不就能只有ssrf函数加上的正确的flag参数和值了吗？</p>
+<p>然而还是怪我不了解node.js 的 express 框架。</p>
+<p>app.use(“&#x2F;“, …) 的作用范围：<br>这个中间件匹配所有路径（因为 &#x2F; 是所有路径的前缀），所以它会在任何路由（如 &#x2F;ssrf, &#x2F;flag）之前执行。这是一个常见的“全局前置检查”。<br>所以简单来说，想要访问&#x2F;ssrf就得带上flag参数，这样的话就无法实现空参数访问&#x2F;ssrf了。</p>
+<p>而<a target="_blank" rel="noopener" href="https://zoiltin.github.io/posts/ctf%E8%AE%B0%E5%BD%95-seccon_ctf_13th_quals-alpacahack_round_7/">wp</a>中，<br>解决办法就是通过express对url的处理来解题<br>express在处理相同的参数时会用逗号拼接：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">/?<span class="hljs-attribute">flag</span>=1&amp;flag=flag  -&gt;  req.query.flag = <span class="hljs-string">&#x27;1,flag&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>这样会导致flag值与正确值不匹配</p>
+<p>但是若是传入：<em><strong>ssrf&#x2F;?flag[&#x3D;]&#x3D;asd</strong></em></p>
+<p>会导致两次解析不一致，其中express的qs解析一次，url解析一次：</p>
+<p>url把flag[&#x3D;]&#x3D; 拆分为：<br>参数：flag[&#x3D;<br>值: ]&#x3D;asd</p>
+<p>qs把 flag[&#x3D;]&#x3D; 解析为对象 { flag: { “&#x3D;”: “asd” } }<br>此时 req.query.flag 是一个对象 { ‘&#x3D;’: ‘asd’ }，不是 undefined</p>
+<p>第一次解析完成后，会导致qs认为flag是存在的，从而通过了’&#x2F;‘中间件，进入到’&#x2F;ssrf’，<br>之后经过’&#x2F;ssrf’的处理，会变成：</p>
+<p>ssrf&#x2F;?flag[&#x3D;]&#x3D;asd&amp;flag&#x3D;(正确flag值)</p>
+<p>然后解析：</p>
+<p>url:<br>参数1：flag[<br>值：]&#x3D;asd<br>参数2：flag<br>值： (正确flag)</p>
+<p>qs就不会把url里两个不同的参数进行合并，所以就存在flag&#x3D;正确值</p>
+<h3 id="感觉若是有node-js的开发经验，那这种题目应该算简单？可惜我学信安并没有很多开发经验。要是考到不了解的框架那不知道怎办了。"><a href="#感觉若是有node-js的开发经验，那这种题目应该算简单？可惜我学信安并没有很多开发经验。要是考到不了解的框架那不知道怎办了。" class="headerlink" title="感觉若是有node.js的开发经验，那这种题目应该算简单？可惜我学信安并没有很多开发经验。要是考到不了解的框架那不知道怎办了。"></a><em><strong>感觉若是有node.js的开发经验，那这种题目应该算简单？可惜我学信安并没有很多开发经验。要是考到不了解的框架那不知道怎办了。</strong></em></h3><p><strong>来自qwen：</strong></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><code class="hljs markdown">你的感受<span class="hljs-strong">**非常真实，也非常普遍**</span>，几乎所有从安全入门、没有深厚开发背景的人都会经历这个阶段。但请放心，你的思考方向完全正确，而且你已经迈出了最关键的一步——<span class="hljs-strong">**理解了漏洞的本质，而不仅仅是“套用技巧”**</span>。<br><br>我们来深入聊聊你的担忧，并给你一些实用的建议。<br><br>---<br><br><span class="hljs-section">### 1. “有开发经验就简单？” —— 部分正确，但不绝对</span><br><br>✅ <span class="hljs-strong">**有开发经验的优势**</span>：<br><span class="hljs-bullet">-</span>   熟悉框架的“正常行为”，更容易识别“异常行为”。<br><span class="hljs-bullet">-</span>   知道 <span class="hljs-code">`app.use()`</span> 是中间件，<span class="hljs-code">`req.query`</span> 是什么，<span class="hljs-code">`URLSearchParams`</span> 怎么工作。<br><span class="hljs-bullet">-</span>   对 URL 编码、参数解析、HTTP 流程有直觉。<br><br>❌ <span class="hljs-strong">**但不代表“简单”**</span>：<br><span class="hljs-bullet">-</span>   这道题利用的是 <span class="hljs-code">`qs`</span> 库在<span class="hljs-strong">**嵌套参数 + 重复键名**</span>下的<span class="hljs-strong">**非预期行为**</span>，即使是经验丰富的 Node.js 开发者，如果不专门研究过 <span class="hljs-code">`qs`</span> 的源码或边界情况，也未必能立刻想到。<br><span class="hljs-bullet">-</span>   CTF 题目的设计目标就是<span class="hljs-strong">**挖掘框架/库的边缘 case 和逻辑矛盾**</span>，而不是考察“日常开发能力”。<br><br>所以，这道题对开发者来说可能“更容易理解”，但要说“简单”，那也不一定。它更像是一个“<span class="hljs-strong">**知道就知道，不知道就很难猜**</span>”的知识盲点题。<br><br>---<br><br><span class="hljs-section">### 2. “没开发经验怎么办？” —— 别怕，有方法！</span><br><br>你现在的状态是：<span class="hljs-strong">**通过学习 WP，你补上了知识盲点，并且用自己的逻辑重新推导了一遍**</span>。这比“凭空想出”更有价值！因为：<br><br><span class="hljs-quote">&gt; <span class="hljs-strong">**CTF 不是考试，而是研究。真正的安全研究者都是站在巨人的肩膀上。**</span></span><br><br><span class="hljs-section">#### 🛠️ 如何弥补开发经验的不足？</span><br><br>| 方法 | 具体做法 | 效果 |<br>| :--- | :--- | :--- |<br>| <span class="hljs-strong">**1. 学习基础 Web 开发概念**</span> | 不需要精通一门语言，但要懂：<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span></span>- HTTP 请求/响应结构（GET/POST, Headers, Query, Body）<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span></span>- Cookie/Session<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span></span>- 常见框架模式（路由、中间件、模板渲染）<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span></span>- 数据库基础（SQL/NoSQL） | 建立“系统观”，不再把代码当黑盒 |<br>| <span class="hljs-strong">**2. 主动查文档和源码**</span> | 看到 <span class="hljs-code">`express`</span>, <span class="hljs-code">`qs`</span>, <span class="hljs-code">`flask`</span>, <span class="hljs-code">`django`</span> 等关键字：<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span></span>- 立刻去搜官方文档或 GitHub。<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span></span>- 重点看：<span class="hljs-strong">**参数解析、路由匹配、安全机制**</span>。<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span></span>- 例如：<span class="hljs-code">`qs`</span> 的 README 明确写了它支持嵌套对象和数组。 | 把“未知”变成“已知” |<br>| <span class="hljs-strong">**3. 搭建实验环境**</span> | 本地写几行代码验证你的猜想：<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span></span><span class="hljs-code">```js&lt;br&gt;const qs = require(&#x27;qs&#x27;);&lt;br&gt;console.log(qs.parse(&#x27;flag[=]=asd&amp;flag=123&#x27;));&lt;br&gt;// 输出？&lt;br&gt;``` </span>| 实践出真知，记忆更深刻 |<br>| <span class="hljs-strong">**4. 关注“框架特性”而非“语言”**</span> | Node.js/Python/PHP 只是载体，真正重要的是：<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span></span>- Express 的中间件机制<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span></span>- Flask 的 template injection<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span></span>- Django 的 ORM 注入<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span></span>掌握一种，触类旁通。 | 提升学习效率 |<br><br>---<br><br><span class="hljs-section">### 3. “考到不了解的框架怎办？” —— 核心策略</span><br><br>当遇到完全陌生的框架时，别慌，按以下步骤走：<br><br><span class="hljs-section">#### 🔍 步骤 1：快速识别技术栈</span><br><span class="hljs-bullet">-</span> 看文件名：<span class="hljs-code">`app.py`</span> → Python/Flask? <span class="hljs-code">`server.js`</span> → Node.js?<br><span class="hljs-bullet">-</span> 看依赖：<span class="hljs-code">`package.json`</span> → Node.js, <span class="hljs-code">`requirements.txt`</span> → Python<br><span class="hljs-bullet">-</span> 看错误信息：500 错误可能暴露框架名<br><br><span class="hljs-section">#### 🧩 步骤 2：找“关键函数”和“数据流”</span><br><span class="hljs-bullet">-</span> 找输入点：<span class="hljs-code">`req.query`</span>, <span class="hljs-code">`req.body`</span>, <span class="hljs-code">`request.GET`</span>, <span class="hljs-code">`request.POST`</span><br><span class="hljs-bullet">-</span> 找输出点：<span class="hljs-code">`res.send()`</span>, <span class="hljs-code">`return render(...)`</span><br><span class="hljs-bullet">-</span> 找危险操作：<span class="hljs-code">`eval`</span>, <span class="hljs-code">`exec`</span>, <span class="hljs-code">`os.system`</span>, <span class="hljs-code">`数据库查询`</span>, <span class="hljs-code">`文件读写`</span>, <span class="hljs-strong">**SSRF 中的 `fetch`/`requests.get`**</span><br><br><span class="hljs-section">#### 📚 步骤 3：查该函数的文档</span><br><span class="hljs-bullet">-</span> 搜索：<span class="hljs-code">`express url.searchParams.append`</span> 或 <span class="hljs-code">`flask request.args.to_dict`</span><br><span class="hljs-bullet">-</span> 重点看：<span class="hljs-strong">**如何处理重复参数？如何处理特殊字符？是否有已知 CVE？**</span><br><br><span class="hljs-section">#### 💡 步骤 4：联想类似漏洞</span><br><span class="hljs-bullet">-</span> SSRF？→ 想办法绕过 host/protocol 检查<br><span class="hljs-bullet">-</span> SQLi？→ 想办法闭合引号或注释<br><span class="hljs-bullet">-</span> SSTI？→ 尝试 <span class="hljs-code">`&#123;%&#125;`</span>, <span class="hljs-code">`&#123;&#123;&#125;&#125;`</span>, <span class="hljs-code">`&lt;%= %&gt;`</span><br><span class="hljs-bullet">-</span> 参数污染？→ 试试 <span class="hljs-code">`?a=1&amp;a=2`</span><br><br>---<br><br><span class="hljs-section">### 🌟 最后一句话</span><br><br><span class="hljs-quote">&gt; <span class="hljs-strong">**“开发经验”不是门槛，而是你可以逐步积累的工具箱。**</span></span><br><span class="hljs-quote">&gt;</span><br><span class="hljs-quote">&gt; <span class="hljs-strong">**而你现在已经拥有了最宝贵的资产——分析问题的能力。**</span></span><br><br>继续加油！你完全有能力攻克任何题目。💪<br></code></pre></td></tr></table></figure>
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>SECCON13</div>
+      <div>https://aidemofashi.github.io/2025/09/10/SECCON13/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>aidemofashi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年9月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/09/08/netdream/" title="netdream">
+                        <span class="hidden-mobile">netdream</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
