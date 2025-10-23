@@ -19,15 +19,15 @@
   <meta name="author" content="aidemofashi">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Mini L-CTF Click and Click当初没做出来，去西电CTF平台复现官方wp：先用JavaScript在浏览器控制台刷够10000   1234but &#x3D; document.querySelector(&quot;#app &gt; main &gt; div &gt; button&quot;)for (var i &#x3D; 0; i &lt; 10000; i++) &#123;">
+    <meta name="description" content="Mini L-CTF Click and Clicktags: java原型链污染 当初没做出来，去西电CTF平台复现官方wp：先用JavaScript在浏览器控制台刷够10000   1234but &#x3D; document.querySelector(&quot;#app &gt; main &gt; div &gt; button&quot;)for (var i &#x3D; 0; i &lt; 100">
 <meta property="og:type" content="article">
 <meta property="og:title" content="note-35">
 <meta property="og:url" content="https://aidemofashi.github.io/2025/05/14/note-35/index.html">
 <meta property="og:site_name" content="aidemofashi&#39;s blog">
-<meta property="og:description" content="Mini L-CTF Click and Click当初没做出来，去西电CTF平台复现官方wp：先用JavaScript在浏览器控制台刷够10000   1234but &#x3D; document.querySelector(&quot;#app &gt; main &gt; div &gt; button&quot;)for (var i &#x3D; 0; i &lt; 10000; i++) &#123;">
+<meta property="og:description" content="Mini L-CTF Click and Clicktags: java原型链污染 当初没做出来，去西电CTF平台复现官方wp：先用JavaScript在浏览器控制台刷够10000   1234but &#x3D; document.querySelector(&quot;#app &gt; main &gt; div &gt; button&quot;)for (var i &#x3D; 0; i &lt; 100">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-14T10:04:40.000Z">
-<meta property="article:modified_time" content="2025-05-14T10:05:46.849Z">
+<meta property="article:modified_time" content="2025-10-23T05:27:51.038Z">
 <meta property="article:author" content="aidemofashi">
 <meta property="article:tag" content="web">
 <meta name="twitter:card" content="summary_large_image">
@@ -276,7 +276,8 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Mini-L-CTF-Click-and-Click"><a href="#Mini-L-CTF-Click-and-Click" class="headerlink" title="Mini L-CTF Click and Click"></a>Mini L-CTF Click and Click</h1><p>当初没做出来，去西电CTF平台复现<br>官方wp：<br>先用JavaScript在浏览器控制台刷够10000  </p>
+                <h1 id="Mini-L-CTF-Click-and-Click"><a href="#Mini-L-CTF-Click-and-Click" class="headerlink" title="Mini L-CTF Click and Click"></a>Mini L-CTF Click and Click</h1><p>tags: java原型链污染</p>
+<p>当初没做出来，去西电CTF平台复现<br>官方wp：<br>先用JavaScript在浏览器控制台刷够10000  </p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs js">but = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;#app &gt; main &gt; div &gt; button&quot;</span>)<br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10000</span>; i++) &#123;<br>    but.<span class="hljs-title function_">click</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>在bp上看到 http 历史记录<br>发现是没50次发一次包<br>过了1000次后服务器一直回显“按的太快了”<br>回显内容：  </p>
 <figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs d">什么叫“前后端分离”啊？（战术后仰）<br><br><span class="hljs-keyword">if</span> ( req.<span class="hljs-keyword">body</span>.point.amount == <span class="hljs-number">0</span> || req.<span class="hljs-keyword">body</span>.point.amount == <span class="hljs-literal">null</span>) &#123; <span class="hljs-keyword">delete</span> req.<span class="hljs-keyword">body</span>.point.amount &#125;<br><br>条件判断：检查 req.<span class="hljs-keyword">body</span>.point.amount 的值是否是 <span class="hljs-number">0</span> 或 <span class="hljs-literal">null</span>。<br>操作：如果满足条件，删除 req.<span class="hljs-keyword">body</span>.point.amount 属性。<br></code></pre></td></tr></table></figure>
