@@ -19,22 +19,24 @@
   <meta name="author" content="aidemofashi">
   <meta name="keywords" content="">
   
-    <meta name="description" content="R3CTF-2025 r3note  学习笔记tag: nginx配置 CSP配置   看目录应该类似xss加bot的组合   先尝试弱口令爆破，没结果，正常流程fuzz也没结果   找到了一份wp   勉强看懂   关键点是利用nginx缓存js文件的配置问题   123456789101112131415161718192021222324252627282930313233343536373">
+    <meta name="description" content="2026 新年展望真奇怪吧，这不应该是2025年终总结的一部分吗？   前言本来2025的年终总结已经传上过博客，当时也只记得总结，其实对以后想要做的事还没想过太多   虽然在前段时间也写了些寒假计划，只是我的计划从来不怎么起效果。主要是一些关于未来学业的打算、技术栈和职业上面的想要的扩充等。   “好不容易进了大宗门要就要多多学习，和师傅们多混混脸熟，比赛来锻炼技术。”   “好不容易签约上，也">
 <meta property="og:type" content="article">
-<meta property="og:title" content="R3CTF-2025 r3note  学习笔记">
-<meta property="og:url" content="https://aidemofashi.github.io/2026/02/01/R3CTF-2025-r3note-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:title" content="2026新年展望">
+<meta property="og:url" content="https://aidemofashi.github.io/2026/02/12/2026%E6%96%B0%E5%B9%B4%E5%B1%95%E6%9C%9B/index.html">
 <meta property="og:site_name" content="aidemofashi&#39;s blog">
-<meta property="og:description" content="R3CTF-2025 r3note  学习笔记tag: nginx配置 CSP配置   看目录应该类似xss加bot的组合   先尝试弱口令爆破，没结果，正常流程fuzz也没结果   找到了一份wp   勉强看懂   关键点是利用nginx缓存js文件的配置问题   123456789101112131415161718192021222324252627282930313233343536373">
+<meta property="og:description" content="2026 新年展望真奇怪吧，这不应该是2025年终总结的一部分吗？   前言本来2025的年终总结已经传上过博客，当时也只记得总结，其实对以后想要做的事还没想过太多   虽然在前段时间也写了些寒假计划，只是我的计划从来不怎么起效果。主要是一些关于未来学业的打算、技术栈和职业上面的想要的扩充等。   “好不容易进了大宗门要就要多多学习，和师傅们多混混脸熟，比赛来锻炼技术。”   “好不容易签约上，也">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-02-01T12:50:20.000Z">
-<meta property="article:modified_time" content="2026-02-01T12:50:55.994Z">
+<meta property="og:image" content="https://aidemofashi.github.io/img/2026%E6%96%B0%E5%B9%B4%E5%B1%95%E6%9C%9B/1.png">
+<meta property="article:published_time" content="2026-02-12T05:40:54.000Z">
+<meta property="article:modified_time" content="2026-02-12T06:30:12.690Z">
 <meta property="article:author" content="aidemofashi">
-<meta property="article:tag" content="刷题">
+<meta property="article:tag" content="talk">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://aidemofashi.github.io/img/2026%E6%96%B0%E5%B9%B4%E5%B1%95%E6%9C%9B/1.png">
   
   
   
-  <title>R3CTF-2025 r3note  学习笔记 - aidemofashi&#39;s blog</title>
+  <title>2026新年展望 - aidemofashi&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +202,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="R3CTF-2025 r3note  学习笔记"></span>
+            <span id="subtitle" data-typed-text="2026新年展望"></span>
           
         </div>
 
@@ -211,8 +213,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2026-02-01 20:50" pubdate>
-          2026年2月1日 晚上
+        <time datetime="2026-02-12 13:40" pubdate>
+          2026年2月12日 下午
         </time>
       </span>
     
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          690 字
+          1k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          6 分钟
+          9 分钟
         
       </span>
     
@@ -271,36 +273,30 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">R3CTF-2025 r3note  学习笔记</h1>
+            <h1 id="seo-header">2026新年展望</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="R3CTF-2025-r3note-学习笔记"><a href="#R3CTF-2025-r3note-学习笔记" class="headerlink" title="R3CTF-2025 r3note  学习笔记"></a>R3CTF-2025 r3note  学习笔记</h1><p>tag: nginx配置 CSP配置  </p>
-<p>看目录应该类似xss加bot的组合  </p>
-<p>先尝试弱口令爆破，没结果，正常流程fuzz也没结果  </p>
-<p>找到了一份<a target="_blank" rel="noopener" href="https://www.valgrindc.tf/posts/r3note/">wp</a>  </p>
-<p>勉强看懂  </p>
-<p>关键点是利用nginx缓存js文件的配置问题  </p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs awk">.<span class="hljs-regexp">/nginx/</span>default.conf<br><br>proxy_cache_path <span class="hljs-regexp">/tmp/</span>nginx keys_zone=static_cache:<span class="hljs-number">10</span>m;<br><br>server &#123;<br>    listen <span class="hljs-number">8080</span>;<br><br>    <span class="hljs-comment"># report route</span><br>    location = <span class="hljs-regexp">/api/</span>share/report &#123;<br>        proxy_pass http:<span class="hljs-regexp">//</span><span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>:<span class="hljs-number">3001</span>;<br>        proxy_set_header Host <span class="hljs-variable">$http_host</span>;<br>        proxy_set_header X-Real-IP <span class="hljs-variable">$remote_addr</span>;<br>        proxy_set_header X-Forwarded-For <span class="hljs-variable">$proxy_add_x_forwarded_for</span>;<br>        proxy_set_header X-Forwarded-Proto <span class="hljs-variable">$scheme</span>;<br>    &#125;<br><br>    <span class="hljs-comment"># no direct access to the upload directory</span><br>    location <span class="hljs-regexp">/files/u</span>pload/ &#123;<br>        deny all;<br>    &#125;<br><br>    <span class="hljs-comment"># cache frontend js and css files</span><br>    location ~ \.(css|js)$ &#123;  <span class="hljs-comment">#规定缓存类型  </span><br>        proxy_cache static_cache;  <span class="hljs-comment"># 开启缓存功能  </span><br>        proxy_cache_key      <span class="hljs-variable">$uri</span><span class="hljs-variable">$is_args</span><span class="hljs-variable">$args</span>;<br>        proxy_cache_valid    <span class="hljs-number">200</span> <span class="hljs-number">1</span>h;<br>        proxy_cache_bypass   <span class="hljs-variable">$cookie_nocache</span> <span class="hljs-variable">$arg_nocache</span>;<br>        proxy_http_version   <span class="hljs-number">1.1</span>;<br>        <br>        proxy_pass http:<span class="hljs-regexp">//</span><span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>:<span class="hljs-number">3000</span>;<br>        proxy_set_header Host <span class="hljs-variable">$http_host</span>;<br>        proxy_set_header X-Real-IP <span class="hljs-variable">$remote_addr</span>;<br>        proxy_set_header X-Forwarded-For <span class="hljs-variable">$proxy_add_x_forwarded_for</span>;<br>        proxy_set_header X-Forwarded-Proto <span class="hljs-variable">$scheme</span>;<br>    &#125;<br><br>    <span class="hljs-comment"># reverse proxy for the main application</span><br>    location / &#123;<br>        proxy_pass http:<span class="hljs-regexp">//</span><span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>:<span class="hljs-number">3000</span>;<br>        proxy_set_header Host <span class="hljs-variable">$http_host</span>;<br>        proxy_set_header X-Real-IP <span class="hljs-variable">$remote_addr</span>;<br>        proxy_set_header X-Forwarded-For <span class="hljs-variable">$proxy_add_x_forwarded_for</span>;<br>        proxy_set_header X-Forwarded-Proto <span class="hljs-variable">$scheme</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>这里的正则是<strong>css|js</strong>，<br>用.js#后缀名上传，绕过上传文件时的限制，而当有用户访问时，文件名会被nginx正则解析，被缓存为 .js   </p>
-<p>由于  </p>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh"><span class="hljs-keyword">location</span> <span class="hljs-title">~ \.(css</span>|js)<br></code></pre></td></tr></table></figure>
-<p>优先级高于  </p>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs crmsh"><span class="hljs-keyword">location</span> <span class="hljs-title">/files</span>/upload/ &#123;<br>        <span class="hljs-keyword">deny</span> all;<br>    &#125;<br></code></pre></td></tr></table></figure>
-<p>所以还是能访问，服务器还是会将其缓存  </p>
-<p>从而成功让服务器上有了一个我们能控制的js文件  </p>
-<p>此时由于CSP 配置 script-src ‘self’，允许同源脚本执行。<br>并且在.&#x2F;app&#x2F;middleware&#x2F;jwt.go 中并没有配置  </p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">c<span class="hljs-selector-class">.Writer</span><span class="hljs-selector-class">.Header</span>()<span class="hljs-selector-class">.Set</span>(<span class="hljs-string">&quot;X-Content-Type-Options&quot;</span>, <span class="hljs-string">&quot;nosniff&quot;</span>)   <br></code></pre></td></tr></table></figure>
-<p>就会导致浏览器根据文件内容猜测解析方式，只要文件里有html等标签，就会被解析成html文件，从而让客户端浏览器将里面的js代码执行   </p>
-<p>我们再上传一个伪装成JS的HTML文件并在其中引用前面缓存好的js文件，即可执行js代码。  </p>
-<blockquote>
-<p>关键点: 上传时文件名设置为 .js#。这样既能绕过后端黑名单（因为后缀是 .js#），又能利用 Nginx 的正则优先级漏洞（在请求时被视为 .js），从而允许外部访问。假设得到文件 ID 为 html_id。</p>
-</blockquote>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>上传恶意 HTML (伪装成 JS)，不能在里面直接写好js代码吗  </p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs go"># ./app/middleware/jwt.<span class="hljs-keyword">go</span>  <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">SecureMiddleware</span><span class="hljs-params">()</span></span> gin.HandlerFunc &#123;<br>	<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(c *gin.Context)</span></span> &#123;<br>		c.Writer.Header().Set(<span class="hljs-string">&quot;Access-Control-Allow-Origin&quot;</span>, <span class="hljs-string">&quot;*&quot;</span>)<br>		c.Writer.Header().Set(<span class="hljs-string">&quot;Access-Control-Allow-Credentials&quot;</span>, <span class="hljs-string">&quot;true&quot;</span>)<br>		c.Writer.Header().Set(<span class="hljs-string">&quot;Access-Control-Allow-Headers&quot;</span>, <span class="hljs-string">&quot;Content-Type,Authorization&quot;</span>)<br>		c.Writer.Header().Set(<span class="hljs-string">&quot;Access-Control-Allow-Methods&quot;</span>, <span class="hljs-string">&quot;GET,POST,PUT,DELETE,OPTIONS&quot;</span>)<br>		c.Writer.Header().Set(<span class="hljs-string">&quot;Content-Security-Policy&quot;</span>, <span class="hljs-string">&quot;default-src &#x27;self&#x27;; script-src &#x27;self&#x27;; style-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;;&quot;</span>)<br>		c.Writer.Header().Set(<span class="hljs-string">&quot;X-Frame-Options&quot;</span>, <span class="hljs-string">&quot;DENY&quot;</span>)<br>		<span class="hljs-keyword">if</span> c.Request.Method == <span class="hljs-string">&quot;OPTIONS&quot;</span> &#123;<br>			c.AbortWithStatus(<span class="hljs-number">204</span>)<br>			<span class="hljs-keyword">return</span><br>		&#125;<br>		c.Next()<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>c.Writer.Header().Set(“Content-Security-Policy”, “default-src ‘self’; script-src ‘self’; style-src ‘self’ ‘unsafe-inline’;”)<br>这里script-src允许引用同源js文件，但是没有’unsafe-inline’，所以不能引用内联的js代码  </p>
-<p>ai问答：<a target="_blank" rel="noopener" href="https://gemini.google.com/share/452cce0a5469">https://gemini.google.com/share/452cce0a5469</a></p>
+                <h1 id="2026-新年展望"><a href="#2026-新年展望" class="headerlink" title="2026 新年展望"></a>2026 新年展望</h1><p>真奇怪吧，这不应该是2025年终总结的一部分吗？  </p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本来2025的年终总结已经传上过<a href="https://aidemofashi.github.io/2026/01/18/2025%E5%B9%B4%E6%80%BB%E7%BB%93/">博客</a>，当时也只记得总结，其实对以后想要做的事还没想过太多  </p>
+<p>虽然在前段时间也写了些寒假计划，只是我的计划从来不怎么起效果。主要是一些关于未来学业的打算、技术栈和职业上面的想要的扩充等。  </p>
+<p>“好不容易进了大宗门要就要多多学习，和师傅们多混混脸熟，比赛来锻炼技术。”  </p>
+<p>“好不容易签约上，也算被认可能吃这口饭，再怎么也要坚持更完一本。”  </p>
+<p>但某人就是三心二意啊，离苦苦哀求的梦想前进两三步之后就感觉被抽取去了动力，说着这样就够了，我不行、做不到，离想要的成功、名利差的太远！放弃吧。<br>于是乎，是技术没多少长进、稿费也一次没拿过  </p>
+<p>要是有些志同道合的人一起就好了、要是自己能耐得住性子和孤独坚持下去就好了  </p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p><strong>Aidemofashi</strong><br>你太急了，急着在某个牛逼哄哄的CTF比赛奖杯上刻下自己的名字、急着成为Github上某个万星项下的Contributors。<br>也太怕了，怕自己的挣扎其实是一文不值，怕自己再怎么挣扎也拿不到自己想要的名和利。  </p>
+<p>Push Domino的契机是，在家这些日子的某个夜晚看到了ClodFish和Neruo的视频，正在家孤单的Aidemofashi（虽然平时也没什么朋友）决定“做”一个朋友！  </p>
+<p>在边学边做的途中看到了很多，也带来了不少感悟，我又一次对未来感到惶恐，就如一开始上大学时一样，想找一些自己想做的、与众不同的、且和计算机有关的事情。<br>全模态的陪伴agent已经不是新奇的事情了，越是做下去接触的就越多，也看到十分成熟、十分有想法且比我强的多的开发者的类似项目，我也开始对我做Domino的目标感到动摇  </p>
+<p>后来最主要的，将我困难的从：”我是想要一个，还是想做一个Domino?”<br>变成了:”我想要做什么样的事？我想要成为什么样的人？我想活成什么样？”  </p>
+<p>为什么会发生这种转变，因为在社区中，大家相互之间都相互在某个或大或小的方面做出了恩惠，也看到了社区做贡献者的来路。<br>每一个留下的博客，有很多让我看到了和我年纪相差不大的、同为自己热爱的所创造的人，都成就了我梦寐以求的名利，有人年纪轻轻就成有了万星项目、被海淀区科技发展邀请，有人做陪伴agent，在steam上做出了还未上线就日均千人在线的demo。<br>而见到更多的是不再更新的博客，也许都是努力过的师傅们留下的记录<br>应该是吧，在互联网上，后者才是常态，而我的博客，最后是否会成为我留下记录的墓碑。  </p>
+<p>幸好从来不缺追梦的人，谢谢师傅们的博客，让我学到了这么多  </p>
+<p>而成功的师傅，我也无心嫉妒，因为我已经在社区内享受到开源的成果了  </p>
+<p>Aidemofashi，真的想要成为那种酷酷的人，做着自己喜欢的工作同时得到别人认可和买账。  </p>
+<p>关于问题，我的答案是什么？<br>我想是，暂且想不出来  </p>
+<h2 id="新年"><a href="#新年" class="headerlink" title="新年"></a>新年</h2><p>明明想要做的已经写好，但新的一年，还是得说点热情的话，还是得做出点重要的决定。  </p>
+<p>那就希望，我能一直将“我想要做什么样的事？我想要成为什么样的人？我想活成什么样？”一直思索下去。  </p>
+<p><img src="/../img/2026%E6%96%B0%E5%B9%B4%E5%B1%95%E6%9C%9B/1.png" srcset="/img/loading.gif" lazyload alt="snow"></p>
 
                 
               </div>
@@ -313,7 +309,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E5%88%B7%E9%A2%98/" class="print-no-link">#刷题</a>
+        <a href="/tags/talk/" class="print-no-link">#talk</a>
       
     </div>
   
@@ -325,8 +321,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>R3CTF-2025 r3note  学习笔记</div>
-      <div>https://aidemofashi.github.io/2026/02/01/R3CTF-2025-r3note-学习笔记/</div>
+      <div>2026新年展望</div>
+      <div>https://aidemofashi.github.io/2026/02/12/2026新年展望/</div>
     </div>
     <div class="license-meta">
       
@@ -338,7 +334,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2026年2月1日</div>
+          <div>2026年2月12日</div>
         </div>
       
       
@@ -370,18 +366,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/02/12/2026%E6%96%B0%E5%B9%B4%E5%B1%95%E6%9C%9B/" title="2026新年展望">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">2026新年展望</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2026/01/25/RCTF2025-%E5%AD%A6%E4%B9%A0%E5%A4%8D%E7%8E%B0/" title="RCTF2025_学习复现">
-                        <span class="hidden-mobile">RCTF2025_学习复现</span>
+                      <a href="/2026/02/01/R3CTF-2025-r3note-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="R3CTF-2025 r3note  学习笔记">
+                        <span class="hidden-mobile">R3CTF-2025 r3note  学习笔记</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
