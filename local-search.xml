@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>关于Fluid图片不加载问题</title>
+    <link href="/2026/02/14/%E5%85%B3%E4%BA%8EFluid%E5%9B%BE%E7%89%87%E4%B8%8D%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/"/>
+    <url>/2026/02/14/%E5%85%B3%E4%BA%8EFluid%E5%9B%BE%E7%89%87%E4%B8%8D%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/</url>
+    
+    <content type="html"><![CDATA[<h1 id="关于Fluid图片不加载问题"><a href="#关于Fluid图片不加载问题" class="headerlink" title="关于Fluid图片不加载问题"></a>关于Fluid图片不加载问题</h1><p>这天在搞博客的<a href="https://aidemofashi.github.io/about/">个人主页</a>，发现一些图片怎么放也加载不上去，并且一直显示在卷圈的图标。  </p><p>并且这些图片有明显特点，都是外站的内容。  </p><p>以前写博客也注意到了，之前想的是妥协一下，直接放在hexo内部来上传github加载。 </p><p>后来整到个人的主页，想把看番列表也整进去，为了保证时效性，这就不得不加载外站的图片。不出所料，依旧是如以前加载不出来。<br>上网收拾类似答案，都是以前写博客时就尝试过的，依旧没有办法  </p><p>这时我们观察前端：    </p><p><img src="/../img/%E5%85%B3%E4%BA%8EFluid%E5%9B%BE%E7%89%87%E4%B8%8D%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/1.png" alt="不加载"></p><p>能发现一个名叫 img-lazyload 的组件。这个名字就很让人怀疑，我们继续追看一下。  </p><p>在前端源码里能看到  </p><p><img src="/../img/%E5%85%B3%E4%BA%8EFluid%E5%9B%BE%E7%89%87%E4%B8%8D%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/2.png" alt="2"></p><p>每一个图片属性都多了一个 lazyload 的东西，就此去询问Ai，最终确定了我环境上的答案  </p><h2 id="Fluid懒加载"><a href="#Fluid懒加载" class="headerlink" title="Fluid懒加载"></a>Fluid懒加载</h2><p><strong>原因</strong></p><p>Hexo 的 Fluid 主题为了极致的加载速度，会对所有 img 标签进行“劫持”，把 src 替换成一张占位图（loading.gif）<br>当主题的懒加载脚本运行时，我们向外部请求的图片还没返回，懒加载脚本已经跑完了，这时就会一直显示着那个加载的占位图。  </p><p><strong>解决办法</strong></p><p>我们可以在的图片样式里加入  </p><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">data-no-lazy=&quot;<span class="hljs-number">1</span>&quot; class=&quot;no-lazyload&quot;<br></code></pre></td></tr></table></figure><p>就可以让这张图片不懒加载，  </p><p>当然这解决不了markdown格式的插入问题，但我们若是不在意懒加载的性能可以直接在 Fluid 的 _config.yml 里关闭懒加载：  </p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">lazyload:</span><br>  <span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span><br><br>  <span class="hljs-comment"># 加载时的占位图片</span><br>  <span class="hljs-comment"># The placeholder image when loading</span><br>  <span class="hljs-attr">loading_img:</span> <span class="hljs-string">/img/loading.gif</span><br></code></pre></td></tr></table></figure><p>或则在当前文章禁用懒加载：</p><figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs md">---<br>title: 关于Fluid图片不加载问题<br>date: 2026-02-14 02:34<br><span class="hljs-section">lazyload: false  # 添加这一行，关闭本页面的懒加载</span><br><span class="hljs-section">---</span><br></code></pre></td></tr></table></figure><h2 id="图片反爬"><a href="#图片反爬" class="headerlink" title="图片反爬"></a>图片反爬</h2><p>当解决懒加载问题，我们又可能遇上里另一个机制：<strong>图片反爬</strong>  </p><p>我选择的解决办法是用代理中转  </p><p>这里放一个图片反爬问题的案例：  </p><p>被b站反爬：  </p><img src="https://i1.hdslb.com/bfs/face/05a9e98489cb1c860705bba3c1e44cba36587033.jpg"><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://i1.hdslb.com/bfs/face/05a9e98489cb1c860705bba3c1e44cba36587033.jpg&quot;</span>&gt;</span><br></code></pre></td></tr></table></figure><p>用图片代理中转解决：  </p><img src="https://images.weserv.nl/?url=https://i1.hdslb.com/bfs/face/05a9e98489cb1c860705bba3c1e44cba36587033.jpg"><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://images.weserv.nl/?url=https://i1.hdslb.com/bfs/face/05a9e98489cb1c860705bba3c1e44cba36587033.jpg&quot;</span>&gt;</span><br></code></pre></td></tr></table></figure><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>每个人博客环境不一样，请根据自己的具体情况参考    </p><p>不想写在hexo里，Fluid上加载个网图真是费劲  </p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>杂项</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>2026新年展望</title>
     <link href="/2026/02/12/2026%E6%96%B0%E5%B9%B4%E5%B1%95%E6%9C%9B/"/>
     <url>/2026/02/12/2026%E6%96%B0%E5%B9%B4%E5%B1%95%E6%9C%9B/</url>
