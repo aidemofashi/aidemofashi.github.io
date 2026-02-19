@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <link rel="icon" href="PRTShark.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>这里是PRTShark的情报基地!!!</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei UI", Arial, sans-serif;
+            background: #000;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-image: url('background_about.png'); /* 更改背景图片 */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        .blurred-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            filter: blur(5px);
+            z-index: -1;
+            background-image: url('background_about.png'); /* 更改背景图片 */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            opacity: 0.2;
+        }
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 1px solid #cbcbcb;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
+            color: #7d71ff;
+        }
+        .header p {
+            font-size: 1.2em;
+            color: #b489c7;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            border-bottom: 2px solid #5f79fa;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .social-links a {
+            display: inline-block;
+            color: #ffffff;
+            text-decoration: none;
+            margin: 5px;
+            font-size: 1.1em;
+            padding: 10px;
+            border-radius: 5px;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+        .social-links a.youtube {
+            background-color: #FF0000;
+        }
+        .social-links a.twitter {
+            background-color: #1DA1F2;
+        }
+        .social-links a.tiktok {
+            background-color: #000;
+            color: #ffffff;
+        }
+        .social-links a.bilibili {
+            background-color: #FF6EB7;
+        }
+        .social-links a.email {
+            background-color: #444;
+        }
+        .social-links a:hover {
+            transform: scale(1.03);
+        }
+        .portfolio {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .portfolio-item {
+            flex: 1 1 calc(50% - 20px);
+            max-width: calc(50% - 20px);
+            box-sizing: border-box;
+        }
+        .portfolio-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+        .portfolio-item img:hover {
+            transform: scale(1.05);
+        }
+        .portfolio-item p {
+            text-align: center;
+            margin: 10px 0 0;
+            font-size: 1.2em;
+            color: #cf91ff;
+        }
+        .update {
+            background: #ffffff67;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .update h3 {
+            margin-top: 0;
+            color: #67bbff;
+        }
+        .update p {
+            color: #cb8bff;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #90e5ff;
+            color: #ffffff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            opacity: 0.2;
+        }
+        .back-button:hover {
+            background-color: #c95eff;
+            transform: scale(1.1);
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <a href="PRTSharkdesuyo.html" class="back-button">BACK</a>
+    <div class="blurred-background"></div>
+    <div class="header">
+        <h1>PRTShark</h1>
+        <p>P是位置,R是旋转,T是透明度,S是缩放,hark是HardCore的改写!</p>
+    </div>
+    <div class="container">
+        <div class="section">
+            <h2>社交媒体</h2>
+            <div class="social-links">
+                <a class="youtube" href="https://www.youtube.com/channel/UCzx784J0da3xi33-ZsAiHSg" target="_blank">YouTube频道</a>
+                <a class="twitter" href="https://x.com/lzpsmax" target="_blank">X（Twitter）</a>
+                <a class="tiktok" href="https://www.tiktok.com/@prtshark?lang=zh-Hans" target="_blank">TikTok</a>
+                <a class="bilibili" href="https://space.bilibili.com/122589358" target="_blank">BiliBili</a>
+                <a class="email" href="mailto:lzpsmax@163.com" target="_blank">电子邮箱</a>
+            </div>
+        </div>
+        <div class="section">
+    <h2>点赞支持</h2>
+    <div class="like-system">
+        <button id="like-button">LIKE</button>
+        <p id="like-count">点赞数：54756</p>
+    </div>
+</div>
+
+
+        <div class="section">
+            <h2>我的作品</h2>
+            <div class="portfolio">
+                <div class="portfolio-item">
+                    <a href="https://www.bilibili.com/video/BV1tm421g7Rv/?spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=177a658ccbc5eb31b141f7ed3c7caead" target="_blank">
+                        <img src="作品1.png" alt="作品1">
+                    </a>
+                    <p>【GBC】恋の绊</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://www.bilibili.com/video/BV1Ff421z7Rg/?spm_id_from=333.999.0.0&vd_source=177a658ccbc5eb31b141f7ed3c7caead" target="_blank">
+                        <img src="作品2.png" alt="作品1">
+                    </a>
+                    <p>【GBC】安和昴全身都很HIP呢！</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://www.bilibili.com/video/BV1By411q7qP/?spm_id_from=333.999.0.0&vd_source=177a658ccbc5eb31b141f7ed3c7caead" target="_blank">
+                        <img src="作品3.png" alt="作品2">
+                    </a>
+                    <p>【GBC】没想成为你的𝙉𝙞𝙜𝙝𝙩𝙢𝙖𝙧𝙚</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://www.bilibili.com/video/BV1D4421Q7TG/?spm_id_from=333.999.0.0&vd_source=177a658ccbc5eb31b141f7ed3c7caead" target="_blank">
+                        <img src="作品4.png" alt="作品3">
+                    </a>
+                    <p>【Girls Band Cry】王妃</p>
+                </div>
+                <div class="portfolio-item">
+                    <a href="https://www.bilibili.com/video/BV181421r7vy/?spm_id_from=333.999.0.0&vd_source=177a658ccbc5eb31b141f7ed3c7caead" target="_blank">
+                        <img src="作品5.png" alt="作品4">
+                    </a>
+                    <p>【GBC】“我没有走错路”</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>近期动态</h2>
+            <div class="update">
+                <h3>XYCTF</h3>
+                <p>来打XYCTF吧，好玩的！</p>
+            </div>
+            <div class="update">
+                <h3>想玩AE了</h3>
+                <p>没思路，没灵感，玩不了一点</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

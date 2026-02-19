@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <link rel="icon" href="PRTShark.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRTShark_No_Tools</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei UI", Arial, sans-serif;
+            background: #000;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-image: url('background_tools.jpg'); /* 更改背景图片 */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        .blurred-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            filter: blur(5px);
+            z-index: -1;
+            background-image: url('background_tools.png'); /* 更改背景图片 */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            opacity: 0.2;
+        }
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 1px solid #cbcbcb;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
+            color: #7d71ff;
+        }
+        .header p {
+            font-size: 1.2em;
+            color: #b489c7;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            border-bottom: 2px solid #5f79fa;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .tool-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .tool-item img {
+            width: 100px;
+            height: 100px;
+            margin-right: 20px;
+            border-radius: 10px;
+        }
+        .tool-item h3 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #67bbff;
+        }
+        .tool-item p {
+            margin: 5px 0 0;
+            font-size: 1em;
+            color: #cb8bff;
+        }
+        .tool-item a {
+            color: #ffffff;
+            background-color: #444;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: transform 0.2s, background-color 0.3s;
+            margin-left: auto;
+        }
+        .tool-item a:hover {
+            transform: scale(1.03);
+            background-color: #555;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #f946ff;
+            color: #ffffff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            opacity: 0.2;
+        }
+        .back-button:hover {
+            background-color: #c95eff;
+            transform: scale(1.1);
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <a href="PRTSharkdesuyo.html" class="back-button">BACK</a>
+    <div class="blurred-background"></div>
+    <div class="header">
+        <h1>PRTShark_No_Tools</h1>
+        <p>PRTShark是我的名字，No是日语里的の的罗马音，也就说，PRTShark_No_xxx就是PRTShark的xxx，当然，说不定是草东粉呢！</p>
+    </div>
+    <div class="container">
+        <div class="section">
+            <h2>工具列表</h2>
+            <div class="tool-item">
+                <img src="t1.png" alt="工具1图标">
+                <div>
+                    <h3>PRTShark_No_Packing</h3>
+                    <p>用于脚本打包，懒得敲命令行而且也记不住，可以自己选图标，顺带还支持PNG转ICO</p>
+                </div>
+                <a href="https://pan.baidu.com/s/1PRvSTz5aTIFWoGateF23xg?pwd=hark" download>点赞4下就给你下载</a>
+            </div>
+            <div class="tool-item">
+                <img src="t2.png" alt="工具2图标">
+                <div>
+                    <h3>PRTShark_No_LSB</h3>
+                    <p>LSB嘛，知道解题但是不会出题的话...下载就对了，用于图片LSB隐写，可写入可读取</p>
+                </div>
+                <a href="https://pan.baidu.com/s/1iFvz3ihXnk-C_DpT_-J5Qg?pwd=hark" download>点赞7下就给你下载</a>
+            </div>
+            <div class="tool-item">
+                <img src="t3.png" alt="工具3图标">
+                <div>
+                    <h3>PRTShark_No_TXT&ASS</h3>
+                    <p>听说过ASS文件吗，那是一种字幕文件，存储字幕的配置，字体啊，出现的时间啊，当然，想要提取出纯字幕的话，就下载吧！</p>
+                </div>
+                <a href="https://pan.baidu.com/s/19ySGF9i4VYYjLbAjksn3mw?pwd=hark" download>你会Ae就给你下载</a>
+            </div>
+            <div class="tool-item">
+                <img src="t4.png" alt="工具4图标">
+                <div>
+                    <h3>工具4</h3>
+                    <p>工具4的描述</p>
+                </div>
+                <a href="tool4.zip" download>下载工具4</a>
+            </div>
+            <div class="tool-item">
+                <img src="t5.png" alt="工具5图标">
+                <div>
+                    <h3>工具5</h3>
+                    <p>工具5的描述</p>
+                </div>
+                <a href="tool5.zip" download>下载工具5</a>
+            </div>
+            <div class="tool-item">
+                <img src="t6.png" alt="工具6图标">
+                <div>
+                    <h3>工具6</h3>
+                    <p>工具6的描述</p>
+                </div>
+                <a href="tool6.zip" download>下载工具6</a>
+            </div>
+            <div class="tool-item">
+                <img src="t7.png" alt="工具7图标">
+                <div>
+                    <h3>工具7</h3>
+                    <p>工具7的描述</p>
+                </div>
+                <a href="tool7.zip" download>下载工具7</a>
+            </div>
+            <div class="tool-item">
+                <img src="t8.png" alt="工具8图标">
+                <div>
+                    <h3>工具8</h3>
+                    <p>工具8的描述</p>
+                </div>
+                <a href="tool8.zip" download>下载工具8</a>
+            </div>
+            <div class="tool-item">
+                <img src="t9.png" alt="工具9图标">
+                <div>
+                    <h3>工具9</h3>
+                    <p>工具9的描述</p>
+                </div>
+                <a href="tool9.zip" download>下载工具9</a>
+            </div>
+            <div class="tool-item">
+                <img src="t10.png" alt="工具10图标">
+                <div>
+                    <h3>工具10</h3>
+                    <p>工具10的描述</p>
+                </div>
+                <a href="tool10.zip" download>下载工具10</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

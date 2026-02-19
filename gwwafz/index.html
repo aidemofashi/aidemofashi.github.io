@@ -1,0 +1,342 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME of GWWAFZ</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 添加自定义样式 */
+        .list a {
+            color: inherit;
+        }
+        .list a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 新增战队成绩样式 */
+        .team-results {
+            margin: 20px 0;
+            background-color: #000;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .team-results h2 {
+            color: white;
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #333;
+            cursor: pointer;
+        }
+        
+        .game-name {
+            color: white;
+            font-weight: bold;
+        }
+        
+        .game-name:hover {
+            color: #ccc;
+            text-decoration: underline;
+        }
+        
+        .game-time {
+            color: #aaa;
+        }
+
+        /* 按钮样式 */
+        .custom-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-button1 {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #1fbd53;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .custom-button1:hover {
+            background-color: #eb93dc;
+        }
+        
+        .custom-button:hover {
+            background-color: #0056b3;
+        }
+        body, html {
+            height: 220%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            text-align: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px; /* Adjust this value based on your preference */
+        }
+
+        .image {
+            max-width: 100%;
+            height: auto;
+            display: block; /* Remove extra space below the image */
+            margin-bottom: 20px; /* Add space between image and text */
+        }
+
+        .text {
+            font-size: 50px; /* Adjust font size as needed */
+            color: #fff;
+        }
+
+        .text-1{
+            font-size: 15px;
+            color: #fff;
+        }
+
+        .list{
+            font-size: 40px;
+            color:#fff;
+        }
+
+        .con{
+            font-size:30px;
+            color:#fff;
+        }
+
+        /* --- 战队成绩折叠功能 --- */
+
+        .result-wrapper {
+            width: 100%;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #333;
+            cursor: pointer;
+        }
+
+        .result-item.active {
+            background-color: #222;
+        }
+
+        .game-name {
+            color: white;
+            font-weight: bold;
+        }
+
+        .game-name:hover {
+            color: #ccc;
+            text-decoration: underline;
+        }
+
+        .game-time {
+            color: #aaa;
+        }
+
+        /* 隐藏内容区域 - 使用 max-height 动画控制显隐 */
+        /* 战队成绩 - 内容区域 */
+        /* 图片样式 */
+        .result-detail img {
+            width: 60%;              /* 控制图片宽度为容器的 60% */
+            height: auto;            /* 保持宽高比 */
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            margin: 10px auto;       /* 上下间距 */
+            display: block;
+            object-fit: contain;
+        }
+
+        /* 容器样式 */
+        .result-detail {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 10px;
+            background-color: #000000;
+            border-top: 1px solid #000000;
+            text-align: center;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+
+        /* 展开状态 */
+        .result-detail.expanded {
+            max-height: 2000px;      /* 足够大以容纳多张图 */
+            padding: 10px 10px;
+            overflow-y: auto;        /* 如果内容太高，允许内部滚动 */
+        }
+        .result-item.active {
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="logo.png" alt="GWWAFZ Logo" class="center-img">
+        <p class="text">Genshin x Wuthering Waves,from AFZ CTF-Detective！<br><b>我们是</b><br><del>原潮</del><br>GWWAFZ战队<br></p>
+        <p class="text-1">由核心两人组成的<del>game</del>,<br>CTF校队<br></p>
+
+        <div class="team-results">
+            <h2>战队成绩</h2>
+
+            <!-- 成绩条目 1 -->
+            <div class="result-wrapper">
+                <div class="result-item" onclick="toggleDetail(this)">
+                    <div class="game-name">京津冀大学生网络安全攻防大赛决赛 DAWD 16th</div>
+                    <div class="game-time">天津-Tianjin, Oct.2025</div>
+                </div>
+                <div class="result-detail">
+                    <img src="public_img/awards/jjj/1773f539-2941-4817-97a9-435898e79fec.png" alt="DAWD 2025 排名截图" />
+                    <img src="public_img/awards/jjj/160376784699372f720385700c9c0668.jpg" alt="DAWD 2025 决赛现场" />
+                </div>
+            </div>
+
+            <!-- 成绩条目 2 -->
+            <div class="result-wrapper">
+                <div class="result-item" onclick="toggleDetail(this)">
+                    <div class="game-name">第九届御网杯 决赛二等奖</div>
+                    <div class="game-time">郑州-Zhengzhou, Jul.2025</div>
+                </div>
+                <div class="result-detail">
+                    <img src="public_img/awards/ywb/3cdab4845d27e0864fdbb0c51f6728d1.jpg" alt="御网杯 2025 奖项照片" />
+                    <img src="public_img/awards/ywb/29f9bb3249e9fe5afe0af5a00cfd40f9.jpg" alt="御网杯 2025 奖项照片" />
+                </div>
+            </div>
+
+            <!-- 成绩条目 3 -->
+            <div class="result-wrapper">
+                <div class="result-item" onclick="toggleDetail(this)">
+                    <div class="game-name">Mini L-CTF 2025 No.45</div>
+                    <div class="game-time">Online, May.2025</div>
+                </div>
+                <div class="result-detail">
+                    <img src="public_img/awards/mini_l/1.png" alt="Mini L-CTF 排名截图" />
+                </div>
+            </div>
+
+            <!-- 成绩条目 4 -->
+            <div class="result-wrapper">
+                <div class="result-item" onclick="toggleDetail(this)">
+                    <div class="game-name">SwampCTF 2025 332nd place</div>
+                    <div class="game-time">Union sakana, Online, Apr.2025</div>
+                </div>
+                <div class="result-detail">
+                    <img src="public_img/awards/swamp/1.png" alt="SwampCTF 截图" />
+                </div>
+            </div>
+
+            <!-- 成绩条目 5 -->
+            <div class="result-wrapper">
+                <div class="result-item" onclick="toggleDetail(this)">
+                    <div class="game-name">HgameCTF 2025 167nd place</div>
+                    <div class="game-time">Online, Feb.2025</div>
+                </div>
+                <div class="result-detail">
+                    <img src="public_img/awards/hgame/1.png" alt="HgameCTF 截图" />
+                </div>
+            </div>
+
+            <!-- 成绩条目 6 -->
+            <div class="result-wrapper">
+                <div class="result-item" onclick="toggleDetail(this)">
+                    <div class="game-name">WuCup 2024 "优胜奖"</div>
+                    <div class="game-time">Online, Dec.2024</div>
+                </div>
+                <div class="result-detail">
+                    <img src="public_img/awards/wucap/1.png" alt="WuCup 证书" />
+                </div>
+            </div>
+
+            <!-- 成绩条目 7 -->
+            <div class="result-wrapper">
+                <div class="result-item" onclick="toggleDetail(this)">
+                    <div class="game-name">网鼎杯 2024 rank 558</div>
+                    <div class="game-time">Online, Oct.2024</div>
+                </div>
+                <div class="result-detail">
+                    <img src="images/wangdingbei2024.jpg" alt="网鼎杯 排名" />
+                </div>
+            </div>
+
+            <!-- 成绩条目 8 -->
+            <div class="result-wrapper">
+                <div class="result-item" onclick="toggleDetail(this)">
+                    <div class="game-name">BuildCTF 2024 rank 94</div>
+                    <div class="game-time">Online, Oct.2024</div>
+                </div>
+                <div class="result-detail">
+                    <img src="images/buildctf2024.jpg" alt="BuildCTF 排名" />
+                </div>
+            </div>
+        </div>
+
+        <p class="list"><b>队员:</b><br>默<br><a href="./aidemofashi_home/index.html" target="_blank">aidemofashi</a><br><a href="./WEB-PRTSHARK/PRTSharkdesuyo.html" target="_blank">PRTShark</a></p>
+        <a href="https://www.bilibili.com/opus/1099671688374648850?spm_id_from=333.1387.0.0" target="_blank" class="custom-button">我要留言</a>
+        <p>
+            <a href="https://space.bilibili.com/455215669" target="_blank" class="custom-button1">联系我</a>
+        </p>
+
+        <!-- 版权信息 -->
+        <p class="con" style="font-size: 0.9em; margin-top: 20px; color: #aaa;">
+            © 2025 Aidemofashi. All Rights Reserved.<br>
+            桂ICP备2025055318号
+        </p>
+    </div>
+    <script>
+        function toggleDetail(element) {
+            const currentWrapper = element.parentElement;
+            const currentDetail = currentWrapper.querySelector('.result-detail');
+            const currentTitle = currentWrapper.querySelector('.result-item');
+
+            const allDetails = document.querySelectorAll('.result-detail');
+            const allTitles = document.querySelectorAll('.result-item');
+
+            // 如果当前已展开，点击则收起
+            if (currentDetail.classList.contains('expanded')) {
+                currentDetail.classList.remove('expanded');
+                currentTitle.classList.remove('active');
+                return;
+            }
+
+            // 否则先关闭所有
+            allDetails.forEach(detail => {
+                detail.classList.remove('expanded');
+            });
+            allTitles.forEach(title => {
+                title.classList.remove('active');
+            });
+
+            // 再打开当前
+            currentDetail.classList.add('expanded');
+            currentTitle.classList.add('active');
+        }
+    </script>
+</body>
+</html>

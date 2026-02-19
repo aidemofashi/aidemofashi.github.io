@@ -1,0 +1,178 @@
+<!DOCTYPE html> <!-- 文档类型声明 -->
+<html lang="zh-cn"> <!-- 设置文档语言为中文 -->
+<head>
+    <meta charset="UTF-8"> <!-- 设置字符编码为UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 设置视口 -->
+    <title>Document</title> <!-- 文档标题 -->
+    <link rel="icon" href="PRTShark.png" type="image/png"> <!-- 更改网页图标 -->
+    <style>
+        body {
+            font-family: 'Agency FB', sans-serif; /* 设置字体 */
+            margin: 0; /* 去除默认外边距 */
+            overflow: hidden; /* 隐藏溢出内容 */
+            background: rgb(229, 229, 229); /* 更改背景颜色为白色 */
+        }
+        .rectangle {
+            position: absolute; /* 绝对定位 */
+            top: 68px; /* 设置顶部位置 */
+            left: 187px; /* 设置左侧位置 */
+            width: 214px; /* 设置宽度 */
+            height: 1px; /* 设置高度 */
+            background: black; /* 设置背景颜色为黑色 */
+            box-shadow: 0 0 10px black; /* 添加发光效果 */
+            transition: width 0.3s ease-in-out; /* 添加过渡效果 */
+        }
+        header {
+            text-align: center; /* 标题居中 */
+            position: fixed; /* 绝对定位 */
+            top: 64.5px; /* 垂直居中 */
+            left: 50%; /* 水平居中 */
+            transform: translate(-50%, -50%); /* 通过平移实现真正的居中 */
+        }
+        canvas {
+            position: fixed; /* 固定定位 */
+            top: 0; /* 顶部对齐 */
+            left: 0; /* 左侧对齐 */
+            z-index: 0; /* 设置层级为-1，使其作为背景 */
+        }
+        .particle {
+            position: fixed; /* 绝对定位 */
+            background: black; /* 更改粒子颜色为黑色 */
+            border-radius: 0%; /* 设置圆角 */
+            opacity: 0.7; /* 设置透明度 */
+            animation: move 30s linear infinite; /* 设置动画 */
+            box-shadow: 0 0 10px black; /* 添加发光效果 */
+        }
+        @keyframes move {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(5); /* 起始位置在底部，初始大小为1 */
+            }
+            100% {
+                transform: translateY(-100vh) translateX(0) scale(5); /* 终止位置在顶部，大小缩小为0 */
+            }
+        }
+        nav ul {
+            display: flex; /* 使用弹性布局 */
+            justify-content: space-between; /* 两端对齐 */
+            list-style: none; /* 删除小标签前的圆点 */
+            padding: 0; /* 去除内边距 */
+            position: fixed; /* 绝对定位 */
+            top: 30px; /* 设置顶部位置 */
+            width: 100%; /* 设置宽度为100% */
+        }
+        nav ul li {
+            display: inline; /* 行内显示 */
+        }
+        nav ul li a {
+            color: black; /* 设置文字颜色 */
+            text-decoration: none; /* 去除下划线 */
+            padding: 0 110px; /* 设置内边距 */
+            font-size: 2.2em; /* 增加文字大小 */
+            transition: transform 0.3s ease-in-out; /* 添加过渡效果 */
+            display: inline-block; /* 使元素成为行内块元素，以便应用transform */
+        }
+        nav ul li a:hover {
+            transform: scale(1.2); /* 悬停时放大 */
+        }
+        nav ul li a:active {
+            transform: scale(0.8); /* 点击时缩小 */
+        }
+        .left-nav {
+            display: flex; /* 使用弹性布局 */
+        }
+        .right-nav {
+            display: flex; /* 使用弹性布局 */
+        }
+      
+    </style>
+</head>
+<body>
+    <canvas id="particleCanvas"></canvas> <!-- 粒子画布 -->
+    <div class="rectangle" style="top: 68px; left: 187px;"></div>
+    <div class="rectangle" style="top: 68px; left: 552px; width: 88px;"></div>
+    <div class="rectangle" style="top: 68px; left: 1070px; width: 130px;"></div>
+    <div class="rectangle" style="top: 68px; left: 1275px;"></div>
+    <header>
+        <h1 style="font-size: 3em; font-weight: lighter;">·PRTShark_No_領域展開·</h1> <!-- 标题 -->
+    </header>
+    <nav>
+        <ul>
+            <div class="left-nav">
+                <li><a href="about.html">·About·</a></li> <!-- 左侧导航 -->
+                <li><a href="experiences.html">·Experiences·</a></li> <!-- 左侧导航 -->
+            </div>
+            <div class="right-nav">
+                <li><a href="tools.html">·Tools·</a></li> <!-- 右侧导航 -->
+                <li><a href="suppose.html">·Suppose·</a></li> <!-- 右侧导航 -->
+            </div>
+        </ul>
+    </nav>
+    <script>
+        const 画布 = document.getElementById('particleCanvas'); // 获取画布元素
+        const 上下文 = 画布.getContext('2d'); // 获取2D上下文
+        画布.width = window.innerWidth; // 设置画布宽度
+        画布.height = window.innerHeight; // 设置画布高度
+
+        const 粒子数组 = []; // 粒子数组，用于存储所有粒子对象
+        const 粒子数量 = 70; // 粒子数量，定义粒子的总数
+
+        class 粒子 {
+            constructor() {
+                this.x = Math.random() * 画布.width; // 随机X坐标
+                this.y = Math.random() * 画布.height; // 随机Y坐标
+                this.大小 = Math.random() * 0 + 0; // 随机大小
+                this.速度X = 0; /* 水平方向速度为0 */
+                this.速度Y = -(Math.random() * 3 + 1); /* 垂直方向速度为负，向上移动 */
+            }
+            更新() {
+                this.x += this.速度X; // 更新X坐标
+                this.y += this.速度Y; // 更新Y坐标
+                if (this.大小 > 0.2) this.大小 -= 0.1; // 缩小粒子
+            }
+            绘制() {
+                上下文.fillStyle = 'black'; /* 更改粒子颜色为黑色 */
+                上下文.shadowColor = 'black'; /* 添加发光效果 */
+                上下文.shadowBlur = 10;
+                上下文.beginPath(); // 开始绘制路径
+                上下文.arc(this.x, this.y, this.大小, 0, Math.PI * 2); // 绘制圆形
+                上下文.closePath(); // 关闭路径
+                上下文.fill(); // 填充路径
+            }
+        }
+
+        function 初始化() {
+            for (let i = 0; i < 粒子数量; i++) {
+                粒子数组.push(new 粒子()); // 初始化粒子，将粒子对象添加到粒子数组中
+            }
+        }
+
+        function 动画() {
+            上下文.clearRect(0, 0, 画布.width, 画布.height); // 清除画布
+            for (let i = 0; i < 粒子数组.length; i++) {
+                粒子数组[i].更新(); // 更新粒子
+                粒子数组[i].绘制(); // 绘制粒子
+            }
+            requestAnimationFrame(动画); // 循环动画
+        }
+
+        初始化(); // 初始化粒子
+        动画(); // 开始动画
+
+        window.addEventListener('resize', function() {
+            画布.width = window.innerWidth; // 更新画布宽度
+            画布.height = window.innerHeight; // 更新画布高度
+        });
+
+        for (let i = 0; i < 粒子数量; i++) {
+            const 粒子元素 = document.createElement('div'); // 创建粒子元素
+            粒子元素.classList.add('particle'); // 添加粒子类
+            粒子元素.style.width = `${Math.random() * 5 + 1}px`; // 设置粒子宽度
+            粒子元素.style.height = 粒子元素.style.width; // 设置粒子高度
+            粒子元素.style.top = `${Math.random() * 100}vh`; // 设置粒子顶部位置
+            粒子元素.style.left = `${Math.random() * 100}vw`; // 设置粒子左侧位置
+            粒子元素.style.animationDuration = `${Math.random() * 10 + 10}s`; // 设置动画持续时间
+            document.body.appendChild(粒子元素); // 添加粒子到文档
+        }
+    </script>
+</body>
+</html>

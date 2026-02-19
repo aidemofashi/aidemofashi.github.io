@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <link rel="icon" href="PRTShark.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRTShark_No_CTF</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei UI", Arial, sans-serif;
+            background: #000;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-image: url('background_blog1.jpg'); /* 更改背景图片 */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        .blurred-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            filter: blur(5px);
+            z-index: -1;
+            background-image: url('background_blog1.jpg'); /* 更改背景图片 */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            opacity: 0.2;
+        }
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 1px solid #cbcbcb;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
+            color: #7d71ff;
+        }
+        .header p {
+            font-size: 1.2em;
+            color: #b489c7;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            border-bottom: 2px solid #5f79fa;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .blog-content {
+            color: #cb8bff;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #90e5ff;
+            color: #ffffff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            opacity: 0.2;
+        }
+        .back-button:hover {
+            background-color: #c95eff;
+            transform: scale(1.1);
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <a href="experiences.html" class="back-button">BACK</a>
+    <div class="blurred-background"></div>
+    <div class="header">
+        <h1>PRTShark_No_Blog1</h1>
+        <p>PRTShark的博客1</p>
+    </div>
+    <div class="container">
+        <div class="section">
+            <h2>CTF_Experiences</h2>
+            <div class="blog-content">
+                <p>源鲁杯
+                    BuildCTF
+                    网鼎杯
+                    强网杯
+                    WuCupCTF
+                    长城杯
+                    春秋杯
+                    西湖论剑
+                    启航杯
+                    HGAME
+                    VNCTF
+                    阿里云CTF
+                </p>
+                <!-- 可以添加更多博客内容 -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>
