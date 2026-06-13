@@ -1,0 +1,654 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/logo.jpg">
+  <link rel="icon" href="/img/logo.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="aidemofashi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="由于我需要在6月16日之前完成我的选修课，但是之前用的脚本已经无法使用（可能是因为智慧树的原因，之前都是在学习同上用的），所以制作一个自动连播的脚本。注意此脚本仅适用于智慧树。   使用方法：    在浏览器中安装油猴(Tampermonkey)插件   在油猴插件中点击添加新脚本并复制下面提供的代码   允许油猴脚本的访问权限（edge浏览器尽量给全，其它浏览器也一样）  12345678910">
+<meta property="og:type" content="article">
+<meta property="og:title" content="智慧树自动连播">
+<meta property="og:url" content="https://aidemofashi.github.io/2026/06/14/%E6%99%BA%E6%85%A7%E6%A0%91%E8%87%AA%E5%8A%A8%E8%BF%9E%E6%92%AD/index.html">
+<meta property="og:site_name" content="aidemofashi&#39;s blog">
+<meta property="og:description" content="由于我需要在6月16日之前完成我的选修课，但是之前用的脚本已经无法使用（可能是因为智慧树的原因，之前都是在学习同上用的），所以制作一个自动连播的脚本。注意此脚本仅适用于智慧树。   使用方法：    在浏览器中安装油猴(Tampermonkey)插件   在油猴插件中点击添加新脚本并复制下面提供的代码   允许油猴脚本的访问权限（edge浏览器尽量给全，其它浏览器也一样）  12345678910">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-13T20:57:17.000Z">
+<meta property="article:modified_time" content="2026-06-13T21:03:40.380Z">
+<meta property="article:author" content="aidemofashi">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>智慧树自动连播 - aidemofashi&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"aidemofashi.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>aidemofashi&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/main.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="智慧树自动连播"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-06-14 04:57" pubdate>
+          2026年6月14日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          643 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          6 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">智慧树自动连播</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>由于我需要在6月16日之前完成我的选修课，但是之前用的脚本已经无法使用（可能是因为智慧树的原因，之前都是在学习同上用的），所以制作一个自动连播的脚本。<br>注意此脚本仅适用于智慧树。  </p>
+<p>使用方法：  </p>
+<ol>
+<li>在浏览器中安装油猴(Tampermonkey)插件  </li>
+<li>在油猴插件中点击添加新脚本并复制下面提供的代码  </li>
+<li>允许油猴脚本的访问权限（edge浏览器尽量给全，其它浏览器也一样）</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// ==UserScript==</span><br><span class="hljs-comment">// @name         智慧树自动连播</span><br><span class="hljs-comment">// @namespace    http://tampermonkey.net/</span><br><span class="hljs-comment">// @version      6.0</span><br><span class="hljs-comment">// @description  视频播放完成后自动播放下一个，切集后自动播放</span><br><span class="hljs-comment">// @author       You</span><br><span class="hljs-comment">// @match        https://studyvideoh5.zhihuishu.com/*</span><br><span class="hljs-comment">// @match        https://*.zhihuishu.com/*</span><br><span class="hljs-comment">// @grant        none</span><br><span class="hljs-comment">// ==/UserScript==</span><br><br>(<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-string">&#x27;use strict&#x27;</span>;<br><br>    <span class="hljs-keyword">function</span> <span class="hljs-title function_">rand</span>(<span class="hljs-params">min, max</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * (max - min + <span class="hljs-number">1</span>)) + min;<br>    &#125;<br><br>    <span class="hljs-keyword">function</span> <span class="hljs-title function_">triggerNext</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">var</span> btn = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#nextBtn&#x27;</span>);<br>        <span class="hljs-keyword">if</span> (!btn || btn.<span class="hljs-property">style</span>.<span class="hljs-property">display</span> === <span class="hljs-string">&#x27;none&#x27;</span>) <span class="hljs-keyword">return</span>;<br><br>        <span class="hljs-keyword">var</span> $ = <span class="hljs-variable language_">window</span>.<span class="hljs-property">$</span>;<br>        <span class="hljs-keyword">if</span> ($) &#123;<br>            <span class="hljs-keyword">var</span> events = $._data ? $.<span class="hljs-title function_">_data</span>(btn, <span class="hljs-string">&#x27;events&#x27;</span>) : <span class="hljs-literal">null</span>;<br>            <span class="hljs-keyword">if</span> (events &amp;&amp; events.<span class="hljs-property">click</span> &amp;&amp; events.<span class="hljs-property">click</span>.<span class="hljs-property">length</span>) &#123;<br>                events.<span class="hljs-property">click</span>[<span class="hljs-number">0</span>].<span class="hljs-property">handler</span>.<span class="hljs-title function_">call</span>(btn);<br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>            <span class="hljs-keyword">try</span> &#123; $(btn).<span class="hljs-title function_">trigger</span>(<span class="hljs-string">&#x27;click&#x27;</span>); <span class="hljs-keyword">return</span>; &#125; <span class="hljs-keyword">catch</span>(e) &#123;&#125;<br>        &#125;<br>        (<span class="hljs-keyword">function</span> <span class="hljs-title function_">findVue</span>(<span class="hljs-params">el, depth</span>) &#123;<br>            <span class="hljs-keyword">if</span> (!el || depth &gt; <span class="hljs-number">8</span>) <span class="hljs-keyword">return</span>;<br>            <span class="hljs-keyword">var</span> vm = el.<span class="hljs-property">__vue__</span> || el.<span class="hljs-property">_vnode</span> || <span class="hljs-literal">null</span>;<br>            <span class="hljs-keyword">if</span> (!vm) &#123; <span class="hljs-title function_">findVue</span>(el.<span class="hljs-property">parentElement</span>, depth + <span class="hljs-number">1</span>); <span class="hljs-keyword">return</span>; &#125;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> vm) &#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    <span class="hljs-keyword">var</span> val = vm[key];<br>                    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> val === <span class="hljs-string">&#x27;function&#x27;</span>) &#123;<br>                        <span class="hljs-keyword">var</span> name = key.<span class="hljs-title function_">toLowerCase</span>();<br>                        <span class="hljs-keyword">if</span> (name.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&#x27;next&#x27;</span>) !== -<span class="hljs-number">1</span> || name.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&#x27;goplay&#x27;</span>) !== -<span class="hljs-number">1</span>) &#123;<br>                            val.<span class="hljs-title function_">call</span>(vm); <span class="hljs-keyword">return</span>;<br>                        &#125;<br>                    &#125;<br>                    <span class="hljs-keyword">if</span> (val &amp;&amp; <span class="hljs-keyword">typeof</span> val === <span class="hljs-string">&#x27;object&#x27;</span> &amp;&amp; !<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(val)) &#123;<br>                        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> k <span class="hljs-keyword">in</span> val) &#123;<br>                            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> val[k] === <span class="hljs-string">&#x27;function&#x27;</span>) &#123;<br>                                <span class="hljs-keyword">var</span> n = k.<span class="hljs-title function_">toLowerCase</span>();<br>                                <span class="hljs-keyword">if</span> (n.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&#x27;next&#x27;</span>) !== -<span class="hljs-number">1</span> || n.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&#x27;goplay&#x27;</span>) !== -<span class="hljs-number">1</span>) &#123;<br>                                    val[k].<span class="hljs-title function_">call</span>(val); <span class="hljs-keyword">return</span>;<br>                                &#125;<br>                            &#125;<br>                        &#125;<br>                    &#125;<br>                &#125; <span class="hljs-keyword">catch</span>(e) &#123;&#125;<br>            &#125;<br>        &#125;)(btn, <span class="hljs-number">0</span>);<br>        <span class="hljs-keyword">if</span> (btn.<span class="hljs-property">onclick</span>) &#123; btn.<span class="hljs-title function_">onclick</span>(); <span class="hljs-keyword">return</span>; &#125;<br>        btn.<span class="hljs-title function_">dispatchEvent</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">MouseEvent</span>(<span class="hljs-string">&#x27;click&#x27;</span>, &#123;<br>            <span class="hljs-attr">bubbles</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">cancelable</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">view</span>: <span class="hljs-variable language_">window</span>,<br>            <span class="hljs-attr">clientX</span>: <span class="hljs-title function_">rand</span>(<span class="hljs-number">0</span>, <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerWidth</span>),<br>            <span class="hljs-attr">clientY</span>: <span class="hljs-title function_">rand</span>(<span class="hljs-number">0</span>, <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerHeight</span>),<br>            <span class="hljs-attr">button</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">buttons</span>: <span class="hljs-number">1</span><br>        &#125;));<br>    &#125;<br><br>    <span class="hljs-keyword">var</span> _waitingEnd = <span class="hljs-literal">false</span>;<br><br>    <span class="hljs-keyword">function</span> <span class="hljs-title function_">resumePlay</span>(<span class="hljs-params">video</span>) &#123;<br>        <span class="hljs-keyword">if</span> (!video || video.<span class="hljs-property">ended</span> || video.<span class="hljs-property">seeking</span>) <span class="hljs-keyword">return</span>;<br>        <span class="hljs-keyword">if</span> (video.<span class="hljs-property">paused</span>) &#123;<br>            <span class="hljs-keyword">var</span> pp = video.<span class="hljs-title function_">play</span>();<br>            <span class="hljs-keyword">if</span> (pp &amp;&amp; <span class="hljs-keyword">typeof</span> pp.<span class="hljs-property">catch</span> === <span class="hljs-string">&#x27;function&#x27;</span>) pp.<span class="hljs-title function_">catch</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;&#125;);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">function</span> <span class="hljs-title function_">setup</span>(<span class="hljs-params">video</span>) &#123;<br>        <span class="hljs-keyword">if</span> (video.<span class="hljs-property">_zsSetup</span>) <span class="hljs-keyword">return</span>;<br>        video.<span class="hljs-property">_zsSetup</span> = <span class="hljs-literal">true</span>;<br><br>        video.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;autoplay&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>);<br>        video.<span class="hljs-property">autoplay</span> = <span class="hljs-literal">true</span>;<br><br>        <span class="hljs-title function_">resumePlay</span>(video);<br><br>        video.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;ended&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>            _waitingEnd = <span class="hljs-literal">true</span>;<br>            <span class="hljs-built_in">setTimeout</span>(triggerNext, <span class="hljs-title function_">rand</span>(<span class="hljs-number">3000</span>, <span class="hljs-number">8000</span>));<br>        &#125;);<br><br>        video.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;playing&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>            _waitingEnd = <span class="hljs-literal">false</span>;<br>        &#125;);<br><br>        video.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;loadstart&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>            video.<span class="hljs-property">_zsSetup</span> = <span class="hljs-literal">false</span>;<br>            _waitingEnd = <span class="hljs-literal">false</span>;<br>            <span class="hljs-title function_">setup</span>(video);<br>        &#125;);<br><br>        video.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;loadedmetadata&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>            video.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;autoplay&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>);<br>            video.<span class="hljs-property">autoplay</span> = <span class="hljs-literal">true</span>;<br>            <span class="hljs-title function_">resumePlay</span>(video);<br>        &#125;);<br>    &#125;<br><br>    <span class="hljs-keyword">function</span> <span class="hljs-title function_">startPoller</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-built_in">setInterval</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>            <span class="hljs-keyword">var</span> video = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;video&#x27;</span>);<br>            <span class="hljs-keyword">if</span> (video &amp;&amp; !video.<span class="hljs-property">ended</span> &amp;&amp; video.<span class="hljs-property">paused</span> &amp;&amp; !_waitingEnd) &#123;<br>                <span class="hljs-title function_">resumePlay</span>(video);<br>            &#125;<br>        &#125;, <span class="hljs-number">2000</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">function</span> <span class="hljs-title function_">waitForVideo</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">var</span> v = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;video&#x27;</span>);<br>        <span class="hljs-keyword">if</span> (v) <span class="hljs-title function_">setup</span>(v);<br><br>        <span class="hljs-keyword">var</span> obs = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MutationObserver</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>            <span class="hljs-keyword">var</span> el = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;video&#x27;</span>);<br>            <span class="hljs-keyword">if</span> (el &amp;&amp; !el.<span class="hljs-property">_zsSetup</span>) <span class="hljs-title function_">setup</span>(el);<br>        &#125;);<br>        obs.<span class="hljs-title function_">observe</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>, &#123; <span class="hljs-attr">childList</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">subtree</span>: <span class="hljs-literal">true</span> &#125;);<br>        <span class="hljs-title function_">startPoller</span>();<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">document</span>.<span class="hljs-property">readyState</span> === <span class="hljs-string">&#x27;loading&#x27;</span>) &#123;<br>        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;DOMContentLoaded&#x27;</span>, waitForVideo);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-title function_">waitForVideo</span>();<br>    &#125;<br>&#125;)();<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>智慧树自动连播</div>
+      <div>https://aidemofashi.github.io/2026/06/14/智慧树自动连播/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>aidemofashi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年6月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/03/28/WMCTF-2025-pdf2text-%E5%A4%8D%E7%8E%B0%E5%AD%A6%E4%B9%A0/" title="WMCTF 2025 pdf2text 复现学习">
+                        <span class="hidden-mobile">WMCTF 2025 pdf2text 复现学习</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.setAttribute('repo', 'aidemofashi/aidemofashi.github.io');
+      s.setAttribute('issue-term', 'pathname');
+      
+      s.setAttribute('label', 'utterances');
+      
+      s.setAttribute('theme', schema);
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('comments').appendChild(s);
+    })
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
